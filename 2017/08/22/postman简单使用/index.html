@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>postman简单使用 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="接口测试,postman,工具使用" />
+    
+    <meta name="description" content="前言上一篇文章《postman安装以及问题》已经说明了如何安装好postman，现在写一下postman的使用，它用法非常丰富多样，这里只举简单的例子来说明大致的操作流程，包括请求、断言、保存、批量执行、导入导出等。 GET请求上图就是一个最简单的GET请求，请求方法下拉框选择GET，接口地址栏填写需要请求的接口，我这里直接写了百度的主页，然后点击Send就完成了请求。下方是请求的结果，可以看到右">
+<meta property="og:type" content="article">
+<meta property="og:title" content="postman简单使用">
+<meta property="og:url" content="http://yoursite.com/2017/08/22/postman%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言上一篇文章《postman安装以及问题》已经说明了如何安装好postman，现在写一下postman的使用，它用法非常丰富多样，这里只举简单的例子来说明大致的操作流程，包括请求、断言、保存、批量执行、导入导出等。 GET请求上图就是一个最简单的GET请求，请求方法下拉框选择GET，接口地址栏填写需要请求的接口，我这里直接写了百度的主页，然后点击Send就完成了请求。下方是请求的结果，可以看到右">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/17-8-15/74413866.jpg">
+<meta property="article:published_time" content="2017-08-22T10:30:00.000Z">
+<meta property="article:modified_time" content="2018-12-17T02:30:56.741Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="接口测试">
+<meta property="article:tag" content="postman">
+<meta property="article:tag" content="工具使用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/17-8-15/74413866.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-postman简单使用" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        postman简单使用
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/08/22/postman%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" class="article-date">
+            <time datetime="2017-08-22T10:30:00.000Z" itemprop="datePublished">2017-08-22</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/postman/" rel="tag">postman</a>, <a class="tag-link" href="/tags/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" rel="tag">工具使用</a>, <a class="tag-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上一篇文章<a href="http://my.lipeilipei.top/2017/08/07/postman/" target="_blank" rel="noopener">《postman安装以及问题》</a>已经说明了如何安装好postman，现在写一下postman的使用，它用法非常丰富多样，这里只举简单的例子来说明大致的操作流程，包括请求、断言、保存、批量执行、导入导出等。</p>
+<h2 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h2><p><img src="http://my.lipeilipei.top/17-8-28/51994249.jpg" alt=""><br>上图就是一个最简单的GET请求，请求方法下拉框选择GET，接口地址栏填写需要请求的接口，我这里直接写了百度的主页，然后点击Send就完成了请求。<br>下方是请求的结果，可以看到右侧状态码是200状态证明请求成功，请求返回值是一个html。<br>页面最左侧有history请求历史栏，可以在这里找已经发送过的所有请求，选择点击以后可以重复请求。</p>
+<h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p><img src="http://my.lipeilipei.top/17-8-28/85013672.jpg" alt=""><br><img src="http://my.lipeilipei.top/17-8-28/47166063.jpg" alt=""><br>在请求方法下拉框选择POST方法，接口地址栏填写需要请求的接口，然后填写请求参数。<br>在请求的body部分点击form-data，以key-value样式请求参数。<br>或者点击raw，以json格式填写请求参数，开发给的接口文档里面参数哦较多的话一般以json格式书写，所以只要复制粘贴过来填写到body部分的raw栏下就可以。</p>
+<h2 id="请求断言"><a href="#请求断言" class="headerlink" title="请求断言"></a>请求断言</h2><p>设置了断言以后能清楚的看出这个请求是否通过，也是后面做自动化的必备条件。<br><img src="http://my.lipeilipei.top/17-8-28/28174441.jpg" alt=""><br>点击请求的test栏，在输入框填写断言，这里的写法都是js格式的，但是也不用担心写起来麻烦，因为常用的断言postman已经在右侧给出了现成的写法，点击一下就可以自动填写到test栏下。比如我这里选择<code>Status code：Code is 200</code>来判断请求返回的状态码是不是200，点击send请求之后可以在下方请求结果的Test栏看到结果是失败的，因为这个接口还没有开发完成，状态码返回的是500。</p>
+<h2 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h2><p>一般测试环境、开发环境、线上环境的环境是独立开来的，设置好环境变量以后，接口地址稍做调整，请求的时候选择对应的环境就能很方便的切换到不同的环境来测试。<br></p>
+<h5 id="1-点击下图中所示的小齿轮按钮，然后点击Manage-Enviroments"><a href="#1-点击下图中所示的小齿轮按钮，然后点击Manage-Enviroments" class="headerlink" title="1.点击下图中所示的小齿轮按钮，然后点击Manage Enviroments"></a>1.点击下图中所示的小齿轮按钮，然后点击Manage Enviroments</h5><p><img src="http://my.lipeilipei.top/17-8-28/19166911.jpg" alt=""></p>
+<h5 id="2-在Manage-Enviroments栏下点击Add"><a href="#2-在Manage-Enviroments栏下点击Add" class="headerlink" title="2.在Manage Enviroments栏下点击Add"></a>2.在Manage Enviroments栏下点击Add</h5><p><img src="http://my.lipeilipei.top/17-8-28/12124110.jpg" alt=""></p>
+<h5 id="3-编辑环境的名称以及接口名称和IP端口，点击Update保存"><a href="#3-编辑环境的名称以及接口名称和IP端口，点击Update保存" class="headerlink" title="3.编辑环境的名称以及接口名称和IP端口，点击Update保存"></a>3.编辑环境的名称以及接口名称和IP端口，点击Update保存</h5><p><img src="http://my.lipeilipei.top/17-8-28/50941862.jpg" alt=""></p>
+<h5 id="4-修改请求url"><a href="#4-修改请求url" class="headerlink" title="4.修改请求url"></a>4.修改请求url</h5><p>返回到postman主页面，将接口前面的IP和端口换成刚刚设置好的环境的key，写在两对大括号里面，可以看到字体自动变成了橙色，鼠标放到上面能看到这个key所对应的value，也就是IP和端口。<br>然后在环境下拉框选择想要测试的环境，我这里选择的是编辑好的测试环境，这个时候请求就会在测试环境请求了，想要在线上测试的话，就在环境下拉框选择编辑好的线上环境就好了。<br><img src="http://my.lipeilipei.top/17-8-28/25457651.jpg" alt=""></p>
+<h2 id="保存到接口集合"><a href="#保存到接口集合" class="headerlink" title="保存到接口集合"></a>保存到接口集合</h2><p>大部分情况下，一个系统模块有很多个接口，把请求都放在该模块的一个集合下方便管理。</p>
+<h5 id="1-左侧切换到collections栏，点击添加按钮"><a href="#1-左侧切换到collections栏，点击添加按钮" class="headerlink" title="1.左侧切换到collections栏，点击添加按钮"></a>1.左侧切换到collections栏，点击添加按钮</h5><p><img src="http://my.lipeilipei.top/17-8-28/41815874.jpg" alt=""></p>
+<h5 id="2-填写集合名称和集合描述并保存"><a href="#2-填写集合名称和集合描述并保存" class="headerlink" title="2.填写集合名称和集合描述并保存"></a>2.填写集合名称和集合描述并保存</h5><p><img src="http://my.lipeilipei.top/17-8-28/31456894.jpg" alt=""></p>
+<h5 id="3-点击请求右侧的save按钮，点击save-as"><a href="#3-点击请求右侧的save按钮，点击save-as" class="headerlink" title="3.点击请求右侧的save按钮，点击save as"></a>3.点击请求右侧的save按钮，点击save as</h5><p><img src="http://my.lipeilipei.top/17-8-28/37323875.jpg" alt=""></p>
+<h5 id="4-弹窗内填写请求的名称和描述等，下方选择点击刚刚创建的集合并保存"><a href="#4-弹窗内填写请求的名称和描述等，下方选择点击刚刚创建的集合并保存" class="headerlink" title="4.弹窗内填写请求的名称和描述等，下方选择点击刚刚创建的集合并保存"></a>4.弹窗内填写请求的名称和描述等，下方选择点击刚刚创建的集合并保存</h5><p><img src="http://my.lipeilipei.top/17-8-28/51094758.jpg" alt=""></p>
+<h2 id="批量执行请求"><a href="#批量执行请求" class="headerlink" title="批量执行请求"></a>批量执行请求</h2><p>postman自带的runner可以批量执行一个集合的接口用例</p>
+<h5 id="1-点击主页左上方的Runner"><a href="#1-点击主页左上方的Runner" class="headerlink" title="1.点击主页左上方的Runner"></a>1.点击主页左上方的Runner</h5><p><img src="http://my.lipeilipei.top/17-8-28/31671649.jpg" alt=""></p>
+<h5 id="2-选择集合"><a href="#2-选择集合" class="headerlink" title="2.选择集合"></a>2.选择集合</h5><ul>
+<li>选择点击刚刚创建的test111集合</li>
+<li>Environment勾选需要测试的环境</li>
+<li>Iteration是执行测试，这里就执行一次就好</li>
+<li>点击Start Run就开始执行，右侧能看到请求结果，最上方是汇总</li>
+</ul>
+<p><img src="http://my.lipeilipei.top/17-8-28/64864625.jpg" alt=""></p>
+<h2 id="导出与导入"><a href="#导出与导入" class="headerlink" title="导出与导入"></a>导出与导入</h2><p>postman能很方便的将接口测试集合导出到本地，同样的也能从本地导入进来。</p>
+<h5 id="导出collection与环境变量"><a href="#导出collection与环境变量" class="headerlink" title="导出collection与环境变量"></a>导出collection与环境变量</h5><p>1.点击请求集合右侧的三个点 -&gt; Export<br><img src="http://my.lipeilipei.top/17-8-28/54675693.jpg" alt=""></p>
+<p>2.弹窗点击Export<br>这里有collection v1和collection v2两种模式，v2模式导出的东西更多，一般选择v1就可以了。<br><img src="http://my.lipeilipei.top/17-8-28/56468788.jpg" alt=""></p>
+<p>3.在环境变量设置这里选择要导出的环境，点击右侧向下箭头即可将环境保存到本地。<br><img src="http://my.lipeilipei.top/17-8-28/87265381.jpg" alt=""></p>
+<p>4.导出到本地的请求集合和环境都是json格式的文件<br><img src="http://my.lipeilipei.top/17-8-28/47983745.jpg" alt=""></p>
+<h5 id="导入Collection"><a href="#导入Collection" class="headerlink" title="导入Collection"></a>导入Collection</h5><p>直接点击postman左上方的Import按钮，在本地选择collection即可<br><img src="http://my.lipeilipei.top/17-8-28/85852094.jpg" alt=""><br><img src="http://my.lipeilipei.top/17-8-28/66457656.jpg" alt=""></p>
+<h2 id="注册登陆"><a href="#注册登陆" class="headerlink" title="注册登陆"></a>注册登陆</h2><p>不登录并不会影响工具的使用，但是登陆以后接口测试用例都可以保存到账号里面，不管是在那个电脑上登陆自己的账号就都能看到已经保存的接口测试集合，所以还是推荐登陆账号使用，谷歌邮箱可以直接登陆，支持国内的QQ邮箱等注册登陆。</p>
+<hr>
+<h3 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h3><p><a href="http://my.lipeilipei.top/2017/08/07/postman/" target="_blank" rel="noopener">postman安装以及问题</a><br><a href="http://my.lipeilipei.top/2017/08/24/postman%E6%8E%A5%E5%8F%A3%E7%94%A8%E4%BE%8B%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C/" target="_blank" rel="noopener">postman接口用例批量执行(Newman)</a><br><a href="http://my.lipeilipei.top/2017/08/25/windows%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8Cpython%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6/" target="_blank" rel="noopener">定时任务与Python发送邮件</a><br><font color="white">xx</font></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://yoursite.com/2017/08/22/postman%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/" data-id="ckb4jjvoc001nx8usgkcj1xg1" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/08/24/postman%E6%8E%A5%E5%8F%A3%E7%94%A8%E4%BE%8B%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            postman接口用例批量执行(Newman)
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/08/15/mongodb%E5%AE%89%E8%A3%85/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">mongodb安装及可能出现的问题</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(1) - TCP Connect" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="title">Python打造端口扫描器(1) - TCP Connect</a></p>
+                            <p class="item-date"><time datetime="2020-05-25T04:00:00.000Z" itemprop="datePublished">2020-05-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/17-8-15/53422481.jpg)" alt="python 中 print 打印显示颜色" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="title">python 中 print 打印显示颜色</a></p>
+                            <p class="item-date"><time datetime="2020-05-22T04:00:00.000Z" itemprop="datePublished">2020-05-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200508081439.png)" alt="编辑器拿 webshell - FCKeditor 2.4.3" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="title">编辑器拿 webshell - FCKeditor 2.4.3</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T12:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/secure_file_priv2.png)" alt="mysql secure_file_priv 设置" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="title">mysql secure_file_priv 设置</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T04:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2017/08/22/postman%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

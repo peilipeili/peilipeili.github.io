@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>python小说爬虫 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="python,爬虫" />
+    
+    <meta name="description" content="前言很久没有写爬虫了，最近接到一个抓取小说的项目顺便做此纪录练练手，之后工作中可能也会有部分场景要用到爬虫，爬取竞争对手进行数据分析什么的。目标网站：潇湘书院环境准备：  python3 requests库 BeautifulSoup库  整体思路抓取这个小说网站免费板块的所有内容，查看页面发现这个板块一共有6697页，每页有20本小说，那整体思路就是先抓取每页的20个小说名称和url，然后进入每">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python小说爬虫">
+<meta property="og:url" content="http://yoursite.com/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言很久没有写爬虫了，最近接到一个抓取小说的项目顺便做此纪录练练手，之后工作中可能也会有部分场景要用到爬虫，爬取竞争对手进行数据分析什么的。目标网站：潇湘书院环境准备：  python3 requests库 BeautifulSoup库  整体思路抓取这个小说网站免费板块的所有内容，查看页面发现这个板块一共有6697页，每页有20本小说，那整体思路就是先抓取每页的20个小说名称和url，然后进入每">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/18-4-26/72083805.jpg">
+<meta property="article:published_time" content="2018-04-25T12:30:00.000Z">
+<meta property="article:modified_time" content="2019-11-05T14:07:34.701Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/18-4-26/72083805.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-python小说爬虫" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        python小说爬虫
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" class="article-date">
+            <time datetime="2018-04-25T12:30:00.000Z" itemprop="datePublished">2018-04-25</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很久没有写爬虫了，最近接到一个抓取小说的项目顺便做此纪录练练手，之后工作中可能也会有部分场景要用到爬虫，爬取竞争对手进行数据分析什么的。<br>目标网站：<a href="http://www.xxsy.net/" target="_blank" rel="noopener"><strong>潇湘书院</strong></a><br>环境准备：</p>
+<ul>
+<li>python3</li>
+<li>requests库</li>
+<li>BeautifulSoup库</li>
+</ul>
+<h2 id="整体思路"><a href="#整体思路" class="headerlink" title="整体思路"></a>整体思路</h2><p>抓取这个小说网站免费板块的所有内容，查看页面发现这个板块一共有6697页，每页有20本小说，那整体思路就是先抓取每页的20个小说名称和url，然后进入每本小说的阅读地址，拿到每一个章节的标题和url，抓取每章节的正文内容并写到本地txt文本中。<br><img src="123" alt=""></p>
+<h2 id="单页分析"><a href="#单页分析" class="headerlink" title="单页分析"></a>单页分析</h2><p>这里请求使用requests，解析页面用非常方便的BeautifulSoup，在一个文章标题上右键检查，在高亮的这条a标签右键，copy selector，通过这条selector来定位BeautifulSoup解析后小说所在的位置。<br><img src="http://my.lipeilipei.top/18-4-26/95059112.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">body &gt; div.content &gt; div &gt; div &gt; div.inner-mainbar &gt; div.search-result &gt; div.result-list &gt; ul &gt; li:nth-child(1) &gt; div &gt; h4 &gt; a</span><br></pre></td></tr></table></figure>
+<p>其中<code>li:nth-child(1)</code>很明显是指这个小说在当前页面小说列表中排列第一个，我们想要本页面所有的20本小说，所以就删掉这个<code>:nth-child(1)</code>，再将selector语句精简一下只要能定位到即可，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">div.result-list &gt; ul &gt; li &gt; div &gt; h4 &gt; a</span><br></pre></td></tr></table></figure>
+<p>然后将它写入代码，print查看一下结果。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,os</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">webdata = requests.get(<span class="string">'http://www.xxsy.net/search?vip=0&amp;sort=2'</span>)</span><br><span class="line">soup = BeautifulSoup(webdata.text,<span class="string">'lxml'</span>)</span><br><span class="line">books = soup.select(<span class="string">'div.result-list &gt; ul &gt; li &gt; div &gt; h4 &gt; a'</span>)</span><br><span class="line">print(books)</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-4-26/26352205.jpg" alt=""><br>结果是一个列表，列表中有20个元素，分别对应的20个小说，我们想要的是每个元素中href后面的链接和小说的名字，用循环提取出来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">for</span> book <span class="keyword">in</span> books:</span><br><span class="line">    bookname = book.text</span><br><span class="line">    bookurl = <span class="string">'http://www.xxsy.net'</span> + book.get(<span class="string">'href'</span>)</span><br><span class="line">    bookid = book.get(<span class="string">'href'</span>).split(<span class="string">'/'</span>)[<span class="number">-1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">    print(bookname,bookurl,bookid)</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-4-26/86095250.jpg" alt=""><br>这样就很简单的拿到了单个页面20本小说的标题和url地址，可以看到上面我把地址中的一串数字用单独取出来了，这个数字其实就是小说对应的唯一ID，后面要用到。</p>
+<h2 id="章节分析"><a href="#章节分析" class="headerlink" title="章节分析"></a>章节分析</h2><p>点击一个小说进入详情页面，切换至”作品目录”下可以看到所有的章节，这时候在一个章节上右键检查，跟上面方法一样，同样可以很简单的获取到该小说所有章节的名称和url地址以及章节ID。<br><img src="http://my.lipeilipei.top/18-4-26/51873134.jpg" alt=""></p>
+<p>为了在一篇文章介绍尽可能多的方法，这里我不用上面这个地方来获取章节信息，从另一个地方进入。点击“开始阅读”进入第一章节的正文，在页面的左边可以看到一个“目录”按钮，点看以后就能看到所有的章节名称了。然而在这些章节名称上右键发现当前页面禁用了鼠标右键功能，无法检查元素当然也就不能copy它的selector。<br><img src="http://my.lipeilipei.top/18-4-26/63797573.jpg" alt=""></p>
+<p>这种按钮的点击肯定是向服务器发送了请求的，打开fiddler进行抓包，再次点击目录按钮，此时可以看到这个请求已经被成功捕获，点击这条请求查看详细信息，这个接口的功能就是查询所有的章节信息。<br><img src="http://my.lipeilipei.top/18-4-26/17982944.jpg" alt=""></p>
+<p>真实的请求地址是<code>http://www.xxsy.net/partview/GetChapterListNoSub?bookid=945608&amp;isvip=0</code>，其中bookid就是我们前面找到的bookid，这里可以做成参数化依次传入其他小说的ID。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">url = <span class="string">'http://www.xxsy.net/partview/GetChapterListNoSub?bookid=945608&amp;isvip=0'</span></span><br><span class="line">titles = BeautifulSoup(requests.get(url).text,<span class="string">'lxml'</span>).select(<span class="string">'ul &gt; li &gt; a'</span>)</span><br><span class="line"><span class="keyword">for</span> title <span class="keyword">in</span> titles:</span><br><span class="line">    titlename = title.text  <span class="comment">#章节名称</span></span><br><span class="line">    titleurl = <span class="string">'http://www.xxsy.net'</span> + title.get(<span class="string">'href'</span>)   <span class="comment">#章节地址</span></span><br><span class="line">    print(titlename,titleurl)</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-4-26/53687066.jpg" alt=""></p>
+<h2 id="正文下载"><a href="#正文下载" class="headerlink" title="正文下载"></a>正文下载</h2><p>上一步取到的titleurl是每一章节的阅读地址，直接requests请求并解析拿到正文内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">contents = BeautifulSoup(requests.get(titleurl).text, <span class="string">'lxml'</span>).select(<span class="string">'div#auto-chapter &gt; p'</span>)   <span class="comment">#正文内容</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-4-26/83734461.jpg" alt=""><br>返回结果是一个列表，每一个元素是一个段落，将每一段内容前后无用的标签剔除并写到本地的txt文本，写入方式为<code>a+</code>,每次写入时在后面追加，不会覆盖之前的内容，文本自动按照前面获取到的小说名来命名。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">    content = str(content).replace(<span class="string">'&lt;p&gt;'</span>, <span class="string">'\n'</span>).replace(<span class="string">'&lt;/p&gt;'</span>, <span class="string">''</span>)</span><br><span class="line">    f = open(path + <span class="string">'%s.txt'</span> % bookname, <span class="string">'a+'</span>)</span><br><span class="line">    f.write(content)</span><br><span class="line">    f.close()</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-4-26/31951196.jpg" alt=""></p>
+<p>到此为止三个步骤已经完成，可以顺利的爬下一个章节的内容了，现在通过几个for循环将这几个步骤整合，就可以源源不断的开始下载小说了。<br><img src="http://my.lipeilipei.top/18-4-26/272032.jpg" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> requests,time,os</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">path = <span class="string">r'C:\Users\lipei\Desktop\潇湘书院爬虫\小说\\'</span>               <span class="comment">#本地存放小说的路径</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_books</span><span class="params">(url)</span>:</span></span><br><span class="line">    webdata = requests.get(url,timeout=<span class="number">60</span>)   </span><br><span class="line">    soup = BeautifulSoup(webdata.text,<span class="string">'lxml'</span>)</span><br><span class="line">    books = soup.select(<span class="string">'div.result-list &gt; ul &gt; li &gt; div &gt; h4 &gt; a'</span>)</span><br><span class="line">    <span class="keyword">for</span> book <span class="keyword">in</span> books:</span><br><span class="line">        bookid = book.get(<span class="string">'href'</span>).split(<span class="string">'/'</span>)[<span class="number">-1</span>].split(<span class="string">'.'</span>)[<span class="number">0</span>]   <span class="comment">#小说ID作为下一个请求ur中的参数</span></span><br><span class="line">        bookname = book.text                                     <span class="comment">#小说名称</span></span><br><span class="line">        bookurl = <span class="string">'http://www.xxsy.net'</span> + book.get(<span class="string">'href'</span>)       <span class="comment">#小说url地址</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> bookname+<span class="string">'.txt'</span> <span class="keyword">in</span> oldlists:                          <span class="comment">#判断是否已经下载过，若存在则跳过</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">        print(<span class="string">'=====================正在下载【'</span> + bookname + <span class="string">'】====================='</span>)</span><br><span class="line">        url = <span class="string">'http://www.xxsy.net/partview/GetChapterListNoSub?bookid=%s&amp;isvip=0'</span> % bookid</span><br><span class="line">        titles = BeautifulSoup(requests.get(url,timeout=<span class="number">60</span>).text,<span class="string">'lxml'</span>).select(<span class="string">'ul &gt; li &gt; a'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> title <span class="keyword">in</span> titles:</span><br><span class="line">            titleurl = <span class="string">'http://www.xxsy.net'</span> + title.get(<span class="string">'href'</span>)  <span class="comment">#章节url地址</span></span><br><span class="line">            titlename = title.text                                <span class="comment">#章节名称</span></span><br><span class="line">            <span class="comment"># print(titlename,titleurl)</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                f = open(path + <span class="string">'%s.txt'</span> % bookname, <span class="string">'a+'</span>)        <span class="comment">#章节名称写到txt文本</span></span><br><span class="line">                f.write(<span class="string">'\n'</span>*<span class="number">2</span> + titlename + <span class="string">'\n'</span>)</span><br><span class="line">                f.close()</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">            contents = BeautifulSoup(requests.get(titleurl,timeout=<span class="number">60</span>).text, <span class="string">'lxml'</span>).select(<span class="string">'div#auto-chapter &gt; p'</span>)</span><br><span class="line">            <span class="keyword">for</span> content <span class="keyword">in</span> contents:</span><br><span class="line">                content = str(content).replace(<span class="string">'&lt;p&gt;'</span>, <span class="string">'\n'</span>).replace(<span class="string">'&lt;/p&gt;'</span>, <span class="string">''</span>)</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    f = open(path + <span class="string">'%s.txt'</span> % bookname, <span class="string">'a+'</span>)   <span class="comment">#正文内容卸载txt文本，紧接在章节名称的下面</span></span><br><span class="line">                    f.write(content)</span><br><span class="line">                    f.close()</span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    <span class="keyword">pass</span></span><br><span class="line">            print(titlename + <span class="string">'[已下载]'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    urls = [<span class="string">'http://www.xxsy.net/search?vip=0&amp;sort=2&amp;pn=&#123;&#125;'</span>.format(i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6697</span>)]   <span class="comment">#免费板块每一页的url通过最后的pn参数控制</span></span><br><span class="line">    <span class="keyword">global</span> oldlists</span><br><span class="line">    oldlists = os.listdir(path)        <span class="comment">#爬虫开始之前检查当前目录已有的文件</span></span><br><span class="line">    <span class="keyword">for</span> url <span class="keyword">in</span> urls:</span><br><span class="line">        get_books(url)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#控制每天爬取的数量，达到要求后停止任务，通过任务开始前后目录中的文件数量相减来判断</span></span><br><span class="line">        newlists = os.listdir(path)</span><br><span class="line">        num = len(newlists) - len(oldlists)</span><br><span class="line">        <span class="keyword">if</span> num &gt;= <span class="number">20</span>:</span><br><span class="line">            print(<span class="string">'今日任务下载完毕，今日下载小说%d本'</span> % num)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>在测试过程中发现短时间持续请求该网站的话会可能被服务器拒绝，但是并没有封禁IP，这可能是这个网站唯一的反爬措施了，然而并没有卵用，将请求放在一个无限循环里面，若被拒绝就自动重连，连上以后跳出循环。<br>后面如果遇到封禁IP的网站再讲如何通过更换IP来规避。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        webdata = requests.get(url,timeout=<span class="number">60</span>)</span><br><span class="line">        <span class="keyword">break</span>      <span class="comment">#连接成功就跳出循环</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p><font color="white">peili</font></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://yoursite.com/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" data-id="ckb4jjvol002cx8ush2aacxru" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/04/27/requests%E4%B8%ADHTTPS%E8%AF%B7%E6%B1%82%E7%9A%84%E5%A4%84%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            requests中HTTPS请求的处理
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/03/28/python%E6%93%8D%E4%BD%9Ctxt%E6%96%87%E6%9C%AC%E7%9A%84%E5%87%A0%E7%A7%8D%E6%A8%A1%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">python操作txt文本的几种模式</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(1) - TCP Connect" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="title">Python打造端口扫描器(1) - TCP Connect</a></p>
+                            <p class="item-date"><time datetime="2020-05-25T04:00:00.000Z" itemprop="datePublished">2020-05-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/17-8-15/53422481.jpg)" alt="python 中 print 打印显示颜色" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="title">python 中 print 打印显示颜色</a></p>
+                            <p class="item-date"><time datetime="2020-05-22T04:00:00.000Z" itemprop="datePublished">2020-05-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200508081439.png)" alt="编辑器拿 webshell - FCKeditor 2.4.3" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="title">编辑器拿 webshell - FCKeditor 2.4.3</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T12:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/secure_file_priv2.png)" alt="mysql secure_file_priv 设置" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="title">mysql secure_file_priv 设置</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T04:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

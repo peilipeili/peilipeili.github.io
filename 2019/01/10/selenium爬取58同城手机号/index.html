@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>selenium爬取58同城手机号 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="python,爬虫,selenium,UI自动化" />
+    
+    <meta name="description" content="以二手房板块为例，抓取二手房源信息和经纪人的联系电话。首先抓取所有房源详情链接，再访问每个链接抓取房源详情保存到数据库。 一、获取列表页所有二手房源详情链接重庆地区共70页，解析每页的房源详情地址并保存到本地。 1234567891011121314151617181920212223242526import requests,lxml,timefrom bs4 import BeautifulS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="selenium爬取58同城手机号">
+<meta property="og:url" content="http://yoursite.com/2019/01/10/selenium%E7%88%AC%E5%8F%9658%E5%90%8C%E5%9F%8E%E6%89%8B%E6%9C%BA%E5%8F%B7/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="以二手房板块为例，抓取二手房源信息和经纪人的联系电话。首先抓取所有房源详情链接，再访问每个链接抓取房源详情保存到数据库。 一、获取列表页所有二手房源详情链接重庆地区共70页，解析每页的房源详情地址并保存到本地。 1234567891011121314151617181920212223242526import requests,lxml,timefrom bs4 import BeautifulS">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/58.jpg">
+<meta property="article:published_time" content="2019-01-10T12:00:00.000Z">
+<meta property="article:modified_time" content="2019-01-14T09:44:46.034Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="selenium">
+<meta property="article:tag" content="UI自动化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/58.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-selenium爬取58同城手机号" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        selenium爬取58同城手机号
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2019/01/10/selenium%E7%88%AC%E5%8F%9658%E5%90%8C%E5%9F%8E%E6%89%8B%E6%9C%BA%E5%8F%B7/" class="article-date">
+            <time datetime="2019-01-10T12:00:00.000Z" itemprop="datePublished">2019-01-10</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/UI%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag">UI自动化</a>, <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/selenium/" rel="tag">selenium</a>, <a class="tag-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>以二手房板块为例，抓取二手房源信息和经纪人的联系电话。<br>首先抓取所有房源详情链接，再访问每个链接抓取房源详情保存到数据库。</p>
+<h2 id="一、获取列表页所有二手房源详情链接"><a href="#一、获取列表页所有二手房源详情链接" class="headerlink" title="一、获取列表页所有二手房源详情链接"></a>一、获取列表页所有二手房源详情链接</h2><p>重庆地区共70页，解析每页的房源详情地址并保存到本地。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,lxml,time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_all_link</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    58同城重庆地区【房产板块 - 二手房】的房源详情地址</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">71</span>):     </span><br><span class="line">        url = <span class="string">'https://cq.58.com/ershoufang/pn%d/'</span> %i      <span class="comment">#房源列表页</span></span><br><span class="line">        web_data = requests.get(url)</span><br><span class="line">        soup = BeautifulSoup(web_data.text,<span class="string">'lxml'</span>)</span><br><span class="line">        fang_links = soup.select(<span class="string">'body &gt; div.main-wrap &gt; div.content-wrap &gt; div.content-side-left &gt; ul &gt; li &gt; div.list-info &gt; h2 &gt; a'</span>)</span><br><span class="line">        <span class="keyword">for</span> fang_link <span class="keyword">in</span> fang_links:</span><br><span class="line">            fang_link = fang_link.get(<span class="string">'href'</span>)     <span class="comment">#a标签的href属性值就是需要的房源详情页的URL</span></span><br><span class="line">            print(fang_link)</span><br><span class="line">            <span class="keyword">if</span> fang_link.startswith(<span class="string">'//'</span>) == <span class="literal">True</span>:   <span class="comment">#判断是否是//开头的链接，是的话直接跳过，这种selenium无法直接通过url进入</span></span><br><span class="line">                print(<span class="string">'URL不符合规则，跳过'</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">            <span class="keyword">with</span> open(<span class="string">r"C:\Users\Administrator\Desktop\58_ershoufang_link.txt"</span>,<span class="string">'a+'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(fang_link + <span class="string">'\n'</span>)      <span class="comment">#写入本地txt文件</span></span><br><span class="line">                f.close()</span><br><span class="line">        print(<span class="string">'第%d页抓取完毕'</span>%i,<span class="string">'    '</span>)</span><br><span class="line">        print(<span class="string">'共%d条'</span>%(len(fang_links)))</span><br><span class="line">        time.sleep(<span class="number">1</span>)     <span class="comment">#每页抓取完毕等待1秒，防止IP被限制</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、分析并抓取详情页面"><a href="#二、分析并抓取详情页面" class="headerlink" title="二、分析并抓取详情页面"></a>二、分析并抓取详情页面</h2><h5 id="1-基本信息"><a href="#1-基本信息" class="headerlink" title="1.基本信息"></a>1.基本信息</h5><p>右键检查元素，标题，户型，面积，朝向等都比较简单的容易获取到，直接用requests获取源码，然后BeautifulSoup解析即可。<br><img src="http://my.lipeilipei.top/19-1-11/10661106.jpg" alt=""></p>
+<h5 id="2-获取售价"><a href="#2-获取售价" class="headerlink" title="2.获取售价"></a>2.获取售价</h5><p>但是总价和每平米售价却是乱码的，这是由于58有一套自定义的字体在在这里替换页面中的数字，而且每次刷新都是随机，要获取到真实的价钱，首先要解析58的自定义字体与数字0-9的一一对应关系，再讲抓取到的自定义字体替换为对应的数字，后面专门写一篇文章介绍。<br><img src="http://my.lipeilipei.top/19-1-11/26861165.jpg" alt=""></p>
+<p>浏览网页结构发现，header标签下的第二个meta标签有一些简介描述，其中就包含了总价和每平米售价，我们将这个标签的内容抓取下来取出其中的数字即可，免去了解析58自定义字体的麻烦。<br><img src="http://my.lipeilipei.top/19-1-11/87191357.jpg" alt=""></p>
+<h5 id="3-获取手机号"><a href="#3-获取手机号" class="headerlink" title="3.获取手机号"></a>3.获取手机号</h5><p>手机号码不是直接展示在页面，需要手动点击”电话联系TA”才能显示，打开控制台可以看到，点击按钮后发送了两个JS请求，第二个请求返回的json值就包含了手机号，第一想法就是通过python的requests直接模拟这个请求来获取手机号，但是仔细观察发现这个GET请求的参数是加密的，要猜解字段有点难度，而且调试过程中发现直接请求接口速度太快会被频繁封IP，本着化繁为简的原则，直接使用selenium控制浏览器模拟点击这个按钮后，获取点击后的网页源码，再解析html中的手机号。<br><img src="http://my.lipeilipei.top/19-1-11/7954095.jpg" alt=""></p>
+<h5 id="4-代码实例"><a href="#4-代码实例" class="headerlink" title="4.代码实例"></a>4.代码实例</h5><p>因为要点击查看手机号，所以不再使用requests获取网页源码，使用selenium + chromedriver获取网页源码，抓取到的信息写入数据库，前提是下载本机chrome浏览器对应的chromedriver驱动放在python可执行路径下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_sql</span><span class="params">(sql)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    将抓取的数据写入mydql数据库</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        db = pymysql.Connect(host=<span class="string">'localhost'</span>,port=<span class="number">3306</span>,user=<span class="string">'root'</span>,password=<span class="string">'123456'</span>,db=<span class="string">'58_ershoufang'</span>)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">'数据库链接失败'</span>)</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># 使用cursor()方法获取操作游标</span></span><br><span class="line">    cursor = db.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SQL 插入语句</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 执行sql语句</span></span><br><span class="line">        cursor.execute(<span class="string">"set names 'utf8'"</span>)   <span class="comment">#中文写入失败的时候加上这句</span></span><br><span class="line">        cursor.execute(sql.encode(<span class="string">'utf8'</span>))</span><br><span class="line">        <span class="comment"># cursor.execute(sql)</span></span><br><span class="line">        <span class="comment"># 提交到数据库执行</span></span><br><span class="line">        db.commit()</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(e)</span><br><span class="line">        <span class="comment"># 如果发生错误则回滚</span></span><br><span class="line">        db.rollback()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 关闭数据库连接</span></span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
+
+<h5 id="抓取房源详情"><a href="#抓取房源详情" class="headerlink" title="抓取房源详情"></a>抓取房源详情</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium.webdriver.chrome.options <span class="keyword">import</span> Options</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">import</span> requests,lxml,time</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_detail_info</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    依次从上一个函数中保存的所有房源地址进入详情页面，获取房产详细信息</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    chrome_options = webdriver.ChromeOptions()</span><br><span class="line">    prefs = &#123;<span class="string">"profile.managed_default_content_settings.images"</span>: <span class="number">2</span>&#125;   <span class="comment">#设置浏览器不加载图片，从而加快页面加载速度</span></span><br><span class="line">    chrome_options.add_experimental_option(<span class="string">"prefs"</span>, prefs)</span><br><span class="line">    chrome_options.add_argument(<span class="string">'--headless'</span>)                    <span class="comment">#chrome-headerless模式</span></span><br><span class="line">    driver = webdriver.Chrome(chrome_options=chrome_options)     <span class="comment">#启动chrome浏览器</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">r"C:\Users\Administrator\Desktop\58_ershoufang_link.txt"</span>,<span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        lines = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            house_info = []</span><br><span class="line">            driver.get(line)</span><br><span class="line">            time.sleep(<span class="number">0.5</span>)</span><br><span class="line">            print(lines.index(line)+<span class="number">1</span>)</span><br><span class="line">            html = driver.page_source     <span class="comment">#获取网页源码</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">"你要找的页面不在这个星球上！"</span> <span class="keyword">in</span> html:</span><br><span class="line">                print(<span class="string">'该房源已经下架'</span>)</span><br><span class="line">                print(<span class="string">'='</span> * <span class="number">50</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                driver.find_element_by_css_selector(<span class="string">'#houseChatEntry &gt; div &gt; p.chat-phone-layer.show-phone'</span>).click()  <span class="comment"># 点击查看手机号</span></span><br><span class="line">                time.sleep(<span class="number">0.3</span>)</span><br><span class="line">                soup = BeautifulSoup(driver.page_source,<span class="string">'lxml'</span>)   <span class="comment">#BeautifulSoup解析</span></span><br><span class="line">                <span class="comment">#页面header &gt; meta标签中有一些描述信息,包括售价</span></span><br><span class="line">                description = soup.select(<span class="string">'head &gt; meta:nth-of-type(2)'</span>)[<span class="number">0</span>].get(<span class="string">'content'</span>).split(<span class="string">";"</span>)</span><br><span class="line">                <span class="comment">#从描述信息字符串中截取房源标题，总售价，每平米售价</span></span><br><span class="line">                title = description[<span class="number">0</span>]   <span class="comment">#房源标题</span></span><br><span class="line">                price_all = description[<span class="number">1</span>].split(<span class="string">'：'</span>)[<span class="number">1</span>].split(<span class="string">'元（'</span>)[<span class="number">0</span>]  <span class="comment">#总售价</span></span><br><span class="line">                price_per = description[<span class="number">1</span>].split(<span class="string">'：'</span>)[<span class="number">1</span>].split(<span class="string">'元（'</span>)[<span class="number">1</span>].split(<span class="string">'）'</span>)[<span class="number">0</span>]  <span class="comment">#每平米售价</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">#select方法在页面结构中选择其余需要抓取的字段，有些字段不是每个房源信息都有的，不存在的时候直接设置为空</span></span><br><span class="line">                house_xiaoqu = soup.select(<span class="string">'body &gt; div.main-wrap &gt; div.house-basic-info.clearfix &gt; div.house-basic-right.fr &gt; ul &gt; li:nth-of-type(1) &gt; span.c_000.mr_10'</span>)   <span class="comment">#所在小区</span></span><br><span class="line">                house_xiaoqu = <span class="string">' - '</span>.join(i.text.strip().replace(<span class="string">'\n'</span>,<span class="string">''</span>).replace(<span class="string">' '</span>,<span class="string">''</span>).replace(<span class="string">'-'</span>,<span class="string">''</span>) <span class="keyword">for</span> i <span class="keyword">in</span> house_xiaoqu)   <span class="comment">#整理小区格式</span></span><br><span class="line">                house_address = soup.select(<span class="string">'body &gt; div.main-wrap &gt; div.house-basic-info.clearfix &gt; div.house-basic-right.fr &gt; ul &gt; li:nth-of-type(2) &gt; span.c_000.mr_10'</span>)   <span class="comment">#所在地址</span></span><br><span class="line">                house_address = <span class="string">' - '</span>.join(i.text.strip().replace(<span class="string">'\n'</span>,<span class="string">''</span>).replace(<span class="string">' '</span>,<span class="string">''</span>).replace(<span class="string">'-'</span>,<span class="string">''</span>) <span class="keyword">for</span> i <span class="keyword">in</span> house_address)   <span class="comment">#整理地址格式</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    broker_name = soup.select(<span class="string">'div.agent-name.agent-little.f14.c_555 &gt; a'</span>)[<span class="number">0</span>].text.strip()   <span class="comment">#经纪人名称</span></span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    broker_name = <span class="string">''</span>   <span class="comment">#经纪人名称不存在的话赋值为空</span></span><br><span class="line">                broker_phone = soup.select(<span class="string">'#houseChatEntry &gt; div &gt; p.phone-num'</span>)[<span class="number">0</span>].text.strip()   <span class="comment">#经纪人电话</span></span><br><span class="line">                house_huxing = soup.select(<span class="string">'#generalSituation &gt; div &gt; ul.general-item-left &gt; li:nth-of-type(2) &gt; span.c_000'</span>)[<span class="number">0</span>].text.strip()   <span class="comment">#房屋户型</span></span><br><span class="line">                house_size = soup.select(<span class="string">'#generalSituation &gt; div &gt; ul.general-item-left &gt; li:nth-of-type(3) &gt; span.c_000'</span>)[<span class="number">0</span>].text.strip()  <span class="comment"># 房屋面积</span></span><br><span class="line">                house_direction = soup.select(<span class="string">'#generalSituation &gt; div &gt; ul.general-item-left &gt; li:nth-of-type(4) &gt; span.c_000'</span>)[<span class="number">0</span>].text.strip()  <span class="comment">#房屋朝向</span></span><br><span class="line">                house_floor = soup.select(<span class="string">'#generalSituation &gt; div &gt; ul.general-item-right &gt; li:nth-of-type(1) &gt; span.c_000'</span>)[<span class="number">0</span>].text.strip()  <span class="comment">#所在楼层</span></span><br><span class="line">                house_fitment = soup.select(<span class="string">'#generalSituation &gt; div &gt; ul.general-item-right &gt; li:nth-of-type(2) &gt; span.c_000'</span>)[<span class="number">0</span>].text.strip()  <span class="comment">#装修情况</span></span><br><span class="line">                house_age_limit = soup.select(<span class="string">'#generalSituation &gt; div &gt; ul.general-item-right &gt; li:nth-of-type(3) &gt; span.c_000'</span>)[<span class="number">0</span>].text.strip()  <span class="comment">#房产年限</span></span><br><span class="line">                house_build_year = soup.select(<span class="string">'#generalSituation &gt; div &gt; ul.general-item-right &gt; li:nth-of-type(4) &gt; span.c_000'</span>)[<span class="number">0</span>].text.strip()  <span class="comment">#建造时间</span></span><br><span class="line"></span><br><span class="line">                house_type = soup.select(<span class="string">'#generalExpense &gt; div &gt; ul.general-item-left &gt; li:nth-of-type(2) &gt; span.c_000'</span>)[<span class="number">0</span>].text   <span class="comment">#房屋类型</span></span><br><span class="line">                jiaoyiquanshu = soup.select(<span class="string">'#generalExpense &gt; div &gt; ul.general-item-left &gt; li:nth-of-type(3) &gt; span.c_000'</span>)[<span class="number">0</span>].text   <span class="comment">#交易权属</span></span><br><span class="line">                hexinmaidian = soup.select(<span class="string">'#generalDesc &gt; div &gt; div:nth-of-type(1) &gt; p'</span>)[<span class="number">0</span>].text   <span class="comment">#核心卖点</span></span><br><span class="line">                yezhuxintai = soup.select(<span class="string">'#generalDesc &gt; div &gt; div:nth-of-type(2) &gt; p'</span>)[<span class="number">0</span>].text.strip()   <span class="comment">#业主心态</span></span><br><span class="line">                fuwujieshao = soup.select(<span class="string">'#generalDesc &gt; div &gt; div:nth-of-type(3) &gt; p'</span>)[<span class="number">0</span>].text.strip()   <span class="comment">#服务介绍</span></span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    fangyuanbianhao = soup.select(<span class="string">'#generalDesc &gt; div &gt; div:nth-of-type(4) &gt; p'</span>)[<span class="number">0</span>].text.strip().split(<span class="string">'：'</span>)[<span class="number">1</span>]   <span class="comment">#房源编号</span></span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    fangyuanbianhao = <span class="string">''</span>    <span class="comment">#房源编号不存在的话赋值为空</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#所有字段存放在列表方便打印查看</span></span><br><span class="line">            house_info = [title,price_all,price_per,house_xiaoqu,house_address,broker_name,broker_phone,house_huxing,house_size,house_direction,house_floor,house_fitment,house_age_limit,house_build_year,house_type,jiaoyiquanshu,hexinmaidian,yezhuxintai,fuwujieshao,fangyuanbianhao]</span><br><span class="line"></span><br><span class="line">            <span class="comment">#sql插入语句</span></span><br><span class="line">            sql = <span class="string">"""INSERT INTO `58_ershoufang`.`fang` (`title`, \</span></span><br><span class="line"><span class="string">                    `price_all`, `price_per`, `house_xiaoqu`, `house_address`, `broker_name`, `broker_phone`, `house_huxing`, `house_size`, `house_direction`, `house_floor`, `house_fitment`, `house_age_limit`, `house_build_year`, `house_type`, `jiaoyiquanshu`, `hexinmaidian`, `yezhuxintai`, `fuwujieshao`, `fangyuanbianhao`) \</span></span><br><span class="line"><span class="string">                    VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');"""</span> % \</span><br><span class="line">                    (title,price_all,price_per,house_xiaoqu,house_address,broker_name,broker_phone,house_huxing,house_size,house_direction,house_floor,house_fitment,house_age_limit,house_build_year,house_type,jiaoyiquanshu,hexinmaidian,yezhuxintai,fuwujieshao,fangyuanbianhao)</span><br><span class="line">            write_sql(sql)      <span class="comment">#写入mysql的函数</span></span><br></pre></td></tr></table></figure>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://yoursite.com/2019/01/10/selenium%E7%88%AC%E5%8F%9658%E5%90%8C%E5%9F%8E%E6%89%8B%E6%9C%BA%E5%8F%B7/" data-id="ckb4jjvou002wx8us1jv8gmau" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript" target="_blank" rel="noopener">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2019/05/21/python%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            python命令行传递参数
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/12/19/%E9%80%9A%E8%BF%87%E7%99%BE%E5%BA%A6%E4%BA%91ORC%E8%A7%A3%E5%86%B3UI%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E9%AA%8C%E8%AF%81%E7%A0%81%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">通过百度云ORC解决UI自动化测试中的简单验证码问题</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(1) - TCP Connect" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="title">Python打造端口扫描器(1) - TCP Connect</a></p>
+                            <p class="item-date"><time datetime="2020-05-25T04:00:00.000Z" itemprop="datePublished">2020-05-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/17-8-15/53422481.jpg)" alt="python 中 print 打印显示颜色" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="title">python 中 print 打印显示颜色</a></p>
+                            <p class="item-date"><time datetime="2020-05-22T04:00:00.000Z" itemprop="datePublished">2020-05-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200508081439.png)" alt="编辑器拿 webshell - FCKeditor 2.4.3" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/%E7%BC%96%E8%BE%91%E5%99%A8%E6%8B%BFwebshell%20-%20FCKeditor%202.4.3/" class="title">编辑器拿 webshell - FCKeditor 2.4.3</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T12:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/secure_file_priv2.png)" alt="mysql secure_file_priv 设置" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/07/mysql%20secure_file_priv%20%E8%AE%BE%E7%BD%AE/" class="title">mysql secure_file_priv 设置</a></p>
+                            <p class="item-date"><time datetime="2020-05-07T04:00:00.000Z" itemprop="datePublished">2020-05-07</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2019/01/10/selenium%E7%88%AC%E5%8F%9658%E5%90%8C%E5%9F%8E%E6%89%8B%E6%9C%BA%E5%8F%B7/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
