@@ -172,6 +172,53 @@ var _hmt = _hmt || [];
         <article class="article article-summary">
     <div class="article-summary-inner">
         
+        <a href="/2020/03/26/markdown%E5%BC%95%E5%8F%91%E7%9A%84XSS/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://www.linuxidc.com/upload/2014-09/140905163467611.jpg)" alt="由markdown引发的XSS，获取其他用户的cookie登录信息" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://yoursite.com/2020/03/26/markdown%E5%BC%95%E5%8F%91%E7%9A%84XSS/">0</span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+            </div>
+            <div class="date"><time datetime="2020-03-26T04:00:00.000Z" itemprop="datePublished">2020-03-26</time></div>
+        </div>
+        
+    
+        <h1 class="article-title" itemprop="name">
+        <a href="/2020/03/26/markdown%E5%BC%95%E5%8F%91%E7%9A%84XSS/">由markdown引发的XSS，获取其他用户的cookie登录信息</a>
+        </h1>
+    
+
+        <p class="article-excerpt">
+            每天写文章都用的 markdown 语法本身是支持直接写入 html 语句的，一些支持 markdown 的论坛或写作网站为了安全性通常会牺牲一些便利，将敏感的 HTML 标签和 JS 函数进行过滤，禁止用户输入。既然是黑名单过滤那肯定就有疏忽的时候，带着这种猜想去网上寻找在线的 markdown 网站，果不其然发现了一处存储型 XSS 。
+初步验证下图某网站左边为文章编辑区域，右边是文章实时预览
+        </p>
+    </div>
+</article>
+    
+
+    
+    
+    
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
         <a href="/2020/03/22/xray%20%E6%89%AB%E6%8F%8F%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8(%E4%B8%80)/" class="thumbnail">
     
     
@@ -216,10 +263,14 @@ xray 是从长亭洞鉴核心引擎中提取出的社区版漏洞扫描神器，
     </div>
 </article>
     
+        </div>
+    
 
     
     
     
+    
+        <div class="article-row">
     
         <article class="article article-summary">
     <div class="article-summary-inner">
@@ -263,8 +314,6 @@ xray 是从长亭洞鉴核心引擎中提取出的社区版漏洞扫描神器，
         </p>
     </div>
 </article>
-    
-        </div>
     
 
     
@@ -635,58 +684,6 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
 </article>
     
 
-    
-    
-    
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <a href="/2019/08/06/python%E6%93%8D%E4%BD%9Cexcel%E8%A1%A8%E8%AE%BE%E7%BD%AE%E5%8D%95%E5%85%83%E6%A0%BC%E9%A2%9C%E8%89%B2/" class="thumbnail">
-    
-    
-        <span style="background-image:url(http://my.lipeilipei.top/excel.png)" alt="python操作excel设置单元格颜色" class="thumbnail-image"></span>
-    
-    
-        
-<span class="comment-counter">
-    <i class="fa fa-comments-o"></i>
-    
-        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://yoursite.com/2019/08/06/python%E6%93%8D%E4%BD%9Cexcel%E8%A1%A8%E8%AE%BE%E7%BD%AE%E5%8D%95%E5%85%83%E6%A0%BC%E9%A2%9C%E8%89%B2/">0</span>
-    
-</span>
-
-
-    
-</a>
-
-        
-        <div class="article-meta">
-            <div class="category">
-            <a class="article-category-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
-            </div>
-            <div class="date"><time datetime="2019-08-06T04:00:00.000Z" itemprop="datePublished">2019-08-06</time></div>
-        </div>
-        
-    
-        <h1 class="article-title" itemprop="name">
-        <a href="/2019/08/06/python%E6%93%8D%E4%BD%9Cexcel%E8%A1%A8%E8%AE%BE%E7%BD%AE%E5%8D%95%E5%85%83%E6%A0%BC%E9%A2%9C%E8%89%B2/">python操作excel设置单元格颜色</a>
-        </h1>
-    
-
-        <p class="article-excerpt">
-            
-之前写过一篇文章介绍python读取和写入excel表 (直达链接)，实际使用中有时候需要对某些单元格设置颜色以突出显示，例如自动化测试中自动将excel表中失败的用例标红。
-
-给单元格设置样式要用到xlutils库的Styles方法，将添加单元格样式与之前的写入excel表结合为如下的方法。
-12345678910111213141516171819import xlrd,xlwtfrom x
-        </p>
-    </div>
-</article>
-    
-        </div>
-    
-
 
     </div></section>
 
@@ -724,6 +721,26 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
         <h3 class="widget-title">recents</h3>
         <div class="widget">
             <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
                 
                     <li>
                         
@@ -802,26 +819,6 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
                             <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
                             <p class="item-title"><a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" class="title">Python打造端口扫描器(1) - TCP Connect</a></p>
                             <p class="item-date"><time datetime="2020-05-25T04:00:00.000Z" itemprop="datePublished">2020-05-25</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="thumbnail">
-    
-    
-        <span style="background-image:url(http://my.lipeilipei.top/17-8-15/53422481.jpg)" alt="python 中 print 打印显示颜色" class="thumbnail-image"></span>
-    
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
-                            <p class="item-title"><a href="/2020/05/22/python%20%E4%B8%AD%20print%20%E6%89%93%E5%8D%B0%E6%98%BE%E7%A4%BA%E9%A2%9C%E8%89%B2/" class="title">python 中 print 打印显示颜色</a></p>
-                            <p class="item-date"><time datetime="2020-05-22T04:00:00.000Z" itemprop="datePublished">2020-05-22</time></p>
                         </div>
                     </li>
                 
