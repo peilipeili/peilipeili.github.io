@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>centos 7 安装STF环境 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="APP,STF" />
+    
+    <meta name="description" content="前言因为自己的办公电脑是Windows，之前一直尝试在Windows安装STF环境，但是坑比较多，尝试多次无法解决，最终在虚拟机中的centos系统成功安装STF，虽然是虚拟机但实际使用中效率并没有很大影响，本文介绍一下在centos7安装STF的过程，参考了一些教程，将安装过程中遇到的各种问题做总结。 一、基础准备1. VMware Workstation 14 （如果是Linux真机，忽略这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="centos 7 安装STF环境">
+<meta property="og:url" content="http://yoursite.com/2018/10/11/centos%207%E5%AE%89%E8%A3%85STF%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言因为自己的办公电脑是Windows，之前一直尝试在Windows安装STF环境，但是坑比较多，尝试多次无法解决，最终在虚拟机中的centos系统成功安装STF，虽然是虚拟机但实际使用中效率并没有很大影响，本文介绍一下在centos7安装STF的过程，参考了一些教程，将安装过程中遇到的各种问题做总结。 一、基础准备1. VMware Workstation 14 （如果是Linux真机，忽略这">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/18-10-10/97368033.jpg">
+<meta property="article:published_time" content="2018-10-11T04:00:00.000Z">
+<meta property="article:modified_time" content="2018-12-17T02:30:56.869Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="APP">
+<meta property="article:tag" content="STF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/18-10-10/97368033.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-centos 7安装STF环境" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        centos 7 安装STF环境
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/10/11/centos%207%E5%AE%89%E8%A3%85STF%E7%8E%AF%E5%A2%83/" class="article-date">
+            <time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished">2018-10-11</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/APP/" rel="tag">APP</a>, <a class="tag-link" href="/tags/STF/" rel="tag">STF</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p><img src="http://my.lipeilipei.top/18-10-11/59560879.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为自己的办公电脑是Windows，之前一直尝试在Windows安装STF环境，但是坑比较多，尝试多次无法解决，最终在虚拟机中的centos系统成功安装STF，虽然是虚拟机但实际使用中效率并没有很大影响，本文介绍一下在centos7安装STF的过程，参考了一些教程，将安装过程中遇到的各种问题做总结。</p>
+<h2 id="一、基础准备"><a href="#一、基础准备" class="headerlink" title="一、基础准备"></a>一、基础准备</h2><h4 id="1-VMware-Workstation-14-（如果是Linux真机，忽略这一步）"><a href="#1-VMware-Workstation-14-（如果是Linux真机，忽略这一步）" class="headerlink" title="1. VMware Workstation 14 （如果是Linux真机，忽略这一步）"></a>1. VMware Workstation 14 （如果是Linux真机，忽略这一步）</h4><p>建议使用VMware Workstation 14及以上版本，我刚开始使用的是12版本，但是系统安装完成后一直无法识别移动USB设备，也就是我的手机，换成14版本则没有这个问题。<br>具体表现如下，手机已经连接上了虚拟机，但是centos中使用lsusb 和 adb devices命令都无法检测到这台手机：<br><img src="http://my.lipeilipei.top/18-10-10/60214551.jpg" alt=""><br><img src="http://my.lipeilipei.top/18-10-10/12890814.jpg" alt=""><br><img src="http://my.lipeilipei.top/18-10-10/19294148.jpg" alt=""></p>
+<p>虚拟机安装centos时，USB兼容性选择USB 3.0，网络连接选择桥接模式<br><img src="http://my.lipeilipei.top/18-10-10/70394990.jpg" alt=""><br><img src="http://my.lipeilipei.top/18-10-10/41503537.jpg" alt=""></p>
+<h4 id="2-centos-7"><a href="#2-centos-7" class="headerlink" title="2. centos 7"></a>2. centos 7</h4><p>centos6.x安装时候依赖关系不好整理，建议直接下载标准版centos7，安装时不要选择最小安装模式，服务器模式或者桌面模式即可，这样java环境等都会自动集成进去不用再手动配置。</p>
+<h4 id="3-安卓手机"><a href="#3-安卓手机" class="headerlink" title="3. 安卓手机"></a>3. 安卓手机</h4><ul>
+<li>开启开发者选项</li>
+<li>开启USB调试</li>
+<li>开启USB安装（STF要在手机上安装一个STF服务，不开启此选项会导致安装失败，也就无法通过STF操作手机）</li>
+</ul>
+<h4 id="4-功能正常的USB线"><a href="#4-功能正常的USB线" class="headerlink" title="4. 功能正常的USB线"></a>4. 功能正常的USB线</h4><h4 id="5-连接手机（如果是Linux真机，忽略这一步）"><a href="#5-连接手机（如果是Linux真机，忽略这一步）" class="headerlink" title="5. 连接手机（如果是Linux真机，忽略这一步）"></a>5. 连接手机（如果是Linux真机，忽略这一步）</h4><p>将手机通过USB连接电脑，同时在虚拟可移动设备中连接此手机<br><img src="http://my.lipeilipei.top/18-10-10/43784223.jpg" alt=""></p>
+<p>若果上图中没有”可移动设备”的选项，是因为虚拟机的USB服务没有开启，开启方法如下：<br>win + R键打开输入窗口，输入<code>services.msc</code>按回车，打开服务列表，找到<code>VMware USB Arbitration Service</code>，双击进入编辑页面，点击启动。<br><img src="http://my.lipeilipei.top/18-10-10/30630800.jpg" alt=""></p>
+<h2 id="二、环境安装"><a href="#二、环境安装" class="headerlink" title="二、环境安装"></a>二、环境安装</h2><h4 id="1-基本命令安装"><a href="#1-基本命令安装" class="headerlink" title="1.基本命令安装"></a>1.基本命令安装</h4><p>安装wget、zip、unzip等命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install wget</span><br><span class="line">yum install -y unzip zip</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-java环境配置"><a href="#2-java环境配置" class="headerlink" title="2.java环境配置"></a>2.java环境配置</h4><p>(安装的标准版centos7可忽略这一步，系统已自带java1.8)<br>首先下载jdk</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span></span><br><span class="line">mkdir java</span><br><span class="line"><span class="built_in">cd</span> java</span><br><span class="line">wget --no-cookies --no-check-certificate --header <span class="string">"Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"</span> <span class="string">"http://download.oracle.com/otn-pub/java/jdk/8u151-b12/e758a0de34e24606bca991d704f6dcbf/jdk-8u151-linux-x64.rpm"</span></span><br><span class="line">rpm -ivh jdk-8u151-linux-x64.rpm</span><br></pre></td></tr></table></figure>
+
+<p>配置环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>在文件中增加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.8.0_151</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br></pre></td></tr></table></figure>
+
+<p>验证环境是否ok：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/58424402.jpg" alt=""></p>
+<h4 id="3-android-SDK环境配置"><a href="#3-android-SDK环境配置" class="headerlink" title="3.android SDK环境配置"></a>3.android SDK环境配置</h4><p>首先下载SDK</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span></span><br><span class="line">mkdir android</span><br><span class="line"><span class="built_in">cd</span> android</span><br><span class="line">wget  https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip</span><br><span class="line">unzip  sdk-tools-linux-3859397.zip</span><br></pre></td></tr></table></figure>
+
+<p>配置环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>在文件中增加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/android/tools/bin</span><br></pre></td></tr></table></figure>
+
+<p>然后执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> profile</span><br></pre></td></tr></table></figure>
+
+<p>安装platform-tools</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdkmanager <span class="string">"platform-tools"</span></span><br></pre></td></tr></table></figure>
+
+<p>配置环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>在文件中增加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/android/platform-tools</span><br></pre></td></tr></table></figure>
+
+<p>执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> profile</span><br></pre></td></tr></table></figure>
+
+<p>查看已安装信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdkmanager --list</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/1503706.jpg" alt=""></p>
+<p>验证环境是否ok：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb --version</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/87611147.jpg" alt=""></p>
+<p>检查手机是否连接成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb devices</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/59516502.jpg" alt=""><br>我链接了两个手机，可以看到结果中有两条设备，设备号后面的状态是<code>device</code>证明设备正常可操作，如果不是此状态，而是<code>unauthorized</code>,<code>offline</code>等，检查一下手机是否连接好电脑，并且开启了USB调试。</p>
+<h4 id="4-node安装"><a href="#4-node安装" class="headerlink" title="4.node安装"></a>4.node安装</h4><p>依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span></span><br><span class="line">mkdir node   </span><br><span class="line"><span class="built_in">cd</span> node</span><br><span class="line">wget  https://nodejs.org/download/release/v9.0.0/node-v9.0.0-linux-x64.tar.gz</span><br><span class="line">tar xvf node-v9.0.0-linux-x64.tar.gz</span><br><span class="line">ln -s /usr/<span class="built_in">local</span>/node/node-v9.0.0-linux-x64/bin/node /usr/<span class="built_in">local</span>/bin/node</span><br><span class="line">ln -s /usr/<span class="built_in">local</span>/node/node-v9.0.0-linux-x64/bin/npm /usr/<span class="built_in">local</span>/bin/npm</span><br></pre></td></tr></table></figure>
+
+<p>检查环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/27036502.jpg" alt=""></p>
+<p>建议安装cnpm,后面直接用npm安装STF速度很慢甚至失败，使用国内的镜像速度要快很多</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+
+<p>检查cnpm是否安装OK</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cnpm -v</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/37711683.jpg" alt=""></p>
+<p>若提示cnpm命令不存在，是因为没有给cnpm执行程序配置环境变量，执行以下命令创建软链接即可，在系统任何地方就都能使用cnpm</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/<span class="built_in">local</span>/node/node-v9.0.0-linux-x64/bin/cnpm /usr/<span class="built_in">local</span>/bin/</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-rethinkdb安装"><a href="#5-rethinkdb安装" class="headerlink" title="5.rethinkdb安装"></a>5.rethinkdb安装</h4><p>依次执行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/dong       -----即在opt新建一个目录用来用来其他依赖</span><br><span class="line">wget http://download.rethinkdb.com/centos/7/`uname -m`/rethinkdb.repo -O /etc/yum.repos.d/rethinkdb.repo</span><br><span class="line">yum install rethinkdb</span><br></pre></td></tr></table></figure>
+
+<p>检查环境是否ok:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rethinkdb -v</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/73213770.jpg" alt=""></p>
+<p>启动rethinkdb<br>直接在命令行输入rethinkdb并回车即可开启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rethinkdb</span><br></pre></td></tr></table></figure>
+
+<p>也可以将它放入后台执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rethinkdb &amp;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-GraphicsMagick安装"><a href="#6-GraphicsMagick安装" class="headerlink" title="6.GraphicsMagick安装"></a>6.GraphicsMagick安装</h4><p>依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/dong</span><br><span class="line">wget https://iweb.dl.sourceforge.net/project/graphicsmagick/graphicsmagick/1.3.26/GraphicsMagick-1.3.26.tar.gz</span><br><span class="line">tar xvf GraphicsMagick-1.3.26.tar.gz</span><br><span class="line"><span class="built_in">cd</span> GraphicsMagick-1.3.26</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>验证环境是否ok:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gm</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/4749028.jpg" alt=""></p>
+<h4 id="7-yasm安装"><a href="#7-yasm安装" class="headerlink" title="7.yasm安装"></a>7.yasm安装</h4><p>依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/dong</span><br><span class="line">wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz</span><br><span class="line">tar xvf yasm-1.3.0.tar.gz</span><br><span class="line"><span class="built_in">cd</span> yasm-1.3.0</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>验证环境是否ok:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yasm --version</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/11436705.jpg" alt=""></p>
+<h4 id="8-libsodium安装"><a href="#8-libsodium安装" class="headerlink" title="8.libsodium安装"></a>8.libsodium安装</h4><p>依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/dong</span><br><span class="line">wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.15.tar.gz</span><br><span class="line">tar xvf libsodium-1.0.15.tar.gz</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>验证环境是否ok:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whereis libsodium</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/22039493.jpg" alt=""></p>
+<h4 id="9-zeromq安装"><a href="#9-zeromq安装" class="headerlink" title="9.zeromq安装"></a>9.zeromq安装</h4><p>依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/dong</span><br><span class="line">wget https://github.com/zeromq/libzmq/releases/download/v4.2.2/zeromq-4.2.2.tar.gz</span><br><span class="line">tar xvf zeromq-4.2.2.tar.gz</span><br><span class="line"><span class="built_in">cd</span> zeromq-4.2.2</span><br><span class="line">./configure</span><br><span class="line">遇到报错，yum install gcc-c++</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>打开文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ld.so.conf</span><br></pre></td></tr></table></figure>
+
+<p>在该文件最后添加一行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/lib</span><br></pre></td></tr></table></figure>
+
+<p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-protobuf安装"><a href="#10-protobuf安装" class="headerlink" title="10.protobuf安装"></a>10.protobuf安装</h4><p>依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/dong</span><br><span class="line">wget https://github.com/google/protobuf/releases/download/v3.5.0/protobuf-cpp-3.5.0.tar.gz</span><br><span class="line">tar xvf protobuf-cpp-3.5.0.tar.gz</span><br><span class="line"><span class="built_in">cd</span> protobuf-3.5.0</span><br><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/protobuf</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>配置变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/profile</span><br></pre></td></tr></table></figure>
+
+<p>在文件末尾增加如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/protobuf/bin/</span><br><span class="line"><span class="built_in">export</span> PKG_CONFIG_PATH=/usr/<span class="built_in">local</span>/protobuf/lib/pkgconfig/</span><br></pre></td></tr></table></figure>
+
+<p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> profile</span><br></pre></td></tr></table></figure>
+
+<p>验证环境是否ok:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc  --version</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/70106298.jpg" alt=""></p>
+<h4 id="11-pkg-config安装"><a href="#11-pkg-config安装" class="headerlink" title="11.pkg-config安装"></a>11.pkg-config安装</h4><p>依次执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/dong</span><br><span class="line">wget http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.2.tar.gz</span><br><span class="line">tar xvf pkg-config-0.29.2.tar.gz</span><br><span class="line"><span class="built_in">cd</span> pkg-config-0.29.2</span><br><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/pkg-config --with-internal-glib</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>验证环境是否ok:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pkg-config --version</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/6106934.jpg" alt=""></p>
+<h4 id="12-stf安装"><a href="#12-stf安装" class="headerlink" title="12.stf安装"></a>12.stf安装</h4><p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cnpm install -g stf</span><br><span class="line"><span class="comment"># 这里就用到了前面安装的cnpm，比npm速度快很多</span></span><br></pre></td></tr></table></figure>
+
+<p>下载完成后，检查STF所需环境是否都正常：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/node/node-v9.0.0-linux-x64/lib/node_modules/stf/bin</span><br><span class="line">./stf doctor</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-10-10/96378249.jpg" alt=""></p>
+<p>STF需要的所有环境就已经全部搭建完成，虚拟机的话建议创建个快照，避免以后环境出问题后可以快速恢复</p>
+<h2 id="开启STF服务"><a href="#开启STF服务" class="headerlink" title="开启STF服务"></a>开启STF服务</h2><p>进入目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/node/node-v9.0.0-linux-x64/lib/node_modules/stf/bin</span><br></pre></td></tr></table></figure>
+
+<p>执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./stf <span class="built_in">local</span> --public-ip 192.168.1.152 --port 7100 --allow-remote &amp;</span><br></pre></td></tr></table></figure>
+<p><code>--public-ip 192.168.1.152</code>就是这个centos机器的IP，可以通过ifconfig命令获取。<br><code>--port 7100</code>端口默认是7100，也可以指定为其他端口。<br><code>--allow-remote</code>表示可以远程访问。<br><code>&amp;</code> 在后台执行服务。</p>
+<p>打开web页面<br>打开centos自带的火狐浏览器，访问127.0.0.1:7100或者192.168.1.152:7100即可进入。<br>因为参数中设置了允许远程访问，在本机或者局域网内的其他机器的浏览器访问192.168.1.152:7100也可以正常访问，操作手机的反应速度很快，几乎没有延迟。<br><img src="http://my.lipeilipei.top/18-10-10/37052758.jpg" alt=""><br><img src="http://my.lipeilipei.top/18-10-11/59560879.jpg" alt=""></p>
+<h2 id="三、错误处理"><a href="#三、错误处理" class="headerlink" title="三、错误处理"></a>三、错误处理</h2><h4 id="1-adb-devices检测不到手机"><a href="#1-adb-devices检测不到手机" class="headerlink" title="1.adb devices检测不到手机"></a>1.adb devices检测不到手机</h4><p>通过lsusb能够检测到USB设备，但是adb devices却检查不到，或者检测到手机却提示<code>no permissions</code>，如下<br><img src="http://my.lipeilipei.top/18-10-11/43145407.jpg" alt=""></p>
+<p>解决办法：<br>新建文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/udev/rules.d/51-android.rules</span><br></pre></td></tr></table></figure>
+
+<p>在文件中填写如下信息并保存：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SUBSYSTEM==<span class="string">"usb"</span>, ATTRS&#123;idVendor&#125;==<span class="string">"2717"</span>,ATTRS&#123;idProduct&#125;==<span class="string">"ff48"</span>,MODE=<span class="string">"0666"</span></span><br></pre></td></tr></table></figure>
+<p>其中<code>2717</code>就是lsusb命令查出来的此设备的VID，<code>ff48</code>就是lsusb命令查出来的此设备的PID，<br><code>0666</code>默认不用修改，多个设备的话MODE都填写0666</p>
+<h4 id="2-STF环境校验有误"><a href="#2-STF环境校验有误" class="headerlink" title="2.STF环境校验有误"></a>2.STF环境校验有误</h4><p>Unexpected error checking ZeroMQ：Error：libzmq.so.5: cannot open shared object file: No such file or directory<br><img src="http://my.lipeilipei.top/18-10-11/85100091.jpg" alt=""><br><code>libzmq.so.5</code>这个文件所在的路径是<code>/usr/local/lib</code></p>
+<p>解决办法：(上面安装过程的第九步)<br>打开文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ld.so.conf</span><br></pre></td></tr></table></figure>
+
+<p>在该文件最后添加一行并保存：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/lib</span><br></pre></td></tr></table></figure>
+
+<p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-STF服务启动失败"><a href="#3-STF服务启动失败" class="headerlink" title="3.STF服务启动失败"></a>3.STF服务启动失败</h4><p>下图中的启动报错是因为rethinkdb没有启动导致的，也就是上面安装步骤的第五步，安装完后要在命令行输入rethinkdb将它启动<br><img src="http://my.lipeilipei.top/18-10-11/7556319.jpg" alt=""></p>
+<h4 id="4-远程机器无法访问页面"><a href="#4-远程机器无法访问页面" class="headerlink" title="4.远程机器无法访问页面"></a>4.远程机器无法访问页面</h4><p>是因为centos防火墙导致的，关闭防火墙即可，注意centos7默认关闭防火墙的命令跟centos6.X有区别</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.jianshu.com/p/539ee1053da3" target="_blank" rel="noopener">https://www.jianshu.com/p/539ee1053da3</a><br><a href="https://testerhome.com/topics/16355" target="_blank" rel="noopener">https://testerhome.com/topics/16355</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+</article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/10/16/requests%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E5%92%8C%E8%BF%94%E5%9B%9E%E7%9A%84cookie/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            requests简单获取cookie
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/08/17/unittest%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%B7%BB%E5%8A%A0log/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">unittest测试中添加log</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top//2020img/TIM图片20200705104958.png)" alt="windows主机渗透 - MS08-067" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="title">windows主机渗透 - MS08-067</a></p>
+                            <p class="item-date"><time datetime="2020-07-03T04:00:00.000Z" itemprop="datePublished">2020-07-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2018/10/11/centos%207%E5%AE%89%E8%A3%85STF%E7%8E%AF%E5%A2%83/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

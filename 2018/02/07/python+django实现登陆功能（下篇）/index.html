@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>python+django实现登陆功能（下篇） | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="django,semantic UI,html,css" />
+    
+    <meta name="description" content="在《python+django实现登陆功能（上篇）》介绍了django的安装配置，本片文章介绍如何用django快速实现登陆功能，开始之前先打开上篇创建的项目，并启动django服务。 Django的MTV模型 M 代表模型（Model），即数据存取层。 该层处理与数据相关的所有事务： 如何存取、如何验证有效性、包含哪些行为以及数据之间的关系等。T 代表模板(Template)，即表现层。 该层处">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python+django实现登陆功能（下篇）">
+<meta property="og:url" content="http://yoursite.com/2018/02/07/python+django%E5%AE%9E%E7%8E%B0%E7%99%BB%E9%99%86%E5%8A%9F%E8%83%BD%EF%BC%88%E4%B8%8B%E7%AF%87%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在《python+django实现登陆功能（上篇）》介绍了django的安装配置，本片文章介绍如何用django快速实现登陆功能，开始之前先打开上篇创建的项目，并启动django服务。 Django的MTV模型 M 代表模型（Model），即数据存取层。 该层处理与数据相关的所有事务： 如何存取、如何验证有效性、包含哪些行为以及数据之间的关系等。T 代表模板(Template)，即表现层。 该层处">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/17-11-7/31455576.jpg">
+<meta property="article:published_time" content="2018-02-07T14:00:00.000Z">
+<meta property="article:modified_time" content="2019-07-09T11:46:01.414Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="django">
+<meta property="article:tag" content="semantic UI">
+<meta property="article:tag" content="html">
+<meta property="article:tag" content="css">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/17-11-7/31455576.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-python+django实现登陆功能（下篇）" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        python+django实现登陆功能（下篇）
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/02/07/python+django%E5%AE%9E%E7%8E%B0%E7%99%BB%E9%99%86%E5%8A%9F%E8%83%BD%EF%BC%88%E4%B8%8B%E7%AF%87%EF%BC%89/" class="article-date">
+            <time datetime="2018-02-07T14:00:00.000Z" itemprop="datePublished">2018-02-07</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/css/" rel="tag">css</a>, <a class="tag-link" href="/tags/django/" rel="tag">django</a>, <a class="tag-link" href="/tags/html/" rel="tag">html</a>, <a class="tag-link" href="/tags/semantic-UI/" rel="tag">semantic UI</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p>在<a href="http://my.lipeilipei.top/2017/11/07/python+django实现登陆功能（上篇）" target="_blank" rel="noopener">《python+django实现登陆功能（上篇）》</a>介绍了django的安装配置，本片文章介绍如何用django快速实现登陆功能，开始之前先打开上篇创建的项目，并启动django服务。</p>
+<h2 id="Django的MTV模型"><a href="#Django的MTV模型" class="headerlink" title="Django的MTV模型"></a>Django的MTV模型</h2><blockquote>
+<p>M 代表模型（Model），即数据存取层。 该层处理与数据相关的所有事务： 如何存取、如何验证有效性、包含哪些行为以及数据之间的关系等。<br>T 代表模板(Template)，即表现层。 该层处理与表现相关的决定： 如何在页面或其他类型文档中进行显示。<br>V 代表视图（View），即业务逻辑层。 该层包含存取模型及调取恰当模板的相关逻辑。 你可以把它看作模型与模板之间的桥梁。</p>
+</blockquote>
+<p>除了以上三层之外，还需要一个URL分发器，它的作用是将一个个URL的页面请求分发给不同的View处理，View再调用相应的Model和Template</p>
+<h5 id="django工作流程示意图"><a href="#django工作流程示意图" class="headerlink" title="django工作流程示意图"></a>django工作流程示意图</h5><p><img src="http://my.lipeilipei.top/18-2-8/7406559.jpg" alt=""><br>用户请求对应的地址后，经过views.py文件中函数的处理，渲染后的数据加载到html返回给用户，urls.py、views.py、../templates/xx.html这几个文件在下文中会频繁用到。</p>
+<hr>
+<h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>在之前已经创建好的../sign/templates目录下，新建一个index.html文件，代码如下。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Rayvision Test<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Rayvision Test<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"get"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">placeholder</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">placeholder</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn"</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>登陆<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="GET请求登陆"><a href="#GET请求登陆" class="headerlink" title="GET请求登陆"></a>GET请求登陆</h5><p><code>form</code>标签的method属性设置为get，提交的时候将以get方式去请求。<br>浏览器打开这个html文件，填写之前创建好的账号并登陆，可以看到提交的参数添加到了URL中，<code>username</code>和<code>password</code>为HTML代码中<code>input</code>标签的name属性。<br><img src="http://my.lipeilipei.top/18-2-5/34357987.jpg" alt=""></p>
+<h5 id="POST请求登陆"><a href="#POST请求登陆" class="headerlink" title="POST请求登陆"></a>POST请求登陆</h5><p>一般网站登陆的请求大都是post请求，这里我们将form标签的method属性修改成post，然后再去登陆。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">placeholder</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">placeholder</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn"</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>登陆<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-2-5/35843014.jpg" alt=""><br>此时发现返回状态码403，禁止访问，这是因为django针对CSRF(跨站请求伪造)有保护措施，在生成的每个表单中放置一个自动生成的令牌，通过这个令牌判断POST请求是否来自同一个网站。</p>
+<ul>
+<li>解决办法一：<br>在上面的HTML中使用django的模板标签添加CSRF令牌，在form表单中添加如下。<br><img src="http://my.lipeilipei.top/18-2-5/71324495.jpg" alt=""><br></li>
+<li>解决办法二：<br>直接忽略这个CSRF检查，在../guest/settings.py文件中注释掉csrf，如下图。<br><img src="http://my.lipeilipei.top/18-2-5/51645928.jpg" alt=""></li>
+</ul>
+<p>再去请求登陆就不会报错，此时请求登陆后没有任何反应，因为还没有设置登录后跳转的地方。</p>
+<hr>
+<h2 id="处理登陆请求"><a href="#处理登陆请求" class="headerlink" title="处理登陆请求"></a>处理登陆请求</h2><p>现在已经写好了请求的前端，也有了请求参数，接下来就是交给django服务器来处理请求，首先通过form表单的action属性来指定提交的路径。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">action</span>=<span class="string">"/login_action/"</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>再打开../guest/urls.py文件添加/login_action/的路由。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sign <span class="keyword">import</span> views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    ...</span><br><span class="line">    url(<span class="string">r'^login_action/'</span>, views.login_action),</span><br></pre></td></tr></table></figure>
+
+<p>然后在../sign/views.py文件编写处理登陆的login_action函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> auth</span><br><span class="line"></span><br><span class="line"><span class="comment">#登陆</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login_action</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        username = request.POST.get(<span class="string">'username'</span>, <span class="string">''</span>)</span><br><span class="line">        password = request.POST.get(<span class="string">'password'</span>, <span class="string">''</span>)</span><br><span class="line">        user = auth.authenticate(username=username, password=password)</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            auth.login(request, user) <span class="comment"># 登录</span></span><br><span class="line">            request.session[<span class="string">'user'</span>] = username <span class="comment"># 将session信息记录到浏览器</span></span><br><span class="line">            <span class="keyword">return</span> HttpResponse(<span class="string">'login success!'</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> render(request,<span class="string">'index.html'</span>, &#123;<span class="string">'error'</span>: <span class="string">'username or password error!'</span>&#125;)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> render(request,<span class="string">'index.html'</span>)</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>首先判断请求的方法是否是POST，不是的话返回该页面。</p>
+</li>
+<li><p><code>request.POST.get</code>方法获取前端传入的用户名和密码，此处的username和password就是html文件里form表单部分那两个input标签的name属性。</p>
+</li>
+<li><p>django已经帮我们做好用户体系，使用<code>authenticate()</code>函数认证传入的用户名和密码。它接受两个参数，用户名 username 和密码 password，与数据库中的账户做对比，用户名密码正确的情况下返回给user对象。如果用户名密码不正确，则authenticate()返回 None。</p>
+</li>
+<li><p>if语句判断authenticate()返回如果不为 None，说明用户认证通过，接下来调用 auth.login()函数进行登陆，通过HttpResponse类返回登陆成功的提示。</p>
+</li>
+<li><p>认证失败的话，则提示用户名或密码错误，现在页面上没有显示错误提示的地方，这里我们再次用到django的模板语言，在密码输入框下方添加，它对应登陆函数中render返回字典中的 key，并且在登录失败的页面中显示 value，即”username or password error!”信息。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">placeholder</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">placeholder</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    &#123;&#123; error &#125;&#125;<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"btn"</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>登陆<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h5 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h5><p><img src="http://my.lipeilipei.top/18-2-6/75076248.jpg" alt="登陆成功"><br><img src="http://my.lipeilipei.top/18-2-6/60534329.jpg" alt="登陆失败"></p>
+<hr>
+<h2 id="增强与美化"><a href="#增强与美化" class="headerlink" title="增强与美化"></a>增强与美化</h2><p>上面我们已经实现了基本的登陆功能，但是是比较粗糙的，登陆成功后只临时用HttpResponse类提示，没有实际意义，页面也不够美观，接下来再写一个登陆成功后跳转的主页，并将登陆页面稍作美化。</p>
+<h5 id="登陆界面美化"><a href="#登陆界面美化" class="headerlink" title="登陆界面美化"></a>登陆界面美化</h5><p>这里推荐一个比较优秀的前端框架<a href="https://semantic-ui.com/" target="_blank" rel="noopener"><strong>Semantic UI</strong></a>，相比于Bootstrap和Foundation，它最大的特点就是非常的语义化，定制化也比较方便。<br>在本地或者网络上导入semantic.css，若在本地导入的话，将下载的semantic.css文件放在../static/css/目录下，然后把之前做好的登陆页面稍作修改。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Rayvision Test<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"../static/css/semantic.css"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">style</span>=<span class="string">"background-color: rgb(230,230,230)"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ui center aligned grid"</span> <span class="attr">style</span>=<span class="string">"margin-top: 200px"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ui six wide column"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span> <span class="attr">class</span>=<span class="string">"ui teal header"</span>&gt;</span>RAYVISION - TEST<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ui segment"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ui content"</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">form</span> <span class="attr">class</span>=<span class="string">"ui form"</span> <span class="attr">method</span>=<span class="string">"post"</span> <span class="attr">action</span>=<span class="string">"/login_action/"</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"field"</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">placeholder</span>=<span class="string">"username"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"field"</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">placeholder</span>=<span class="string">"password"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                        &#123;&#123; error &#125;&#125;<span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">"ui fluid large teal button"</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span>登陆<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="登录后页面"><a href="#登录后页面" class="headerlink" title="登录后页面"></a>登录后页面</h5><p>在../sign/templates目录下，新建一个test_manage.html文件，在里面写好需要的内容。<br>然后在../sign/views.py文件中之前写好的login_action函数做修改，将<code>HttpResponse</code>改为<code>HttpResponseRedirect</code>，它可以对路径进行重定向，从而将登录成功之后的请求指向/test_manage/目录。<br>接着在views.py文件中继续创建 test_manage 函数，用于返回test_manage.html 面页。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse,HttpResponseRedirect</span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> auth</span><br><span class="line"></span><br><span class="line"><span class="comment">#登陆</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login_action</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        username = request.POST.get(<span class="string">'username'</span>, <span class="string">''</span>)</span><br><span class="line">        password = request.POST.get(<span class="string">'password'</span>, <span class="string">''</span>)</span><br><span class="line">        user = auth.authenticate(username=username, password=password)</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            auth.login(request, user) <span class="comment"># 登录</span></span><br><span class="line">            request.session[<span class="string">'user'</span>] = username <span class="comment"># 将session信息记录到浏览器</span></span><br><span class="line">            response = HttpResponseRedirect(<span class="string">'/test_manage/'</span>)</span><br><span class="line">            <span class="keyword">return</span> response</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> render(request,<span class="string">'index.html'</span>, &#123;<span class="string">'error'</span>: <span class="string">'username or password error!'</span>&#125;)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> render(request,<span class="string">'index.html'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#测试项目管理页面</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_manage</span><span class="params">(request)</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">"test_manage.html"</span>)</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<p>最后不要忘记在../guest/urls.py 文件中添加路径 test_manage/的路由。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">from</span> sign <span class="keyword">import</span> views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    ...</span><br><span class="line">    url(<span class="string">r'^test_manage/$'</span>, views.event_manage),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h5 id="效果图-1"><a href="#效果图-1" class="headerlink" title="效果图"></a>效果图</h5><p><img src="http://my.lipeilipei.top/18-2-7/51672167.jpg" alt=""></p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>django实现登陆功能上下篇已经完结，但是这里介绍的是最基本的登陆功能，用的是django自动生成的user表里的数据，也仅仅实现了主流程，具体项目中按照需要创建新的数据表，根据严谨的测试思维，我们在开发阶段就要尽可能多的想到异常场景，例如用户名密码为空，特殊字符，长度限制等，在前面的登陆处理函数中通过if来判断，另外我们的请求是将密码明文发送出去的，相当不安全，因此还需再实际使用过程中引入所需的加密模块将密码加密。</p>
+<hr>
+<h3 id="相关文章"><a href="#相关文章" class="headerlink" title="相关文章"></a>相关文章</h3><p><a href="http://my.lipeilipei.top/2017/11/07/python+django实现登陆功能（上篇）" target="_blank" rel="noopener">python+django实现登陆功能（上篇）</a><br><font color="white">xx</font></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+</article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/03/28/python%E6%93%8D%E4%BD%9Ctxt%E6%96%87%E6%9C%AC%E7%9A%84%E5%87%A0%E7%A7%8D%E6%A8%A1%E5%BC%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            python操作txt文本的几种模式
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/01/30/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">常用小命令（长期更新）</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top//2020img/TIM图片20200705104958.png)" alt="windows主机渗透 - MS08-067" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="title">windows主机渗透 - MS08-067</a></p>
+                            <p class="item-date"><time datetime="2020-07-03T04:00:00.000Z" itemprop="datePublished">2020-07-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2018/02/07/python+django%E5%AE%9E%E7%8E%B0%E7%99%BB%E9%99%86%E5%8A%9F%E8%83%BD%EF%BC%88%E4%B8%8B%E7%AF%87%EF%BC%89/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

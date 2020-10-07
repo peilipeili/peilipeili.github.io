@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>通过百度云ORC解决UI自动化测试中的简单验证码问题 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="python,selenium,UI自动化,验证码" />
+    
+    <meta name="description" content="前言在selenium做自动化测试的时候经常会遇到验证码的问题，之前通过Tesseract-OCR软件结合python的pytesseract库来处理，然而在实际使用过程中识别效果并不是特别理想，需要手动训练自己的验证来提高识别率，却又经常遇到环境方面的问题导致障碍颇多，目前比较火的方法是通过大数据机器学习、人工智能来更好的训练，例如tensorflow框架等。当然时间有限的话还可以使用市场上已经">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过百度云ORC解决UI自动化测试中的简单验证码问题">
+<meta property="og:url" content="http://yoursite.com/2018/12/19/%E9%80%9A%E8%BF%87%E7%99%BE%E5%BA%A6%E4%BA%91ORC%E8%A7%A3%E5%86%B3UI%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E9%AA%8C%E8%AF%81%E7%A0%81%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言在selenium做自动化测试的时候经常会遇到验证码的问题，之前通过Tesseract-OCR软件结合python的pytesseract库来处理，然而在实际使用过程中识别效果并不是特别理想，需要手动训练自己的验证来提高识别率，却又经常遇到环境方面的问题导致障碍颇多，目前比较火的方法是通过大数据机器学习、人工智能来更好的训练，例如tensorflow框架等。当然时间有限的话还可以使用市场上已经">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/18-11-22/15812298.jpg">
+<meta property="article:published_time" content="2018-12-19T04:00:00.000Z">
+<meta property="article:modified_time" content="2018-12-19T02:46:47.226Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="selenium">
+<meta property="article:tag" content="UI自动化">
+<meta property="article:tag" content="验证码">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/18-11-22/15812298.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-通过百度云ORC解决UI自动化测试中的简单验证码问题" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        通过百度云ORC解决UI自动化测试中的简单验证码问题
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/12/19/%E9%80%9A%E8%BF%87%E7%99%BE%E5%BA%A6%E4%BA%91ORC%E8%A7%A3%E5%86%B3UI%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E9%AA%8C%E8%AF%81%E7%A0%81%E9%97%AE%E9%A2%98/" class="article-date">
+            <time datetime="2018-12-19T04:00:00.000Z" itemprop="datePublished">2018-12-19</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/UI%E8%87%AA%E5%8A%A8%E5%8C%96/" rel="tag">UI自动化</a>, <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/selenium/" rel="tag">selenium</a>, <a class="tag-link" href="/tags/%E9%AA%8C%E8%AF%81%E7%A0%81/" rel="tag">验证码</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在selenium做自动化测试的时候经常会遇到验证码的问题，之前通过Tesseract-OCR软件结合python的pytesseract库来处理，然而在实际使用过程中识别效果并不是特别理想，需要手动训练自己的验证来提高识别率，却又经常遇到环境方面的问题导致障碍颇多，目前比较火的方法是通过大数据机器学习、人工智能来更好的训练，例如tensorflow框架等。<br>当然时间有限的话还可以使用市场上已经成熟的图片/文字识别服务等，本文主要介绍百度云人工智能的文字识别服务。</p>
+<h2 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h2><h5 id="1-在百度云新建应用"><a href="#1-在百度云新建应用" class="headerlink" title="1.在百度云新建应用"></a>1.在百度云新建应用</h5><p>使用自己的百度账号登陆<a href="https://cloud.baidu.com/" target="_blank" rel="noopener">百度云</a>，进入控制台后，依次点击左侧的’总览’ - ‘产品服务’ - ‘人工智能’ - ‘文字识别’，进入如下页面<br><img src="http://my.lipeilipei.top/18-11-22/15812298.jpg" alt=""></p>
+<p><img src="http://my.lipeilipei.top/18-11-22/75553321.jpg" alt=""></p>
+<p>点击创建应用，应用名称和应用描述为必填，其他的根据自己的需要选择即可，我这里全部按照默认选择不去修改。<br><img src="http://my.lipeilipei.top/18-11-22/52696879.jpg" alt=""></p>
+<p>创建完成后在应用管理里面能看到刚刚新创建的内容如下图，<code>AppID</code>，<code>API Key</code>，<code>Secret Key</code>三个字段后面要用到。<br><img src="http://my.lipeilipei.top/18-11-22/9345750.jpg" alt=""></p>
+<h5 id="2-安装-baidu-aip-库"><a href="#2-安装-baidu-aip-库" class="headerlink" title="2.安装 baidu-aip 库"></a>2.安装 <code>baidu-aip</code> 库</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install baidu-aip</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、简单DEMO"><a href="#二、简单DEMO" class="headerlink" title="二、简单DEMO"></a>二、简单DEMO</h2><h5 id="1-首先需要导入aip库的AipOcr方法："><a href="#1-首先需要导入aip库的AipOcr方法：" class="headerlink" title="1.首先需要导入aip库的AipOcr方法："></a>1.首先需要导入aip库的AipOcr方法：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> aip <span class="keyword">import</span> AipOcr</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-然后验证百度账号："><a href="#2-然后验证百度账号：" class="headerlink" title="2.然后验证百度账号："></a>2.然后验证百度账号：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">APP_ID = <span class="string">'1*******9'</span></span><br><span class="line">API_KEY = <span class="string">'q*****************5'</span></span><br><span class="line">SECRET_KEY = <span class="string">'q**************g'</span></span><br><span class="line">client = AipOcr(APP_ID, API_KEY, SECRET_KEY)</span><br></pre></td></tr></table></figure>
+<p><code>AppID</code>，<code>API Key</code>，<code>Secret Key</code>分别是第一步环境准备中获取的三个字段。</p>
+<h5 id="3-人工智能识别验证码"><a href="#3-人工智能识别验证码" class="headerlink" title="3.人工智能识别验证码"></a>3.人工智能识别验证码</h5><p><img src="http://my.lipeilipei.top/18-12-18/2991964.jpg" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#打开本地本地验证码</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">r'C:\Users\Administrator\Desktop\验证码.jpg'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">    yanzhengma = fp.read()</span><br><span class="line"></span><br><span class="line"><span class="comment">#使用client.basicAccurate()或者client.basicGeneral()方法自动识别验证码</span></span><br><span class="line">a = client.basicAccurate(yanzhengma)</span><br><span class="line">print(a)</span><br></pre></td></tr></table></figure>
+<p>client.basicAccurate() –&gt; 文字识别高精度版本，每天免费500次请求。<br>client.basicGeneral() –&gt; 文字识别普通精度版本，每天免费50000次请求。</p>
+<p>此时打印出来的a是一个字典如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#39;log_id&#39;: 204739743393514642, &#39;words_result_num&#39;: 1, &#39;words_result&#39;: [&#123;&#39;words&#39;: &#39; r:e52&#39;&#125;]&#125;</span><br></pre></td></tr></table></figure>
+<p>我们只需要字典中的验证码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yzm_result = a[<span class="string">'words_result'</span>][<span class="number">0</span>][<span class="string">'words'</span>]</span><br><span class="line">print(yzm_result)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r:e52</span><br></pre></td></tr></table></figure>
+<p>使用的高精度识别版本，仍然偶尔会识别错误，例如上面这个例子，验证码前面多了个空格，第一个字母r后面多了个冒号，我们手动将这些不需要的字符替换为空即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yzm_result = a[<span class="string">'words_result'</span>][<span class="number">0</span>][<span class="string">'words'</span>].strip().replace(<span class="string">' '</span>,<span class="string">''</span>).replace(<span class="string">'.'</span>,<span class="string">''</span>).replace(<span class="string">':'</span>,<span class="string">''</span>).replace(<span class="string">'\''</span>,<span class="string">''</span>)</span><br><span class="line">    <span class="keyword">return</span> yzm_result</span><br></pre></td></tr></table></figure>
+<p>在我的测试使用中发现，对于这种级别的图片验证码高精度识别的话只是偶尔会出现错误，总体上还是很准确的，不用过多担心百度云的识别精度，实际应用到业务中可以放到循环里面，验证码识别失败重新识别即可。</p>
+<h5 id="4-将上面步骤写入到一个方法方便调用："><a href="#4-将上面步骤写入到一个方法方便调用：" class="headerlink" title="4.将上面步骤写入到一个方法方便调用："></a>4.将上面步骤写入到一个方法方便调用：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">yzm</span><span class="params">(yanzhengma_path)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    识别登陆验证码</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    APP_ID = <span class="string">'1*******9'</span></span><br><span class="line">    API_KEY = <span class="string">'q*****************5'</span></span><br><span class="line">    SECRET_KEY = <span class="string">'q**************g'</span></span><br><span class="line">    client = AipOcr(APP_ID, API_KEY, SECRET_KEY)</span><br><span class="line">    <span class="keyword">with</span> open(yanzhengma_path, <span class="string">'rb'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">        yanzhengma = fp.read()</span><br><span class="line">    a = client.basicAccurate(yanzhengma)     <span class="comment">#basicAccurate   basicGeneral</span></span><br><span class="line">    yzm_result = a[<span class="string">'words_result'</span>][<span class="number">0</span>][<span class="string">'words'</span>].strip().replace(<span class="string">' '</span>,<span class="string">''</span>).replace(<span class="string">'.'</span>,<span class="string">''</span>).replace(<span class="string">':'</span>,<span class="string">''</span>).replace(<span class="string">'\''</span>,<span class="string">''</span>)</span><br><span class="line">    print(<span class="string">'登陆验证码：'</span> + yzm_result)</span><br><span class="line">    <span class="keyword">return</span> yzm_result</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、登陆场景"><a href="#三、登陆场景" class="headerlink" title="三、登陆场景"></a>三、登陆场景</h2><p>主要实现过程：</p>
+<ul>
+<li>先把登陆页面的验证码保存到本地</li>
+<li>然后通过百度云识别出结果</li>
+<li>将结果填写到验证码输入框</li>
+<li>点击登陆并判断验证码是否正确，不正确的话返回第一步重新获取并识别</li>
+</ul>
+<p>直接通过代码的注释来解释每一步：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">from</span> aip <span class="keyword">import</span> AipOcr</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">yanzhengma_path = <span class="string">'C:/Users/Administrator/Desktop/'</span>  <span class="comment">#验证码存放的本地路径</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">()</span>:</span></span><br><span class="line">    driver = webdriver.Chrome()   <span class="comment">#启动浏览器</span></span><br><span class="line">    driver.get(<span class="string">'https://www.****.com/login.html'</span>)   <span class="comment">#进入登陆页面</span></span><br><span class="line">    driver.maximize_window()     <span class="comment">#窗口最大化</span></span><br><span class="line">    driver.find_element_by_css_selector(<span class="string">'#loginName'</span>).send_keys(<span class="string">'username'</span>)   <span class="comment">#输入登陆用户名</span></span><br><span class="line">    time.sleep(<span class="number">0.5</span>)</span><br><span class="line">    driver.find_element_by_css_selector(<span class="string">'#passWord'</span>).send_keys(<span class="string">'password'</span>)    <span class="comment">#输入登陆密码</span></span><br><span class="line">    time.sleep(<span class="number">0.5</span>)</span><br><span class="line">    n = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        driver.find_element_by_id(<span class="string">'randompicture'</span>).screenshot(yanzhengma_path + <span class="string">'验证码.jpg'</span>)   <span class="comment">#将登陆验证码截图保存在本地</span></span><br><span class="line">        yzm_result = yzm(yanzhengma_path + <span class="string">'验证码.jpg'</span>)  <span class="comment"># 自动识别验证码，调用上一步写好的验证码识别函数yzm()</span></span><br><span class="line">        driver.find_element_by_id(<span class="string">'radompicture'</span>).send_keys(yzm_result)   <span class="comment">#填写识别后的验证码</span></span><br><span class="line">        time.sleep(<span class="number">0.5</span>)</span><br><span class="line">        driver.find_element_by_css_selector(<span class="string">"#loginForm &gt; div &gt; div.login_btn &gt; a"</span>).click()  <span class="comment"># 点击"登陆"按钮</span></span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">try</span>:        <span class="comment">#这里判断登陆失败的提示信息是否存在,根据自己的实际业务来判断即可</span></span><br><span class="line">            is_element_exist = driver.find_element_by_id(<span class="string">'selectShopName'</span>)</span><br><span class="line">            <span class="keyword">if</span> is_element_exist.text == <span class="string">'验证码不正确！'</span>:       <span class="comment">#判断登陆失败提示信息是否是"验证码不正确！"，是则说明验证码识别错误，重新获取验证码并识别</span></span><br><span class="line">                print(<span class="string">'验证码不正确，正在第%d次重新登陆'</span> % n)</span><br><span class="line">                n += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">except</span>:      <span class="comment">#登陆失败的提示信息元素不存在则说明登陆成功，跳出循环</span></span><br><span class="line">            print(<span class="string">'登陆成功'</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/18-12-19/37321349.jpg" alt=""></p>
+<p>百度云文字识别还有更多强大的功能，例如身份证、车牌、营业执照识别等，详细介绍和收费标准参考<strong><a href="https://cloud.baidu.com/doc/OCR/OCR-API.html#.E6.8E.A5.E5.8F.A3.E8.83.BD.E5.8A.9B" target="_blank" rel="noopener">【官方文档】</a></strong>。</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+</article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2019/01/10/selenium%E7%88%AC%E5%8F%9658%E5%90%8C%E5%9F%8E%E6%89%8B%E6%9C%BA%E5%8F%B7/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            selenium爬取58同城手机号
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/10/16/Windows%E4%B8%8Bpython3%E7%99%BB%E9%99%86%E5%92%8C%E6%93%8D%E4%BD%9Clinux%E6%9C%8D%E5%8A%A1%E5%99%A8/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Windows下python3登陆和操作linux服务器</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top//2020img/TIM图片20200705104958.png)" alt="windows主机渗透 - MS08-067" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="title">windows主机渗透 - MS08-067</a></p>
+                            <p class="item-date"><time datetime="2020-07-03T04:00:00.000Z" itemprop="datePublished">2020-07-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2018/12/19/%E9%80%9A%E8%BF%87%E7%99%BE%E5%BA%A6%E4%BA%91ORC%E8%A7%A3%E5%86%B3UI%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84%E7%AE%80%E5%8D%95%E9%AA%8C%E8%AF%81%E7%A0%81%E9%97%AE%E9%A2%98/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
