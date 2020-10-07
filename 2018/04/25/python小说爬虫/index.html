@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+
+    
+
     
     <title>python小说爬虫 | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="python,爬虫" />
+    <meta name="keywords" content="python,爬虫" />
     
     <meta name="description" content="前言很久没有写爬虫了，最近接到一个抓取小说的项目顺便做此纪录练练手，之后工作中可能也会有部分场景要用到爬虫，爬取竞争对手进行数据分析什么的。目标网站：潇湘书院环境准备：  python3 requests库 BeautifulSoup库  整体思路抓取这个小说网站免费板块的所有内容，查看页面发现这个板块一共有6697页，每页有20本小说，那整体思路就是先抓取每页的20个小说名称和url，然后进入每">
 <meta property="og:type" content="article">
@@ -26,6 +29,8 @@
 <meta name="twitter:image" content="http://my.lipeilipei.top/18-4-26/72083805.jpg">
     
 
+    
+        <link rel="alternate" href="/" title="Hexo" type="application/atom+xml" />
     
 
     
@@ -47,7 +52,7 @@
 
 
     
-<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
 
     
     
@@ -72,6 +77,7 @@ var _hmt = _hmt || [];
 })();
 </script>
 
+    
     
 
 
@@ -98,8 +104,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                    
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -152,6 +158,7 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
+
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -162,6 +169,7 @@ var _hmt = _hmt || [];
     <a class="page-title-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a>
     </h1>
 </div>
+
                         <div class="main-body-content">
                             <article id="post-python小说爬虫" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
@@ -179,11 +187,23 @@ var _hmt = _hmt || [];
         
             <div class="article-meta">
                 
-    <div class="article-date">
-        <a href="/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" class="article-date">
-            <time datetime="2018-04-25T12:30:00.000Z" itemprop="datePublished">2018-04-25</time>
-        </a>
-    </div>
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" class="article-date">
+       <time datetime="2018-04-25T12:30:00.000Z" itemprop="datePublished">2018-04-25</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" class="article-date">
+     <time datetime="2019-11-05T14:07:34.701Z" itemprop="dateModified">2019-11-05</time>
+  </a>
+</div>
+
+
+                
 
                 
     <div class="article-tag">
@@ -191,11 +211,26 @@ var _hmt = _hmt || [];
         <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a>
     </div>
 
-				阅读量<span id="busuanzi_value_page_pv"></span>次
+                
+   <span id="/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" class="leancloud-visitors" data-flag-title="python小说爬虫">
+   <i class="fa fa-eye"></i>
+   <span class="post-meta-item-text">Views: </span>
+   <i class="leancloud-visitors-count">1000000</i>
+   </span>
+
+
+                
+
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很久没有写爬虫了，最近接到一个抓取小说的项目顺便做此纪录练练手，之后工作中可能也会有部分场景要用到爬虫，爬取竞争对手进行数据分析什么的。<br>目标网站：<a href="http://www.xxsy.net/" target="_blank" rel="noopener"><strong>潇湘书院</strong></a><br>环境准备：</p>
 <ul>
 <li>python3</li>
@@ -234,64 +269,111 @@ var _hmt = _hmt || [];
         <footer class="article-footer">
             
 
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
+
+
+    <a data-url="http://yoursite.com/2018/04/25/python%E5%B0%8F%E8%AF%B4%E7%88%AC%E8%99%AB/" data-id="ckfz2tnol002fp8tzf27k9o8m" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
 </script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
 
         </footer>
     </div>
-</article>
-<!-- 来必力City版安装代码 -->
-<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
-<script type="text/javascript">
-   (function(d, s) {
-       var j, e = d.getElementsByTagName(s)[0];
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "python小说爬虫",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/18-4-26/72083805.jpg",
+        "keywords": "python 爬虫",
+        "genre": "爬虫",
+        "datePublished": "2018-04-25",
+        "dateCreated": "2018-04-25",
+        "dateModified": "2019-11-05",
+        "url": "http://yoursite.com/2018/04/25/python小说爬虫/",
+        "description": "前言很久没有写爬虫了，最近接到一个抓取小说的项目顺便做此纪录练练手，之后工作中可能也会有部分场景要用到爬虫，爬取竞争对手进行数据分析什么的。目标网站：潇湘书院环境准备：
 
-       if (typeof LivereTower === 'function') { return; }
+python3
+requests库
+BeautifulSoup库
 
-       j = d.createElement(s);
-       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-       j.async = true;
-
-       e.parentNode.insertBefore(j, e);
-   })(document, 'script');
+整体思路抓取这个小说网站免费板块的所有内容，查看页面发现这个板块一共有6697页，每页有20本小说，那整体思路就是先抓取每页的20个小说名称和url，然后进入每",
+        "wordCount": 1371
+    }
 </script>
-<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
-</div>
-<!-- City版安装代码已完成 -->
+
+</article>
+
+    <section id="comments">
+    
+        
+    <!-- Valine -->
+    <div class="vcomments"></div>
+
+
+    
+    </section>
+
+
+
                         </div>
                     </section>
                     <aside id="sidebar">
@@ -302,8 +384,48 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="stack-overflow" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-stack-overflow"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
                         <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
                     </a>
                 </li>
                 
@@ -451,6 +573,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
     </div>
 </aside>
+
                 </div>
             </div>
         </div>
@@ -462,17 +585,24 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <!-- <p>&copy; 2020 John Doe</p> -->
-                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
-				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
             </div>
         </div>
     </div>
 </footer>
-        
-      
 
+    </div>
+    
+    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -480,19 +610,20 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = '' == true;
+        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
             appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
             appKey: "G379F3DJSqtjFpBrHtN68HUp",
-            placeholder: "Just Do It",
-            avatar:"",
+            placeholder: "留言吧",
+            avatar:"identicon",
             recordIP:"",
-            visitor: ""
+            visitor: "true"
         });
     </script>
+
 
 
 
@@ -533,6 +664,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     
     
 
+    
+    
+    
+
 
 
 <!-- Custom Scripts -->
@@ -540,6 +675,5 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <script src="/js/main.js"></script>
 
 
-    </div>
 </body>
 </html>

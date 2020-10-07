@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+
+    
+
     
     <title>unittest测试中添加log | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="python,接口测试,log,unittest" />
+    <meta name="keywords" content="python,接口测试,log,unittest" />
     
     <meta name="description" content="前言在使用python + unittest执行测试用例时将必要的日志信息输出到本地文件和控制台方便定位问题。 一、详解1.首先新建一个公共文件publicData.py，导入logging模块，创建一个实列 1234import logginglogger &#x3D; logging.getLogger()logger.setLevel(level&#x3D;logging.DEBUG)    #设置日志等级，I">
 <meta property="og:type" content="article">
@@ -29,6 +32,8 @@
     
 
     
+        <link rel="alternate" href="/" title="Hexo" type="application/atom+xml" />
+    
 
     
         <link rel="icon" href="/css/images/bitbug_favicon.ico" />
@@ -49,7 +54,7 @@
 
 
     
-<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
 
     
     
@@ -74,6 +79,7 @@ var _hmt = _hmt || [];
 })();
 </script>
 
+    
     
 
 
@@ -100,8 +106,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                    
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -154,6 +160,7 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
+
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -164,6 +171,7 @@ var _hmt = _hmt || [];
     <a class="page-title-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
     </h1>
 </div>
+
                         <div class="main-body-content">
                             <article id="post-unittest测试中添加log" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
@@ -181,11 +189,23 @@ var _hmt = _hmt || [];
         
             <div class="article-meta">
                 
-    <div class="article-date">
-        <a href="/2018/08/17/unittest%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%B7%BB%E5%8A%A0log/" class="article-date">
-            <time datetime="2018-08-17T12:30:00.000Z" itemprop="datePublished">2018-08-17</time>
-        </a>
-    </div>
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2018/08/17/unittest%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%B7%BB%E5%8A%A0log/" class="article-date">
+       <time datetime="2018-08-17T12:30:00.000Z" itemprop="datePublished">2018-08-17</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2018/08/17/unittest%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%B7%BB%E5%8A%A0log/" class="article-date">
+     <time datetime="2018-12-17T02:30:56.787Z" itemprop="dateModified">2018-12-17</time>
+  </a>
+</div>
+
+
+                
 
                 
     <div class="article-tag">
@@ -193,11 +213,26 @@ var _hmt = _hmt || [];
         <a class="tag-link" href="/tags/log/" rel="tag">log</a>, <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/unittest/" rel="tag">unittest</a>, <a class="tag-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a>
     </div>
 
-				阅读量<span id="busuanzi_value_page_pv"></span>次
+                
+   <span id="/2018/08/17/unittest%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%B7%BB%E5%8A%A0log/" class="leancloud-visitors" data-flag-title="unittest测试中添加log">
+   <i class="fa fa-eye"></i>
+   <span class="post-meta-item-text">Views: </span>
+   <i class="leancloud-visitors-count">1000000</i>
+   </span>
+
+
+                
+
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在使用python + unittest执行测试用例时将必要的日志信息输出到本地文件和控制台方便定位问题。</p>
 <h2 id="一、详解"><a href="#一、详解" class="headerlink" title="一、详解"></a>一、详解</h2><p>1.首先新建一个公共文件publicData.py，导入logging模块，创建一个实列</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger()</span><br><span class="line">logger.setLevel(level=logging.DEBUG)    <span class="comment">#设置日志等级，INFO/DEBUG/WARNING/ERROR</span></span><br></pre></td></tr></table></figure>
@@ -228,64 +263,107 @@ var _hmt = _hmt || [];
         <footer class="article-footer">
             
 
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
+
+
+    <a data-url="http://yoursite.com/2018/08/17/unittest%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%B7%BB%E5%8A%A0log/" data-id="ckfz2tnpe003ap8tzaesm6ivl" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
 </script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
 
         </footer>
     </div>
-</article>
-<!-- 来必力City版安装代码 -->
-<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
-<script type="text/javascript">
-   (function(d, s) {
-       var j, e = d.getElementsByTagName(s)[0];
-
-       if (typeof LivereTower === 'function') { return; }
-
-       j = d.createElement(s);
-       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-       j.async = true;
-
-       e.parentNode.insertBefore(j, e);
-   })(document, 'script');
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "unittest测试中添加log",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/17-8-15/53422481.jpg",
+        "keywords": "python 接口测试 log unittest",
+        "genre": "测试",
+        "datePublished": "2018-08-17",
+        "dateCreated": "2018-08-17",
+        "dateModified": "2018-12-17",
+        "url": "http://yoursite.com/2018/08/17/unittest测试中添加log/",
+        "description": "前言在使用python + unittest执行测试用例时将必要的日志信息输出到本地文件和控制台方便定位问题。
+一、详解1.首先新建一个公共文件publicData.py，导入logging模块，创建一个实列
+1234import logginglogger = logging.getLogger()logger.setLevel(level=logging.DEBUG)    #设置日志等级，I",
+        "wordCount": 305
+    }
 </script>
-<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
-</div>
-<!-- City版安装代码已完成 -->
+
+</article>
+
+    <section id="comments">
+    
+        
+    <!-- Valine -->
+    <div class="vcomments"></div>
+
+
+    
+    </section>
+
+
+
                         </div>
                     </section>
                     <aside id="sidebar">
@@ -296,8 +374,48 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="stack-overflow" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-stack-overflow"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
                         <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
                     </a>
                 </li>
                 
@@ -445,6 +563,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
     </div>
 </aside>
+
                 </div>
             </div>
         </div>
@@ -456,17 +575,24 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <!-- <p>&copy; 2020 John Doe</p> -->
-                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
-				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
             </div>
         </div>
     </div>
 </footer>
-        
-      
 
+    </div>
+    
+    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -474,19 +600,20 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = '' == true;
+        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
             appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
             appKey: "G379F3DJSqtjFpBrHtN68HUp",
-            placeholder: "Just Do It",
-            avatar:"",
+            placeholder: "留言吧",
+            avatar:"identicon",
             recordIP:"",
-            visitor: ""
+            visitor: "true"
         });
     </script>
+
 
 
 
@@ -527,6 +654,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     
     
 
+    
+    
+    
+
 
 
 <!-- Custom Scripts -->
@@ -534,6 +665,5 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <script src="/js/main.js"></script>
 
 
-    </div>
 </body>
 </html>

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+
+    
+
     
     <title>mongodb安装及可能出现的问题 | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="工具,数据库,mongodb" />
+    <meta name="keywords" content="工具,数据库,mongodb" />
     
     <meta name="description" content="目录 下载mongodb 配置 启动mongodb 进入mongodb 注册为Windows服务 可能出现的问题  一、下载mongodb进入官网，选择适合的版本并下载到本地，不同操作系统，32位64位都有对应的安装包，比如我下载的是msi格式的安装程序，下载后直接双击运行安装，我安装的路径是 D:\application\mongodb。 二、配置1.在D:\application\mongod">
 <meta property="og:type" content="article">
@@ -27,6 +30,8 @@
 <meta name="twitter:image" content="http://my.lipeilipei.top/17-8-20/70360838.jpg">
     
 
+    
+        <link rel="alternate" href="/" title="Hexo" type="application/atom+xml" />
     
 
     
@@ -48,7 +53,7 @@
 
 
     
-<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
 
     
     
@@ -73,6 +78,7 @@ var _hmt = _hmt || [];
 })();
 </script>
 
+    
     
 
 
@@ -99,8 +105,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                    
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -153,6 +159,7 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
+
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -163,6 +170,7 @@ var _hmt = _hmt || [];
     <a class="page-title-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a>
     </h1>
 </div>
+
                         <div class="main-body-content">
                             <article id="post-mongodb安装" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
@@ -180,11 +188,23 @@ var _hmt = _hmt || [];
         
             <div class="article-meta">
                 
-    <div class="article-date">
-        <a href="/2017/08/15/mongodb%E5%AE%89%E8%A3%85/" class="article-date">
-            <time datetime="2017-08-14T17:03:00.000Z" itemprop="datePublished">2017-08-15</time>
-        </a>
-    </div>
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2017/08/15/mongodb%E5%AE%89%E8%A3%85/" class="article-date">
+       <time datetime="2017-08-14T17:03:00.000Z" itemprop="datePublished">2017-08-15</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2017/08/15/mongodb%E5%AE%89%E8%A3%85/" class="article-date">
+     <time datetime="2018-12-17T02:30:56.668Z" itemprop="dateModified">2018-12-17</time>
+  </a>
+</div>
+
+
+                
 
                 
     <div class="article-tag">
@@ -192,11 +212,26 @@ var _hmt = _hmt || [];
         <a class="tag-link" href="/tags/mongodb/" rel="tag">mongodb</a>, <a class="tag-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a>, <a class="tag-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a>
     </div>
 
-				阅读量<span id="busuanzi_value_page_pv"></span>次
+                
+   <span id="/2017/08/15/mongodb%E5%AE%89%E8%A3%85/" class="leancloud-visitors" data-flag-title="mongodb安装及可能出现的问题">
+   <i class="fa fa-eye"></i>
+   <span class="post-meta-item-text">Views: </span>
+   <i class="leancloud-visitors-count">1000000</i>
+   </span>
+
+
+                
+
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
             <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
 <li>下载mongodb</li>
 <li>配置</li>
@@ -225,64 +260,114 @@ var _hmt = _hmt || [];
         <footer class="article-footer">
             
 
-    <div class="bdsharebuttonbox">
-    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
-    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
-    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
-    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
-    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
-    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
-</div>
+
+
+    <a data-url="http://yoursite.com/2017/08/15/mongodb%E5%AE%89%E8%A3%85/" data-id="ckfz2tnnw001ap8tz48n8clzl" class="article-share-link"><i class="fa fa-share"></i>Share</a>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
 </script>
-<style>
-    .bdshare_popup_box {
-        border-radius: 4px;
-        border: #e1e1e1 solid 1px;
-    }
-    .bdshare-button-style0-16 a,
-    .bdshare-button-style0-16 .bds_more {
-        padding-left: 20px;
-        margin: 6px 10px 6px 0;
-    }
-    .bdshare_dialog_list a,
-    .bdshare_popup_list a,
-    .bdshare_popup_bottom a {
-        font-family: 'Microsoft Yahei';
-    }
-    .bdshare_popup_top {
-        display: none;
-    }
-    .bdshare_popup_bottom {
-        height: auto;
-        padding: 5px;
-    }
-</style>
-
-
 
         </footer>
     </div>
-</article>
-<!-- 来必力City版安装代码 -->
-<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
-<script type="text/javascript">
-   (function(d, s) {
-       var j, e = d.getElementsByTagName(s)[0];
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "mongodb安装及可能出现的问题",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/17-8-20/70360838.jpg",
+        "keywords": "工具 数据库 mongodb",
+        "genre": "Web开发",
+        "datePublished": "2017-08-15",
+        "dateCreated": "2017-08-15",
+        "dateModified": "2018-12-17",
+        "url": "http://yoursite.com/2017/08/15/mongodb安装/",
+        "description": "目录
+下载mongodb
+配置
+启动mongodb
+进入mongodb
+注册为Windows服务
+可能出现的问题
 
-       if (typeof LivereTower === 'function') { return; }
-
-       j = d.createElement(s);
-       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-       j.async = true;
-
-       e.parentNode.insertBefore(j, e);
-   })(document, 'script');
+一、下载mongodb进入官网，选择适合的版本并下载到本地，不同操作系统，32位64位都有对应的安装包，比如我下载的是msi格式的安装程序，下载后直接双击运行安装，我安装的路径是 D:\application\mongodb。
+二、配置1.在D:\application\mongod",
+        "wordCount": 103
+    }
 </script>
-<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
-</div>
-<!-- City版安装代码已完成 -->
+
+</article>
+
+    <section id="comments">
+    
+        
+    <!-- Valine -->
+    <div class="vcomments"></div>
+
+
+    
+    </section>
+
+
+
                         </div>
                     </section>
                     <aside id="sidebar">
@@ -293,8 +378,48 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="stack-overflow" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-stack-overflow"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
                         <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
                     </a>
                 </li>
                 
@@ -442,6 +567,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
     </div>
 </aside>
+
                 </div>
             </div>
         </div>
@@ -453,17 +579,24 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <!-- <p>&copy; 2020 John Doe</p> -->
-                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
-				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
             </div>
         </div>
     </div>
 </footer>
-        
-      
 
+    </div>
+    
+    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -471,19 +604,20 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = '' == true;
+        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
             appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
             appKey: "G379F3DJSqtjFpBrHtN68HUp",
-            placeholder: "Just Do It",
-            avatar:"",
+            placeholder: "留言吧",
+            avatar:"identicon",
             recordIP:"",
-            visitor: ""
+            visitor: "true"
         });
     </script>
+
 
 
 
@@ -524,6 +658,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     
     
 
+    
+    
+    
+
 
 
 <!-- Custom Scripts -->
@@ -531,6 +669,5 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <script src="/js/main.js"></script>
 
 
-    </div>
 </body>
 </html>
