@@ -605,17 +605,26 @@ NULL(默认)
     </div>
 </footer>
         
-    
-    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-    <script src="//cdn.jsdelivr.net/gh/xcss/valine@v1.1.7-rc3/dist/Valine.min.js"></script>
+      
+
+    <script src="//unpkg.com/valine"></script>
     <script>
+        var GUEST = ['nick','mail','link'];
+        var meta = '';
+        meta = meta.split(',').filter(function (item) {
+            return GUEST.indexOf(item)>-1;
+        });
+        var avatarcdn = '' == true;
         new Valine({
-            el: '#valine-thread' ,
-            notify:true,
-            verify:false,
-            app_id: 'FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz',
-            app_key: 'G379F3DJSqtjFpBrHtN68HUp',
-            placeholder: 'Just Do It'
+            el: '.vcomments',
+            notify: "true",
+            verify: "false",
+            appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
+            appKey: "G379F3DJSqtjFpBrHtN68HUp",
+            placeholder: "Just Do It",
+            avatar:"",
+            recordIP:"",
+            visitor: ""
         });
     </script>
 

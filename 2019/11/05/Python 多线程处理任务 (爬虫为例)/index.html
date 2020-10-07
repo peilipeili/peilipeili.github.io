@@ -7,7 +7,7 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="爬虫,多线程,python" />
+        <meta name="keywords" content="python,爬虫,多线程" />
     
     <meta name="description" content="这篇文章主要讲一下使用 Python 的 threading 库进行多线程任务，本文以一个爬虫为例。 爬虫 DEMO下面是一个百度搜索的示例，使用 requests + BeautifulSoup 采集指定关键词指定页数的结果标题。封装的方法接受三个参数，分别是起始页码(int)，结束页码(int)，要搜索的关键词(str)。 123456789101112131415161718def baid">
 <meta property="og:type" content="article">
@@ -20,9 +20,9 @@
 <meta property="article:published_time" content="2019-11-05T04:00:00.000Z">
 <meta property="article:modified_time" content="2019-11-05T14:08:03.103Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
 <meta property="article:tag" content="爬虫">
 <meta property="article:tag" content="多线程">
-<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://my.lipeilipei.top/18-4-26/72083805.jpg">
     
@@ -470,17 +470,26 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     </div>
 </footer>
         
-    
-    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-    <script src="//cdn.jsdelivr.net/gh/xcss/valine@v1.1.7-rc3/dist/Valine.min.js"></script>
+      
+
+    <script src="//unpkg.com/valine"></script>
     <script>
+        var GUEST = ['nick','mail','link'];
+        var meta = '';
+        meta = meta.split(',').filter(function (item) {
+            return GUEST.indexOf(item)>-1;
+        });
+        var avatarcdn = '' == true;
         new Valine({
-            el: '#valine-thread' ,
-            notify:true,
-            verify:false,
-            app_id: 'FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz',
-            app_key: 'G379F3DJSqtjFpBrHtN68HUp',
-            placeholder: 'Just Do It'
+            el: '.vcomments',
+            notify: "true",
+            verify: "false",
+            appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
+            appKey: "G379F3DJSqtjFpBrHtN68HUp",
+            placeholder: "Just Do It",
+            avatar:"",
+            recordIP:"",
+            visitor: ""
         });
     </script>
 
