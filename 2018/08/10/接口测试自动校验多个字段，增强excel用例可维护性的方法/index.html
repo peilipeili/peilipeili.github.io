@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>HTTP接口测试自动校验多个字段，增强excel用例可维护性的方法 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="python,unittest,excel" />
+    
+    <meta name="description" content="前言当接口比较多，返回值也比较多，接口自动化测试校验返回值是否符合预期就得在每条测试用例后面添加多个assert校验，几百条用例的时候写校验语句就得上千条，为了简化代码，同时为了方便继续使用现有的excel表维护接口用例，因此将断言的方法重新封装为一个易用的函数来调用。 实现方式整理excel用例首先excel中的用例预期结果按照统一的格式来写，这是方便代码获取到预期结果并做下一步操作。例如这一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP接口测试自动校验多个字段，增强excel用例可维护性的方法">
+<meta property="og:url" content="http://yoursite.com/2018/08/10/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95%E8%87%AA%E5%8A%A8%E6%A0%A1%E9%AA%8C%E5%A4%9A%E4%B8%AA%E5%AD%97%E6%AE%B5%EF%BC%8C%E5%A2%9E%E5%BC%BAexcel%E7%94%A8%E4%BE%8B%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7%E7%9A%84%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言当接口比较多，返回值也比较多，接口自动化测试校验返回值是否符合预期就得在每条测试用例后面添加多个assert校验，几百条用例的时候写校验语句就得上千条，为了简化代码，同时为了方便继续使用现有的excel表维护接口用例，因此将断言的方法重新封装为一个易用的函数来调用。 实现方式整理excel用例首先excel中的用例预期结果按照统一的格式来写，这是方便代码获取到预期结果并做下一步操作。例如这一个">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/18-8-14/59983745.jpg">
+<meta property="article:published_time" content="2018-08-10T12:30:00.000Z">
+<meta property="article:modified_time" content="2018-12-17T02:30:56.656Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="unittest">
+<meta property="article:tag" content="excel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/18-8-14/59983745.jpg">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-接口测试自动校验多个字段，增强excel用例可维护性的方法" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        HTTP接口测试自动校验多个字段，增强excel用例可维护性的方法
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2018/08/10/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95%E8%87%AA%E5%8A%A8%E6%A0%A1%E9%AA%8C%E5%A4%9A%E4%B8%AA%E5%AD%97%E6%AE%B5%EF%BC%8C%E5%A2%9E%E5%BC%BAexcel%E7%94%A8%E4%BE%8B%E5%8F%AF%E7%BB%B4%E6%8A%A4%E6%80%A7%E7%9A%84%E6%96%B9%E6%B3%95/" class="article-date">
+            <time datetime="2018-08-10T12:30:00.000Z" itemprop="datePublished">2018-08-10</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/excel/" rel="tag">excel</a>, <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/unittest/" rel="tag">unittest</a>
+    </div>
+
+				阅读量<span id="busuanzi_value_page_pv"></span>次
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当接口比较多，返回值也比较多，接口自动化测试校验返回值是否符合预期就得在每条测试用例后面添加多个assert校验，几百条用例的时候写校验语句就得上千条，为了简化代码，同时为了方便继续使用现有的excel表维护接口用例，因此将断言的方法重新封装为一个易用的函数来调用。</p>
+<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><h4 id="整理excel用例"><a href="#整理excel用例" class="headerlink" title="整理excel用例"></a>整理excel用例</h4><p>首先excel中的用例预期结果按照统一的格式来写，这是方便代码获取到预期结果并做下一步操作。<br>例如这一个接口我要检验返回值中的三个字段，分别是code，message，result，预期结果这一栏每个字段后面写上英文冒号以及预期值，三个字段通过换行分隔开。<br><img src="http://my.lipeilipei.top/18-8-14/59983745.jpg" alt=""></p>
+<h4 id="编写公共方法"><a href="#编写公共方法" class="headerlink" title="编写公共方法"></a>编写公共方法</h4><p>这里我新建一个public_data.py文件，在里面编写公共方法。</p>
+<h5 id="1-读取excel表公共方法"><a href="#1-读取excel表公共方法" class="headerlink" title="1.读取excel表公共方法"></a>1.读取excel表公共方法</h5><p>这段代码是从excel读取内容的公共方法，它接收三个参数，分别是表的名称、行、列，可以取到具体哪一个框的内容。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read_excel</span><span class="params">(sheet,row,col)</span>:</span></span><br><span class="line">    <span class="string">'''读取excel表公共方法'''</span></span><br><span class="line">    a = xlrd.open_workbook(<span class="string">'E:/R-Test/datas/test_data.xls'</span>)</span><br><span class="line">    b = a.sheet_by_name(sheet)</span><br><span class="line">    c = b.cell_value(row,col)</span><br><span class="line">    <span class="keyword">return</span> c</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-判断每个接口用例执行几次断言公共方法"><a href="#2-判断每个接口用例执行几次断言公共方法" class="headerlink" title="2.判断每个接口用例执行几次断言公共方法"></a>2.判断每个接口用例执行几次断言公共方法</h5><p>这段代码是校验多个返回字段的公共方法，它接收五个参数，分别是self、表名、行、列、请求返回值。<br>调用上面的读取excel表公共方法，从预期结果栏获取需要校验的字段名，预期值，此方法直接获取到的是一个字符串，现在通过换行符将需要校验的几个字段拆分，然后放入for循环用assert来断言。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">assert_num</span><span class="params">(self,sheet,row,col,result)</span>:</span></span><br><span class="line">    <span class="string">'''判断每个接口用例执行几次断言'''</span></span><br><span class="line">    a = read_excel(sheet,row,col).split(<span class="string">'\n'</span>)       <span class="comment">#获取预期结果</span></span><br><span class="line">    b = read_excel(sheet, row, col+<span class="number">1</span>).split(<span class="string">'\n'</span>)   <span class="comment">#获取结果解释，用于断言失败后打印必要信息</span></span><br><span class="line">    <span class="keyword">for</span> i,j <span class="keyword">in</span> zip(a,b):</span><br><span class="line">        r = result[i.split(<span class="string">':'</span>)[<span class="number">0</span>]]                 <span class="comment">#r就是从返回值中取出的要进行校验的字段，result参数是需要传入的接口返回信息。</span></span><br><span class="line">        <span class="keyword">if</span> type(r) <span class="keyword">is</span> int:                          <span class="comment">#如果返回值取出的数据为int格式，把他转为str，方便跟excel中取出的字符串比较,此框架从excel表中取出的内容为str格式</span></span><br><span class="line">            r = str(r)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        self.assertEqual(r, i.split(<span class="string">':'</span>)[<span class="number">1</span>],msg=<span class="string">'['</span>+j+<span class="string">'校验有误]'</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="3-优化上一个方法"><a href="#3-优化上一个方法" class="headerlink" title="3.优化上一个方法"></a>3.优化上一个方法</h5><p>实际测试过程中发现有些要校验的字段并不是在接口返回json的第一层，而是嵌套好几层的，例如下面这个接口的status字段。<br><img src="http://my.lipeilipei.top/18-8-14/39980507.jpg" alt=""></p>
+<p>因此需要校验这些字段的话首先要从excel表中拿到正确的字段名，同样在写excel表的时候就按照固定格式，那么字段名写成这样，每一层中间用短横线’-‘分开，注意如果测试的接口本身字段有短横线要注意区分，换成其他的符号。<br><img src="http://my.lipeilipei.top/18-8-14/23353913.jpg" alt=""></p>
+<p>然后修改上面的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">assert_num</span><span class="params">(self,sheet,row,col,result)</span>:</span></span><br><span class="line">    <span class="string">'''判断每个接口用例执行几次断言'''</span></span><br><span class="line">    a = read_excel(sheet,row,col).split(<span class="string">'\n'</span>)       <span class="comment">#获取预期结果</span></span><br><span class="line">    b = read_excel(sheet, row, col+<span class="number">1</span>).split(<span class="string">'\n'</span>)   <span class="comment">#获取结果解释</span></span><br><span class="line">    <span class="keyword">for</span> i,j <span class="keyword">in</span> zip(a,b):</span><br><span class="line">        x = i.split(<span class="string">':'</span>)[<span class="number">0</span>]                         <span class="comment">#x就是从返回值中取出的要进行校验的字段</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">'-'</span> <span class="keyword">in</span> x:                                <span class="comment">#判断若excel里面额字段不是一层，则转换成字典连续取值的格式</span></span><br><span class="line">            y = x.split(<span class="string">'-'</span>)</span><br><span class="line">            <span class="keyword">for</span> key <span class="keyword">in</span> y:                           <span class="comment">#通过for循环依次获取下一层的字段值</span></span><br><span class="line">                result = result[key]</span><br><span class="line">            r = result</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            r = result[x]</span><br><span class="line">        <span class="keyword">if</span> type(r) <span class="keyword">is</span> int:                          <span class="comment">#如果返回值取出的数据为int格式，把他转为str，方便跟excel中取出的字符串比较,此框架从excel表中取出的内容为str格式</span></span><br><span class="line">            r = str(r)</span><br><span class="line">        <span class="keyword">if</span> type(r) <span class="keyword">is</span> bool:                         <span class="comment">#有些接口返回值是布尔值，转换成字符串</span></span><br><span class="line">            r = str(r)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        self.assertIn(i.split(<span class="string">':'</span>)[<span class="number">1</span>], r,msg=<span class="string">'['</span>+j+<span class="string">'校验有误]'</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="在接口测试用例中调用"><a href="#在接口测试用例中调用" class="headerlink" title="在接口测试用例中调用"></a>在接口测试用例中调用</h2><p>在测试用例所在的文件中导入公共方法，然后在接口测试用例执行完毕后调用断言校验的方法就可以自动判断有几条字段需要校验，分别校验并打印结果。<br><img src="http://my.lipeilipei.top/18-8-14/89025849.jpg" alt=""></p>
+<p><font color="white">peili</font></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+</article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/08/17/unittest%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%B7%BB%E5%8A%A0log/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            unittest测试中添加log
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2018/08/08/%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%8Bmysql%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">命令行下mysql中文乱码解决办法</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top//2020img/TIM图片20200705104958.png)" alt="windows主机渗透 - MS08-067" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="title">windows主机渗透 - MS08-067</a></p>
+                            <p class="item-date"><time datetime="2020-07-03T04:00:00.000Z" itemprop="datePublished">2020-07-03</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/20200526145544.png)" alt="Python打造端口扫描器(2) - TCP SYN扫描" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="title">Python打造端口扫描器(2) - TCP SYN扫描</a></p>
+                            <p class="item-date"><time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/gh/xcss/valine@v1.1.7-rc3/dist/Valine.min.js"></script>
+    <script>
+        new Valine({
+            el: '#valine-thread' ,
+            notify:true,
+            verify:false,
+            app_id: 'FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz',
+            app_key: 'G379F3DJSqtjFpBrHtN68HUp',
+            placeholder: 'Just Do It'
+        });
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
