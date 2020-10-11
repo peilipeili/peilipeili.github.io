@@ -21,7 +21,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://my.lipeilipei.top/images/2020/20200922131655.png">
 <meta property="article:published_time" content="2020-09-24T04:00:00.000Z">
-<meta property="article:modified_time" content="2020-09-25T06:07:03.668Z">
+<meta property="article:modified_time" content="2020-10-11T10:23:44.726Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="渗透">
 <meta name="twitter:card" content="summary">
@@ -195,7 +195,7 @@ var _hmt = _hmt || [];
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
   <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="article-date">
-     <time datetime="2020-09-25T06:07:03.668Z" itemprop="dateModified">2020-09-25</time>
+     <time datetime="2020-10-11T10:23:44.726Z" itemprop="dateModified">2020-10-11</time>
   </a>
 </div>
 
@@ -309,10 +309,7 @@ var _hmt = _hmt || [];
 <p><img src="http://my.lipeilipei.top/images/2020/20200922133636.png" alt=""></p>
 <p>可以访问远程桌面了</p>
 <p><img src="http://my.lipeilipei.top/images/2020/20200922133652.png" alt=""></p>
-<p>cobaltstrike 操作不是很熟练，还是用 metasploite 吧，通过 cs 上传一个 msf 生成的马，msf 开启监听</p>
-<blockquote>
-<p>注：cs 可以直接派生 shell 给 msf，但是当时我尝试的老半天 msf 一直没有返回 session，所以才无奈先手动上传一个 msf 的马曲线救国</p>
-</blockquote>
+<p>metasploite 上有很多不错的工具和命令，把目标机器上线到 msf 继续操作，通过 cs 上传一个 <code>msfvenom</code> 生成的马，msf 开启监听</p>
 <p><img src="http://my.lipeilipei.top/images/2020/20200922133920.png" alt=""></p>
 <p>msf 开启监听</p>
 <p><img src="http://my.lipeilipei.top/images/2020/20200922133931.png" alt=""></p>
@@ -320,6 +317,9 @@ var _hmt = _hmt || [];
 <p><img src="http://my.lipeilipei.top/images/2020/20200922134104.png" alt=""></p>
 <p>msf 成功拿到 shell，是继承的 system 权限</p>
 <p><img src="http://my.lipeilipei.top/images/2020/20200922134128.png" alt=""></p>
+<blockquote>
+<p>注：cs 可以直接派生 shell 给 msf，但是当时我尝试的老半天 msf 一直没有返回 session，所以才无奈先手动上传一个 msf 的马曲线救国</p>
+</blockquote>
 <p>查看密码哈希，不能获取，因为msf的这个马是32位的，系统是64位的</p>
 <p><img src="http://my.lipeilipei.top/images/2020/20200922134144.png" alt=""></p>
 <p><code>ps</code> 查看进程，在进程中找一个以 system 权限运行的 64 位的程序，迁移进程后再获取哈希</p>
@@ -394,7 +394,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         "genre": "安全",
         "datePublished": "2020-09-24",
         "dateCreated": "2020-09-24",
-        "dateModified": "2020-09-25",
+        "dateModified": "2020-10-11",
         "url": "http://yoursite.com/2020/09/24/某博彩网站渗透实战/",
         "description": "
 本文原创首发投稿在合天智汇，仅限于技术讨论与分享，严禁用于非法途径。若读者因此作出任何危害网络安全行为后果自负。
