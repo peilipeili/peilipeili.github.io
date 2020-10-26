@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-
-    
-
+    <meta charset="utf-8">
     
     <title>aiohttp报错 ImportError：cannot import name &#39;Coroutine&#39; | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="keywords" content="python" />
+        <meta name="keywords" content="python" />
     
     <meta name="description" content="今天将之前的IP代理池copy到其他电脑执行的时候报如下错误，可以看出是aiohttp这个库有问题，但是在之前的机器上运行是没有问题的，猜测可能是版本不同导致。 aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本最低是3.5.3。 而我本地的python是3.5.2，通过官网下载新的python安装包，直接覆盖安装即可，之前安装的第三方库不会有影响。">
 <meta property="og:type" content="article">
@@ -49,7 +46,7 @@
 
 
     
-<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
 
     
     
@@ -74,7 +71,6 @@ var _hmt = _hmt || [];
 })();
 </script>
 
-    
     
 
 
@@ -101,8 +97,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -155,7 +151,6 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
-
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -166,7 +161,6 @@ var _hmt = _hmt || [];
     <a class="page-title-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a>
     </h1>
 </div>
-
                         <div class="main-body-content">
                             <article id="post-aiohttp报错" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
@@ -184,23 +178,11 @@ var _hmt = _hmt || [];
         
             <div class="article-meta">
                 
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2019/08/17/aiohttp%E6%8A%A5%E9%94%99/" class="article-date">
-       <time datetime="2019-08-17T04:00:00.000Z" itemprop="datePublished">2019-08-17</time>
-    </a>
-  </div>
-
-
-<div class="article-date">
-  <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2019/08/17/aiohttp%E6%8A%A5%E9%94%99/" class="article-date">
-     <time datetime="2019-10-08T13:31:38.356Z" itemprop="dateModified">2019-10-08</time>
-  </a>
-</div>
-
-
-                
+    <div class="article-date">
+        <a href="/2019/08/17/aiohttp%E6%8A%A5%E9%94%99/" class="article-date">
+            <time datetime="2019-08-17T04:00:00.000Z" itemprop="datePublished">2019-08-17</time>
+        </a>
+    </div>
 
                 
     <div class="article-tag">
@@ -208,20 +190,11 @@ var _hmt = _hmt || [];
         <a class="tag-link" href="/tags/python/" rel="tag">python</a>
     </div>
 
-                
-
-                
-
+				阅读量<span id="busuanzi_value_page_pv"></span>次
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            
-
-            
-
-            
-
             <p>今天将之前的IP代理池copy到其他电脑执行的时候报如下错误，可以看出是aiohttp这个库有问题，但是在之前的机器上运行是没有问题的，猜测可能是版本不同导致。<br><img src="http://my.lipeilipei.top/aiohttp%E6%8A%A5%E9%94%99.png" alt=""></p>
 <p><code>aiohttp</code> 最新版本是3.5.4，根据<a href="'https://pypi.org/project/aiohttp/'">文档介绍</a>，此版本要求python版本最低是3.5.3。<br><img src="http://my.lipeilipei.top/aiohttp%E8%A6%81%E6%B1%82.png" alt=""></p>
 <p>而我本地的python是3.5.2，通过官网下载新的python安装包，直接覆盖安装即可，之前安装的第三方库不会有影响。<br><img src="http://my.lipeilipei.top/python.png" alt=""></p>
@@ -239,7 +212,7 @@ var _hmt = _hmt || [];
     <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
 </div>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script>
 <style>
     .bdshare_popup_box {
@@ -269,44 +242,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
         </footer>
     </div>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "author": {
-            "@type": "Person",
-            "name": "John Doe"
-        },
-        "headline": "aiohttp报错 ImportError：cannot import name &#39;Coroutine&#39;",
-        "image": "http://yoursite.comhttp://my.lipeilipei.top/aiohttp%E6%8A%A5%E9%94%99.png",
-        "keywords": "python",
-        "genre": "爬虫",
-        "datePublished": "2019-08-17",
-        "dateCreated": "2019-08-17",
-        "dateModified": "2019-10-08",
-        "url": "http://yoursite.com/2019/08/17/aiohttp报错/",
-        "description": "今天将之前的IP代理池copy到其他电脑执行的时候报如下错误，可以看出是aiohttp这个库有问题，但是在之前的机器上运行是没有问题的，猜测可能是版本不同导致。
-aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本最低是3.5.3。
-而我本地的python是3.5.2，通过官网下载新的python安装包，直接覆盖安装即可，之前安装的第三方库不会有影响。
-",
-        "wordCount": 9
-    }
-</script>
-
 </article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
 
-    <section id="comments">
-    
-        
-    <!-- Valine -->
-    <div class="vcomments"></div>
+       if (typeof LivereTower === 'function') { return; }
 
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
 
-    
-    </section>
-
-
-
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
                         </div>
                     </section>
                     <aside id="sidebar">
@@ -317,7 +271,7 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
                         <i class="icon fa fa-github"></i>
                     </a>
                 </li>
@@ -466,7 +420,6 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
         
     </div>
 </aside>
-
                 </div>
             </div>
         </div>
@@ -478,24 +431,17 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <p>&copy; 2020 John Doe</p>
-                
-                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
-                
-            </div>
-            <div class="footer-plugins">
-              
-    
-
-
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
             </div>
         </div>
     </div>
 </footer>
+        
+      
 
-    </div>
-    
-    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -503,20 +449,19 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
+        var avatarcdn = '' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
-            appId: "xte3AlbJVwsDXOptfeAOGivl-MdYXbMMI",
-            appKey: "yPJe4NIicPjj3EmTGBE98PAu",
-            placeholder: "建议在上方留下昵称和邮箱，以便收到回复提醒",
-            avatar:"monsterid",
+            appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
+            appKey: "G379F3DJSqtjFpBrHtN68HUp",
+            placeholder: "Just Do It",
+            avatar:"",
             recordIP:"",
-            visitor: "false"
+            visitor: ""
         });
     </script>
-
 
 
 
@@ -557,10 +502,6 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
     
     
 
-    
-    
-    
-
 
 
 <!-- Custom Scripts -->
@@ -568,5 +509,6 @@ aiohttp 最新版本是3.5.4，根据文档介绍，此版本要求python版本�
 <script src="/js/main.js"></script>
 
 
+    </div>
 </body>
 </html>

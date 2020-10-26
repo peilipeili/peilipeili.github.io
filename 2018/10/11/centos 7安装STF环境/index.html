@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-
-    
-
+    <meta charset="utf-8">
     
     <title>centos 7 安装STF环境 | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="keywords" content="APP,STF" />
+        <meta name="keywords" content="APP,STF" />
     
     <meta name="description" content="前言因为自己的办公电脑是Windows，之前一直尝试在Windows安装STF环境，但是坑比较多，尝试多次无法解决，最终在虚拟机中的centos系统成功安装STF，虽然是虚拟机但实际使用中效率并没有很大影响，本文介绍一下在centos7安装STF的过程，参考了一些教程，将安装过程中遇到的各种问题做总结。 一、基础准备1. VMware Workstation 14 （如果是Linux真机，忽略这">
 <meta property="og:type" content="article">
@@ -50,7 +47,7 @@
 
 
     
-<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
 
     
     
@@ -75,7 +72,6 @@ var _hmt = _hmt || [];
 })();
 </script>
 
-    
     
 
 
@@ -102,8 +98,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -156,7 +152,6 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
-
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -167,7 +162,6 @@ var _hmt = _hmt || [];
     <a class="page-title-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
     </h1>
 </div>
-
                         <div class="main-body-content">
                             <article id="post-centos 7安装STF环境" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
@@ -185,23 +179,11 @@ var _hmt = _hmt || [];
         
             <div class="article-meta">
                 
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2018/10/11/centos%207%E5%AE%89%E8%A3%85STF%E7%8E%AF%E5%A2%83/" class="article-date">
-       <time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished">2018-10-11</time>
-    </a>
-  </div>
-
-
-<div class="article-date">
-  <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2018/10/11/centos%207%E5%AE%89%E8%A3%85STF%E7%8E%AF%E5%A2%83/" class="article-date">
-     <time datetime="2018-12-17T02:30:56.869Z" itemprop="dateModified">2018-12-17</time>
-  </a>
-</div>
-
-
-                
+    <div class="article-date">
+        <a href="/2018/10/11/centos%207%E5%AE%89%E8%A3%85STF%E7%8E%AF%E5%A2%83/" class="article-date">
+            <time datetime="2018-10-11T04:00:00.000Z" itemprop="datePublished">2018-10-11</time>
+        </a>
+    </div>
 
                 
     <div class="article-tag">
@@ -209,20 +191,11 @@ var _hmt = _hmt || [];
         <a class="tag-link" href="/tags/APP/" rel="tag">APP</a>, <a class="tag-link" href="/tags/STF/" rel="tag">STF</a>
     </div>
 
-                
-
-                
-
+				阅读量<span id="busuanzi_value_page_pv"></span>次
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            
-
-            
-
-            
-
             <p><img src="http://my.lipeilipei.top/18-10-11/59560879.jpg" alt=""></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为自己的办公电脑是Windows，之前一直尝试在Windows安装STF环境，但是坑比较多，尝试多次无法解决，最终在虚拟机中的centos系统成功安装STF，虽然是虚拟机但实际使用中效率并没有很大影响，本文介绍一下在centos7安装STF的过程，参考了一些教程，将安装过程中遇到的各种问题做总结。</p>
 <h2 id="一、基础准备"><a href="#一、基础准备" class="headerlink" title="一、基础准备"></a>一、基础准备</h2><h4 id="1-VMware-Workstation-14-（如果是Linux真机，忽略这一步）"><a href="#1-VMware-Workstation-14-（如果是Linux真机，忽略这一步）" class="headerlink" title="1. VMware Workstation 14 （如果是Linux真机，忽略这一步）"></a>1. VMware Workstation 14 （如果是Linux真机，忽略这一步）</h4><p>建议使用VMware Workstation 14及以上版本，我刚开始使用的是12版本，但是系统安装完成后一直无法识别移动USB设备，也就是我的手机，换成14版本则没有这个问题。<br>具体表现如下，手机已经连接上了虚拟机，但是centos中使用lsusb 和 adb devices命令都无法检测到这台手机：<br><img src="http://my.lipeilipei.top/18-10-10/60214551.jpg" alt=""><br><img src="http://my.lipeilipei.top/18-10-10/12890814.jpg" alt=""><br><img src="http://my.lipeilipei.top/18-10-10/19294148.jpg" alt=""></p>
@@ -409,7 +382,7 @@ var _hmt = _hmt || [];
     <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
 </div>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script>
 <style>
     .bdshare_popup_box {
@@ -439,43 +412,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
         </footer>
     </div>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "author": {
-            "@type": "Person",
-            "name": "John Doe"
-        },
-        "headline": "centos 7 安装STF环境",
-        "image": "http://yoursite.comhttp://my.lipeilipei.top/18-10-10/97368033.jpg",
-        "keywords": "APP STF",
-        "genre": "测试",
-        "datePublished": "2018-10-11",
-        "dateCreated": "2018-10-11",
-        "dateModified": "2018-12-17",
-        "url": "http://yoursite.com/2018/10/11/centos 7安装STF环境/",
-        "description": "
-前言因为自己的办公电脑是Windows，之前一直尝试在Windows安装STF环境，但是坑比较多，尝试多次无法解决，最终在虚拟机中的centos系统成功安装STF，虽然是虚拟机但实际使用中效率并没有很大影响，本文介绍一下在centos7安装STF的过程，参考了一些教程，将安装过程中遇到的各种问题做总结。
-一、基础准备1. VMware Workstation 14 （如果是Linux真机，忽略这",
-        "wordCount": 856
-    }
-</script>
-
 </article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
 
-    <section id="comments">
-    
-        
-    <!-- Valine -->
-    <div class="vcomments"></div>
+       if (typeof LivereTower === 'function') { return; }
 
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
 
-    
-    </section>
-
-
-
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
                         </div>
                     </section>
                     <aside id="sidebar">
@@ -486,7 +441,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
                         <i class="icon fa fa-github"></i>
                     </a>
                 </li>
@@ -635,7 +590,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
     </div>
 </aside>
-
                 </div>
             </div>
         </div>
@@ -647,24 +601,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <p>&copy; 2020 John Doe</p>
-                
-                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
-                
-            </div>
-            <div class="footer-plugins">
-              
-    
-
-
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
             </div>
         </div>
     </div>
 </footer>
+        
+      
 
-    </div>
-    
-    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -672,20 +619,19 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
+        var avatarcdn = '' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
-            appId: "xte3AlbJVwsDXOptfeAOGivl-MdYXbMMI",
-            appKey: "yPJe4NIicPjj3EmTGBE98PAu",
-            placeholder: "建议在上方留下昵称和邮箱，以便收到回复提醒",
-            avatar:"monsterid",
+            appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
+            appKey: "G379F3DJSqtjFpBrHtN68HUp",
+            placeholder: "Just Do It",
+            avatar:"",
             recordIP:"",
-            visitor: "false"
+            visitor: ""
         });
     </script>
-
 
 
 
@@ -726,10 +672,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     
     
 
-    
-    
-    
-
 
 
 <!-- Custom Scripts -->
@@ -737,5 +679,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <script src="/js/main.js"></script>
 
 
+    </div>
 </body>
 </html>

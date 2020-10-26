@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-
-    
-
+    <meta charset="utf-8">
     
     <title>requests简单获取cookie | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="keywords" content="requests" />
+        <meta name="keywords" content="requests" />
     
     <meta name="description" content="一般在单个脚本文件中用requests.session()就可以自动处理多个请求之间的cookie，但是有时候需要将第一次请求后的cookie获取到单独保存出来跨文件跨脚本使用，此时直接用.cookies方法只能获取到response headers中的cookie，而请求之后request headers中的cookie则需要用以下方法。 DEMO12345import requestsr &#x3D;">
 <meta property="og:type" content="article">
@@ -49,7 +46,7 @@
 
 
     
-<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
 
     
     
@@ -74,7 +71,6 @@ var _hmt = _hmt || [];
 })();
 </script>
 
-    
     
 
 
@@ -101,8 +97,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -155,7 +151,6 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
-
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -166,7 +161,6 @@ var _hmt = _hmt || [];
     <a class="page-title-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
     </h1>
 </div>
-
                         <div class="main-body-content">
                             <article id="post-requests获取请求和返回的cookie" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
@@ -184,23 +178,11 @@ var _hmt = _hmt || [];
         
             <div class="article-meta">
                 
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2018/10/16/requests%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E5%92%8C%E8%BF%94%E5%9B%9E%E7%9A%84cookie/" class="article-date">
-       <time datetime="2018-10-16T04:00:00.000Z" itemprop="datePublished">2018-10-16</time>
-    </a>
-  </div>
-
-
-<div class="article-date">
-  <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2018/10/16/requests%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E5%92%8C%E8%BF%94%E5%9B%9E%E7%9A%84cookie/" class="article-date">
-     <time datetime="2018-12-17T02:30:56.811Z" itemprop="dateModified">2018-12-17</time>
-  </a>
-</div>
-
-
-                
+    <div class="article-date">
+        <a href="/2018/10/16/requests%E8%8E%B7%E5%8F%96%E8%AF%B7%E6%B1%82%E5%92%8C%E8%BF%94%E5%9B%9E%E7%9A%84cookie/" class="article-date">
+            <time datetime="2018-10-16T04:00:00.000Z" itemprop="datePublished">2018-10-16</time>
+        </a>
+    </div>
 
                 
     <div class="article-tag">
@@ -208,20 +190,11 @@ var _hmt = _hmt || [];
         <a class="tag-link" href="/tags/requests/" rel="tag">requests</a>
     </div>
 
-                
-
-                
-
+				阅读量<span id="busuanzi_value_page_pv"></span>次
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            
-
-            
-
-            
-
             <p>一般在单个脚本文件中用<code>requests.session()</code>就可以自动处理多个请求之间的cookie，但是有时候需要将第一次请求后的cookie获取到单独保存出来跨文件跨脚本使用，此时直接用<code>.cookies</code>方法只能获取到response headers中的cookie，而请求之后request headers中的cookie则需要用以下方法。</p>
 <h2 id="DEMO"><a href="#DEMO" class="headerlink" title="DEMO"></a>DEMO</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">r = requests.post(url,data=data)</span><br><span class="line">print(r.cookies)                       <span class="comment">#获取response headers中的cookie</span></span><br><span class="line">print(r.request._cookies._cookies)     <span class="comment">#获取request headers中的cookie</span></span><br></pre></td></tr></table></figure>
 
@@ -240,7 +213,7 @@ var _hmt = _hmt || [];
     <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
 </div>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script>
 <style>
     .bdshare_popup_box {
@@ -270,42 +243,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
         </footer>
     </div>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "author": {
-            "@type": "Person",
-            "name": "John Doe"
-        },
-        "headline": "requests简单获取cookie",
-        "image": "http://yoursite.comhttp://my.lipeilipei.top/17-8-15/53422481.jpg",
-        "keywords": "requests",
-        "genre": "测试",
-        "datePublished": "2018-10-16",
-        "dateCreated": "2018-10-16",
-        "dateModified": "2018-12-17",
-        "url": "http://yoursite.com/2018/10/16/requests获取请求和返回的cookie/",
-        "description": "一般在单个脚本文件中用requests.session()就可以自动处理多个请求之间的cookie，但是有时候需要将第一次请求后的cookie获取到单独保存出来跨文件跨脚本使用，此时直接用.cookies方法只能获取到response headers中的cookie，而请求之后request headers中的cookie则需要用以下方法。
-DEMO12345import requestsr = ",
-        "wordCount": 57
-    }
-</script>
-
 </article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
 
-    <section id="comments">
-    
-        
-    <!-- Valine -->
-    <div class="vcomments"></div>
+       if (typeof LivereTower === 'function') { return; }
 
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
 
-    
-    </section>
-
-
-
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
                         </div>
                     </section>
                     <aside id="sidebar">
@@ -316,7 +272,7 @@ DEMO12345import requestsr = ",
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
                         <i class="icon fa fa-github"></i>
                     </a>
                 </li>
@@ -465,7 +421,6 @@ DEMO12345import requestsr = ",
         
     </div>
 </aside>
-
                 </div>
             </div>
         </div>
@@ -477,24 +432,17 @@ DEMO12345import requestsr = ",
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <p>&copy; 2020 John Doe</p>
-                
-                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
-                
-            </div>
-            <div class="footer-plugins">
-              
-    
-
-
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
             </div>
         </div>
     </div>
 </footer>
+        
+      
 
-    </div>
-    
-    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -502,20 +450,19 @@ DEMO12345import requestsr = ",
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
+        var avatarcdn = '' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
-            appId: "xte3AlbJVwsDXOptfeAOGivl-MdYXbMMI",
-            appKey: "yPJe4NIicPjj3EmTGBE98PAu",
-            placeholder: "建议在上方留下昵称和邮箱，以便收到回复提醒",
-            avatar:"monsterid",
+            appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
+            appKey: "G379F3DJSqtjFpBrHtN68HUp",
+            placeholder: "Just Do It",
+            avatar:"",
             recordIP:"",
-            visitor: "false"
+            visitor: ""
         });
     </script>
-
 
 
 
@@ -556,10 +503,6 @@ DEMO12345import requestsr = ",
     
     
 
-    
-    
-    
-
 
 
 <!-- Custom Scripts -->
@@ -567,5 +510,6 @@ DEMO12345import requestsr = ",
 <script src="/js/main.js"></script>
 
 
+    </div>
 </body>
 </html>

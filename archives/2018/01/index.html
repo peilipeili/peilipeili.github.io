@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-
-    
-
+    <meta charset="utf-8">
     
     <title>Archive: 2018/1 | Hexo</title>
     
@@ -40,7 +37,7 @@
 
 
     
-<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
 
     
     
@@ -65,7 +62,6 @@ var _hmt = _hmt || [];
 })();
 </script>
 
-    
     
 
 
@@ -92,8 +88,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -146,7 +142,6 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
-
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -157,7 +152,6 @@ var _hmt = _hmt || [];
     <i class="icon fa fa-archive"></i>Archive: 2018/1
     </h1>
 </div>
-
                         <div class="main-body-content">
                             
 
@@ -187,8 +181,6 @@ var _hmt = _hmt || [];
         
 <span class="comment-counter">
     <i class="fa fa-comments-o"></i>
-    
-        <span><a href="http://yoursite.com/2018/01/30/%E5%B8%B8%E7%94%A8%E5%B0%8F%E5%91%BD%E4%BB%A4/#isso-thread"></a></span>
     
 </span>
 
@@ -235,8 +227,6 @@ DEMO12345678910111213141516171819202122
 <span class="comment-counter">
     <i class="fa fa-comments-o"></i>
     
-        <span><a href="http://yoursite.com/2018/01/29/python%E8%AF%BB%E5%86%99excel%E8%A1%A8%E6%A0%BC/#isso-thread"></a></span>
-    
 </span>
 
 
@@ -282,7 +272,7 @@ DEMO12345678910111213141516171819202122
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
                         <i class="icon fa fa-github"></i>
                     </a>
                 </li>
@@ -408,7 +398,6 @@ DEMO12345678910111213141516171819202122
         
     </div>
 </aside>
-
                 </div>
             </div>
         </div>
@@ -420,24 +409,17 @@ DEMO12345678910111213141516171819202122
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <p>&copy; 2020 John Doe</p>
-                
-                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
-                
-            </div>
-            <div class="footer-plugins">
-              
-    
-
-
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
             </div>
         </div>
     </div>
 </footer>
+        
+      
 
-    </div>
-    
-    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -445,20 +427,19 @@ DEMO12345678910111213141516171819202122
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
+        var avatarcdn = '' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
-            appId: "xte3AlbJVwsDXOptfeAOGivl-MdYXbMMI",
-            appKey: "yPJe4NIicPjj3EmTGBE98PAu",
-            placeholder: "建议在上方留下昵称和邮箱，以便收到回复提醒",
-            avatar:"monsterid",
+            appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
+            appKey: "G379F3DJSqtjFpBrHtN68HUp",
+            placeholder: "Just Do It",
+            avatar:"",
             recordIP:"",
-            visitor: "false"
+            visitor: ""
         });
     </script>
-
 
 
 
@@ -499,10 +480,6 @@ DEMO12345678910111213141516171819202122
     
     
 
-    
-    
-    
-
 
 
 <!-- Custom Scripts -->
@@ -510,5 +487,6 @@ DEMO12345678910111213141516171819202122
 <script src="/js/main.js"></script>
 
 
+    </div>
 </body>
 </html>

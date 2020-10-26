@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-
-    
-
+    <meta charset="utf-8">
     
     <title>Python 多线程处理任务 (爬虫为例) | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="keywords" content="python,爬虫,多线程" />
+        <meta name="keywords" content="python,爬虫,多线程" />
     
     <meta name="description" content="这篇文章主要讲一下使用 Python 的 threading 库进行多线程任务，本文以一个爬虫为例。 爬虫 DEMO下面是一个百度搜索的示例，使用 requests + BeautifulSoup 采集指定关键词指定页数的结果标题。封装的方法接受三个参数，分别是起始页码(int)，结束页码(int)，要搜索的关键词(str)。 123456789101112131415161718def baid">
 <meta property="og:type" content="article">
@@ -51,7 +48,7 @@
 
 
     
-<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+<script src="/libs/jquery/2.0.3/jquery.min.js"></script>
 
     
     
@@ -76,7 +73,6 @@ var _hmt = _hmt || [];
 })();
 </script>
 
-    
     
 
 
@@ -103,8 +99,8 @@ var _hmt = _hmt || [];
                                     <a class="main-nav-list-link" href="/">Home</a>
                                 </li>
                             
-                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
-                                
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                    
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/about/index.html">About</a>
                                 </li>
@@ -157,7 +153,6 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </header>
-
         <div class="container">
             <div class="main-body container-inner">
                 <div class="main-body-inner">
@@ -168,7 +163,6 @@ var _hmt = _hmt || [];
     <a class="page-title-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a>
     </h1>
 </div>
-
                         <div class="main-body-content">
                             <article id="post-Python 多线程处理任务 (爬虫为例)" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
@@ -186,23 +180,11 @@ var _hmt = _hmt || [];
         
             <div class="article-meta">
                 
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2019/11/05/Python%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1%20(%E7%88%AC%E8%99%AB%E4%B8%BA%E4%BE%8B)/" class="article-date">
-       <time datetime="2019-11-05T04:00:00.000Z" itemprop="datePublished">2019-11-05</time>
-    </a>
-  </div>
-
-
-<div class="article-date">
-  <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2019/11/05/Python%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1%20(%E7%88%AC%E8%99%AB%E4%B8%BA%E4%BE%8B)/" class="article-date">
-     <time datetime="2019-11-05T14:08:03.103Z" itemprop="dateModified">2019-11-05</time>
-  </a>
-</div>
-
-
-                
+    <div class="article-date">
+        <a href="/2019/11/05/Python%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1%20(%E7%88%AC%E8%99%AB%E4%B8%BA%E4%BE%8B)/" class="article-date">
+            <time datetime="2019-11-05T04:00:00.000Z" itemprop="datePublished">2019-11-05</time>
+        </a>
+    </div>
 
                 
     <div class="article-tag">
@@ -210,20 +192,11 @@ var _hmt = _hmt || [];
         <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a>, <a class="tag-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a>
     </div>
 
-                
-
-                
-
+				阅读量<span id="busuanzi_value_page_pv"></span>次
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            
-
-            
-
-            
-
             <p>这篇文章主要讲一下使用 Python 的 <code>threading</code> 库进行多线程任务，本文以一个爬虫为例。</p>
 <h2 id="爬虫-DEMO"><a href="#爬虫-DEMO" class="headerlink" title="爬虫 DEMO"></a>爬虫 DEMO</h2><p>下面是一个百度搜索的示例，使用 requests + BeautifulSoup 采集指定关键词指定页数的结果标题。<br>封装的方法接受三个参数，分别是起始页码(int)，结束页码(int)，要搜索的关键词(str)。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">baidu_search</span><span class="params">(start_num,end_num,keyWord)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    采集百度搜索结果的标题</span></span><br><span class="line"><span class="string">    :param start_num: 起始页码</span></span><br><span class="line"><span class="string">    :param end_num: 结束页码</span></span><br><span class="line"><span class="string">    :param keyWord: 搜索的关键词</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(start_num,end_num):</span><br><span class="line">        url = <span class="string">'https://www.baidu.com/s?wd=%s&amp;pn=%d'</span>% (keyWord,i*<span class="number">10</span>)</span><br><span class="line">        headers = &#123;</span><br><span class="line">            <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'</span></span><br><span class="line">        &#125;</span><br><span class="line">        r = requests.get(url,headers=headers).text   <span class="comment"># 获取源码</span></span><br><span class="line">        soup = BeautifulSoup(r,<span class="string">'lxml'</span>)  <span class="comment"># BeautifulSoup 解析</span></span><br><span class="line">        result = soup.select(<span class="string">'div.result.c-container &gt; h3 &gt; a'</span>)  <span class="comment"># 通过 css selector 定位查询结果所在元素，返回结果是个列表</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> result:</span><br><span class="line">            title = i.text    <span class="comment"># 通过 .text 方法获取元素内的文本</span></span><br><span class="line">            print(title)</span><br></pre></td></tr></table></figure>
@@ -269,7 +242,7 @@ var _hmt = _hmt || [];
     <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
 </div>
 <script>
-window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script>
 <style>
     .bdshare_popup_box {
@@ -299,43 +272,25 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 
         </footer>
     </div>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "author": {
-            "@type": "Person",
-            "name": "John Doe"
-        },
-        "headline": "Python 多线程处理任务 (爬虫为例)",
-        "image": "http://yoursite.comhttp://my.lipeilipei.top/18-4-26/72083805.jpg",
-        "keywords": "python 爬虫 多线程",
-        "genre": "爬虫",
-        "datePublished": "2019-11-05",
-        "dateCreated": "2019-11-05",
-        "dateModified": "2019-11-05",
-        "url": "http://yoursite.com/2019/11/05/Python 多线程处理任务 (爬虫为例)/",
-        "description": "这篇文章主要讲一下使用 Python 的 threading 库进行多线程任务，本文以一个爬虫为例。
-爬虫 DEMO下面是一个百度搜索的示例，使用 requests + BeautifulSoup 采集指定关键词指定页数的结果标题。封装的方法接受三个参数，分别是起始页码(int)，结束页码(int)，要搜索的关键词(str)。
-123456789101112131415161718def baid",
-        "wordCount": 714
-    }
-</script>
-
 </article>
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zMDE2OC82NzIz">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
 
-    <section id="comments">
-    
-        
-    <!-- Valine -->
-    <div class="vcomments"></div>
+       if (typeof LivereTower === 'function') { return; }
 
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
 
-    
-    </section>
-
-
-
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
                         </div>
                     </section>
                     <aside id="sidebar">
@@ -346,7 +301,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             
                 
                 <li>
-                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank">
                         <i class="icon fa fa-github"></i>
                     </a>
                 </li>
@@ -495,7 +450,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
     </div>
 </aside>
-
                 </div>
             </div>
         </div>
@@ -507,24 +461,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
                 <h1 class="logo-wrap">
                     <a href="/" class="logo"></a>
                 </h1>
-                <p>&copy; 2020 John Doe</p>
-                
-                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
-                
-            </div>
-            <div class="footer-plugins">
-              
-    
-
-
+                <!-- <p>&copy; 2020 John Doe</p> -->
+                <!-- <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p> -->
+				<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+				本站访客数<span id="busuanzi_value_site_pv"></span>人次
             </div>
         </div>
     </div>
 </footer>
+        
+      
 
-    </div>
-    
-    
     <script src="//unpkg.com/valine"></script>
     <script>
         var GUEST = ['nick','mail','link'];
@@ -532,20 +479,19 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         meta = meta.split(',').filter(function (item) {
             return GUEST.indexOf(item)>-1;
         });
-        var avatarcdn = 'https://gravatar.loli.net/avatar/' == true;
+        var avatarcdn = '' == true;
         new Valine({
             el: '.vcomments',
             notify: "true",
             verify: "false",
-            appId: "xte3AlbJVwsDXOptfeAOGivl-MdYXbMMI",
-            appKey: "yPJe4NIicPjj3EmTGBE98PAu",
-            placeholder: "建议在上方留下昵称和邮箱，以便收到回复提醒",
-            avatar:"monsterid",
+            appId: "FP6aIwzVr9MdAM2Vgph98vKd-gzGzoHsz",
+            appKey: "G379F3DJSqtjFpBrHtN68HUp",
+            placeholder: "Just Do It",
+            avatar:"",
             recordIP:"",
-            visitor: "false"
+            visitor: ""
         });
     </script>
-
 
 
 
@@ -586,10 +532,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
     
     
 
-    
-    
-    
-
 
 
 <!-- Custom Scripts -->
@@ -597,5 +539,6 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
 <script src="/js/main.js"></script>
 
 
+    </div>
 </body>
 </html>
