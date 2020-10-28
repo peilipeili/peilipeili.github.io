@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>Python打造端口扫描器(2) - TCP SYN扫描 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="python,端口,扫描器" />
+    
+    <meta name="description" content="写在前面这篇文章是 python 打造端口扫描器的第二篇，介绍 TCP SYN扫描模式。 原理简介 此模式类似于 nmap 的 -sS 模式（nmap的默认扫描模式）  TCP SYN 扫描也就是半开扫描（半开式扫描），这种扫描方式与全连接扫描类似，但客户端不会和服务端建立完整的连接。 扫描过程为：客户端会发送一个带有 SYN 标识和端口号的 TCP 数据包给服务器，如果服务器这个端口是开放的，则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python打造端口扫描器(2) - TCP SYN扫描">
+<meta property="og:url" content="http://yoursite.com/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="写在前面这篇文章是 python 打造端口扫描器的第二篇，介绍 TCP SYN扫描模式。 原理简介 此模式类似于 nmap 的 -sS 模式（nmap的默认扫描模式）  TCP SYN 扫描也就是半开扫描（半开式扫描），这种扫描方式与全连接扫描类似，但客户端不会和服务端建立完整的连接。 扫描过程为：客户端会发送一个带有 SYN 标识和端口号的 TCP 数据包给服务器，如果服务器这个端口是开放的，则">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/20200526145544.png">
+<meta property="article:published_time" content="2020-05-29T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-29T11:40:03.276Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="端口">
+<meta property="article:tag" content="扫描器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/20200526145544.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-Python打造端口扫描器(2) - TCP SYN扫描" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Python打造端口扫描器(2) - TCP SYN扫描
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="article-date">
+       <time datetime="2020-05-29T04:00:00.000Z" itemprop="datePublished">2020-05-29</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2020/05/29/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(2)%20-%20TCP%20SYN%E6%89%AB%E6%8F%8F/" class="article-date">
+     <time datetime="2020-05-29T11:40:03.276Z" itemprop="dateModified">2020-05-29</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python/" rel="tag">python</a>, <a class="tag-link" href="/tags/%E6%89%AB%E6%8F%8F%E5%99%A8/" rel="tag">扫描器</a>, <a class="tag-link" href="/tags/%E7%AB%AF%E5%8F%A3/" rel="tag">端口</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这篇文章是 python 打造端口扫描器的第二篇，介绍 TCP SYN扫描模式。</p>
+<h2 id="原理简介"><a href="#原理简介" class="headerlink" title="原理简介"></a>原理简介</h2><blockquote>
+<p>此模式类似于 nmap 的 <code>-sS</code> 模式（nmap的默认扫描模式）</p>
+</blockquote>
+<p>TCP SYN 扫描也就是半开扫描（半开式扫描），这种扫描方式与全连接扫描类似，但客户端不会和服务端建立完整的连接。</p>
+<p>扫描过程为：客户端会发送一个带有 SYN 标识和端口号的 TCP 数据包给服务器，如果服务器这个端口是开放的，则会接受这个连接并返回一个带有 <code>SYN</code> 和 <code>ACK</code> 标识的数据包给客户端，随后客户端会返回带有 <code>RST</code> 标识的数据包，而不是像全连接扫描一样返回一个带有 <code>ACK</code>和 <code>RST</code> 标识的数据包，这样就不会与服务端建立完整的连接了。如果目标端口处于关闭状态，则服务端会返回一个 <code>RST</code> 标识的数据包。</p>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><p>半开扫描的实现代码与全连接扫描的实现代码很相似，从原理就可以知道，主要的区别在于客户端对端口第二次发送的数据包flags的值，直接断开连接，这样就不会进行一次完整的TCP连接。</p>
+<p>如下图，只需将客户端第二次发送给服务器的 flags 设置为 <code>R</code>,其他的部分与上一篇全开扫描一致。</p>
+<p><img src="http://my.lipeilipei.top/20200529171028.png" alt=""></p>
+<p>仍然使用 scapy 配合多线程完成。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading,time</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> Print_Font <span class="keyword">as</span> font <span class="comment"># 第一篇文章中封装的打印颜色方法</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_ip</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''从命令行参数中获取 IP'''</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        parameter = sys.argv</span><br><span class="line">        ip = parameter[<span class="number">1</span>]</span><br><span class="line">        print(<span class="string">'The IP you test is : '</span>, end = <span class="string">''</span>)</span><br><span class="line">        font.print_YELLOW(ip)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        print(e)</span><br><span class="line">    <span class="keyword">return</span> ip</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">port_scan</span><span class="params">(port)</span>:</span></span><br><span class="line">    <span class="string">'''扫描端口'''</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        packet = IP(dst=ip)/TCP(dport=port,flags=<span class="string">'S'</span>)   <span class="comment"># 构造一个 flags 的值为 S 的报文</span></span><br><span class="line">        send = sr1(packet,timeout=<span class="number">2</span>,verbose=<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> send.haslayer(<span class="string">'TCP'</span>):</span><br><span class="line">            <span class="keyword">if</span> send[<span class="string">'TCP'</span>].flags == <span class="string">'SA'</span>:   <span class="comment"># 判断目标主机是否返回 SYN+ACK</span></span><br><span class="line">                send_1 = sr1(IP(dst=ip)/TCP(dport=port,flags=<span class="string">'R'</span>),timeout=<span class="number">2</span>,verbose=<span class="number">0</span>) <span class="comment"># 只向目标主机发送 RST</span></span><br><span class="line">                font.print_GREEN(<span class="string">'[+] %d is open'</span> % port)</span><br><span class="line">            <span class="keyword">elif</span> send[<span class="string">'TCP'</span>].flags == <span class="string">'RA'</span>:</span><br><span class="line">                <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    threads = []</span><br><span class="line">    threads_count = <span class="number">100</span>     <span class="comment"># 线程数，默认 100 个线程</span></span><br><span class="line"></span><br><span class="line">    packet_ping = IP(dst=ip)/ICMP()     <span class="comment"># 在扫描端口之前先用 ICMP 协议探测一下主机是否存活</span></span><br><span class="line">    ping = sr1(packet_ping,timeout=<span class="number">2</span>,verbose=<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> ping <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">for</span> p <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">1001</span>):   <span class="comment"># 默认扫描1-1000的端口，可以手动修改这里的端口范围</span></span><br><span class="line">            t = threading.Thread(target=port_scan,args=(p,))</span><br><span class="line">            threads.append(t)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> threads:</span><br><span class="line">            t.start()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> threads:</span><br><span class="line">            t.join()</span><br><span class="line">    <span class="keyword">elif</span> ping <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        font.print_RED(<span class="string">'该主机处于关闭状态或本机被该主机过滤，无法对其使用 ping 探测'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ip = get_ip()</span><br><span class="line">    start_time = time.time()</span><br><span class="line">    main()</span><br><span class="line">    end_time = time.time()</span><br><span class="line">    print(<span class="string">'[time cost] : '</span> + str(end_time-start_time) + <span class="string">' 秒'</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="使用方法："><a href="#使用方法：" class="headerlink" title="使用方法："></a>使用方法：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python TCP_SYN_Scan_Socket.py 14.215.177.38</span><br></pre></td></tr></table></figure>
+
+<h5 id="扫描结果"><a href="#扫描结果" class="headerlink" title="扫描结果"></a>扫描结果</h5><p><img src="http://my.lipeilipei.top//2020img/20200529193933.png" alt=""></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "Python打造端口扫描器(2) - TCP SYN扫描",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/20200526145544.png",
+        "keywords": "python 端口 扫描器",
+        "genre": "安全",
+        "datePublished": "2020-05-29",
+        "dateCreated": "2020-05-29",
+        "dateModified": "2020-05-29",
+        "url": "http://yoursite.com/2020/05/29/Python打造端口扫描器(2) - TCP SYN扫描/",
+        "description": "写在前面这篇文章是 python 打造端口扫描器的第二篇，介绍 TCP SYN扫描模式。
+原理简介
+此模式类似于 nmap 的 -sS 模式（nmap的默认扫描模式）
+
+TCP SYN 扫描也就是半开扫描（半开式扫描），这种扫描方式与全连接扫描类似，但客户端不会和服务端建立完整的连接。
+扫描过程为：客户端会发送一个带有 SYN 标识和端口号的 TCP 数据包给服务器，如果服务器这个端口是开放的，则",
+        "wordCount": 685
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            windows主机渗透 - MS08-067
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2020/05/25/Python%E6%89%93%E9%80%A0%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8(1)%20-%20TCP%20Connect/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Python打造端口扫描器(1) - TCP Connect</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/msf_logo.jpg)" alt="msf+python免杀360火绒" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="title">msf+python免杀360火绒</a></p>
+                            <p class="item-date"><time datetime="2020-09-30T04:00:00.000Z" itemprop="datePublished">2020-09-30</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top//2020img/TIM图片20200705104958.png)" alt="windows主机渗透 - MS08-067" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="title">windows主机渗透 - MS08-067</a></p>
+                            <p class="item-date"><time datetime="2020-07-03T04:00:00.000Z" itemprop="datePublished">2020-07-03</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>

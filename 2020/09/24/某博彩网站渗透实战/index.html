@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>某博彩网站渗透实战 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="渗透" />
+    
+    <meta name="description" content="本文原创首发投稿在合天智汇，仅限于技术讨论与分享，严禁用于非法途径。若读者因此作出任何危害网络安全行为后果自负。  前言最近听说用某棋牌产品建的站存在SQL注入，刚好别人发来一个  渗透惯用套路一把梭信息收集 -&gt; 漏洞探测&#x2F;利用 -&gt; 提权&#x2F;权限维持 -&gt; 清理痕迹 一、信息收集 浏览器访问主页初步发现系统：Windows server中间件 IIS7.5语言：ASPX 端口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="某博彩网站渗透实战">
+<meta property="og:url" content="http://yoursite.com/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文原创首发投稿在合天智汇，仅限于技术讨论与分享，严禁用于非法途径。若读者因此作出任何危害网络安全行为后果自负。  前言最近听说用某棋牌产品建的站存在SQL注入，刚好别人发来一个  渗透惯用套路一把梭信息收集 -&gt; 漏洞探测&#x2F;利用 -&gt; 提权&#x2F;权限维持 -&gt; 清理痕迹 一、信息收集 浏览器访问主页初步发现系统：Windows server中间件 IIS7.5语言：ASPX 端口">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/images/2020/20200922131655.png">
+<meta property="article:published_time" content="2020-09-24T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-11T10:23:44.726Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="渗透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/images/2020/20200922131655.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-某博彩网站渗透实战" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        某博彩网站渗透实战
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="article-date">
+       <time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="article-date">
+     <time datetime="2020-10-11T10:23:44.726Z" itemprop="dateModified">2020-10-11</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <blockquote>
+<p>本文原创首发投稿在合天智汇，仅限于技术讨论与分享，严禁用于非法途径。若读者因此作出任何危害网络安全行为后果自负。</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近听说用某棋牌产品建的站存在SQL注入，刚好别人发来一个</p>
+<p><img src="http://my.lipeilipei.top/images/2020/1.png" alt=""></p>
+<h5 id="渗透惯用套路一把梭"><a href="#渗透惯用套路一把梭" class="headerlink" title="渗透惯用套路一把梭"></a>渗透惯用套路一把梭</h5><p>信息收集 -&gt; 漏洞探测/利用 -&gt; 提权/权限维持 -&gt; 清理痕迹</p>
+<h2 id="一、信息收集"><a href="#一、信息收集" class="headerlink" title="一、信息收集"></a>一、信息收集</h2><p><img src="http://my.lipeilipei.top/images/2020/2.png" alt=""></p>
+<h5 id="浏览器访问主页初步发现"><a href="#浏览器访问主页初步发现" class="headerlink" title="浏览器访问主页初步发现"></a>浏览器访问主页初步发现</h5><p>系统：<code>Windows server</code><br>中间件 <code>IIS7.5</code><br>语言：<code>ASPX</code></p>
+<h5 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV -T4 -p- 11x.xx.xxx.xx</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922130535.png" alt=""></p>
+<p>开放的端口真不少<br>其中web服务的有几个：80(当前主页)、81、82、88、47001<br><code>81</code>：是这个棋牌站的后台<br><code>82</code>：也是个后台，不知道是什么系统的后台，有验证码<br><code>88</code>/<code>47001</code>：访问失败</p>
+<p><code>1433</code>：数据库 mssql</p>
+<p>还开了 <code>139</code>、<code>445</code> 但是被过滤了，不知道是不是有防火墙，后面再看</p>
+<h5 id="敏感目录扫描"><a href="#敏感目录扫描" class="headerlink" title="敏感目录扫描"></a>敏感目录扫描</h5><p>先用 Dirsearch 过一遍，前面搜集到网站语言是 aspx，加上 -e 指定语言</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python dirsearch.py -u http:&#x2F;&#x2F;11x.xx.xxx.xx -e aspx</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131024.png" alt=""></p>
+<p>再用 7kbscan 过一遍，毕竟这里面收集的都是国人常用的字典</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131220.png" alt=""></p>
+<p><code>/m/</code> 是用户注册页面，可能有用，先记着</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131307.png" alt=""></p>
+<p><code>/test.html</code>是调起微信的入口，没啥用，可能是在手机端引导受害者聊天的吧</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131355.png" alt=""></p>
+<h5 id="查IP"><a href="#查IP" class="headerlink" title="查IP"></a>查IP</h5><p>北京某个运营商的服务器，菠菜在国内服务器建站挺大胆的</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131443.png" alt=""></p>
+<h5 id="信息整理"><a href="#信息整理" class="headerlink" title="信息整理"></a>信息整理</h5><p><img src="http://my.lipeilipei.top/images/2020/20200922131542.png" alt=""></p>
+<p>估计就是个人建的小站，不去展开收集更过的东西了，免得打偏浪费时间</p>
+<h2 id="二、漏洞探测"><a href="#二、漏洞探测" class="headerlink" title="二、漏洞探测"></a>二、漏洞探测</h2><p>重点先放在前面找到的 81 端口，也就是网站的后台管理页面</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131655.png" alt=""></p>
+<p>没有验证码，用户名 / 密码随便写个 admin / admin，抓包</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131738.png" alt=""></p>
+<p>用户名加了个引号发送请求直接返回报错了，不出意外应该会有报错注入或者盲注啥的</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922131829.png" alt=""></p>
+<h5 id="兵分两路"><a href="#兵分两路" class="headerlink" title="兵分两路"></a>兵分两路</h5><p>一路把这个数据包保存到本地 qipai.txt，用 sqlmap 去扫，前面已经知道是 mssql 数据库，加上 –dbms 参数指定数据库类型节约时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -r qipai.txt --dbms &quot;Microsoft SQL Server&quot; --dbs</span><br></pre></td></tr></table></figure>
+
+<p>另一路，把数据包发送到 intruder 模块去爆破密码，尝试了在浏览器随便输入用户名，提示 “用户名不存在”，输入 admin 的时候提示 “用户名或密码错误”，说明 admin 账户是存在的，只爆破密码就行</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922135616.png" alt=""></p>
+<p>爆出密码 <code>888999</code>，弱口令，永远滴神！😁</p>
+<p>成功登录后台</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922135633.png" alt=""></p>
+<p>只有 69 个注册用户，剩下的全是机器人，这 69 个用户冲了 143 万？玩棋牌的都这么有钱吗，我欢乐斗地主都舍不得冲 6 块首充😥</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132227.png" alt=""></p>
+<p>赌博沾不得呀，这个老哥一天输了 2800，所有的输赢率管理员都可以在后台随意配置</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132355.png" alt=""></p>
+<p>在后台翻了半天没找到上传点，先放着</p>
+<p>回到另一路 sqlmap 看看，确定存在注入，已经在慢慢跑库名了</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132439.png" alt=""></p>
+<p>跑出 16 个库，根据名字猜 <code>RYPlatformManagerDB</code> 库可能存着管理员的相关信息</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132452.png" alt=""></p>
+<p>跑表名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -r qipai.txt --tables -D RYPlatformManagerDB</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132532.png" alt=""></p>
+<p>翻了半天就找到一个管理员的账号密码，就是前面 bp 爆破出来的那个，还有一些用户的信息，没啥更有价值的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -r qipai.txt --is-dba</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132617.png" alt=""></p>
+<p>是 DBA 权限，尝试拿 shell，mssql 数据库直接用 sqlmap 爆破路径就行了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sqlmap.py -r qipai.txt --os-shell</span><br></pre></td></tr></table></figure>
+<p>用的盲注，时间较慢，经过漫长的等待终于成功拿 shell，渗透呐，表面上是个技术活，实际上是个体力活🤔</p>
+<p><code>whoami</code> 查看当前用户权限很小，只是个 mssql 数据库权限</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132652.png" alt=""></p>
+<p>Systeminfo 查看一下系统信息，可以看到系统是 64 位的 Windows server 2008</p>
+<p>Cobaltstrike 生成攻击载荷，再目标机器上用 powershell 加载，目标机器成功上线</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132930.png" alt=""></p>
+<p><code>net user</code> 查看用户</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922132947.png" alt=""></p>
+<p><code>tasklist</code> 查看进程，应该没有装杀软</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133011.png" alt=""></p>
+<p><code>net start</code> 查看已开启的服务，可以看到防火墙是开启的，所以前面 nmap 扫描 445 等端口被过滤</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133058.png" alt=""></p>
+<p>关闭防火墙，额还没提权😮</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133113.png" alt=""></p>
+<h2 id="三、提权-维权"><a href="#三、提权-维权" class="headerlink" title="三、提权/维权"></a>三、提权/维权</h2><p>前面得知这个机器是 <code>windows server 2008</code>，尝试用土豆提权（MS16-075）</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133334.png" alt=""></p>
+<p>执行后稍等了一会儿，比较幸运，这个机器没打补丁，一次就提权成功，拿到 system 权限，开始为所欲为😊</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133437.png" alt=""></p>
+<p>进入文件管理，能看到前面信息收集时的 test.html 文件</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133532.png" alt=""></p>
+<p><code>netstat -ano</code> 看一下端口开放情况，3389 没有开</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133613.png" alt=""></p>
+<p>手动开启一下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server &#x2F;v fDenyTSConnections &#x2F;t REG_DWORD &#x2F;d 0 &#x2F;f</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133636.png" alt=""></p>
+<p>可以访问远程桌面了</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133652.png" alt=""></p>
+<p>metasploite 上有很多不错的工具和命令，把目标机器上线到 msf 继续操作，通过 cs 上传一个 <code>msfvenom</code> 生成的马，msf 开启监听</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133920.png" alt=""></p>
+<p>msf 开启监听</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922133931.png" alt=""></p>
+<p>在 cs 上运行上传的马</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134104.png" alt=""></p>
+<p>msf 成功拿到 shell，是继承的 system 权限</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134128.png" alt=""></p>
+<blockquote>
+<p>注：cs 可以直接派生 shell 给 msf，但是当时我尝试的老半天 msf 一直没有返回 session，所以才无奈先手动上传一个 msf 的马曲线救国</p>
+</blockquote>
+<p>查看密码哈希，不能获取，因为msf的这个马是32位的，系统是64位的</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134144.png" alt=""></p>
+<p><code>ps</code> 查看进程，在进程中找一个以 system 权限运行的 64 位的程序，迁移进程后再获取哈希</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134222.png" alt=""></p>
+<p>到在线破解哈希的网站查一下 administrator 的密码，密码不算复杂，几秒钟就查到了</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134321.png" alt=""></p>
+<p>成功登录远程桌面，拿下这个博彩网站的服务器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134338.png" alt=""></p>
+<p>留两个后门，一个webshell，一个开机自启的nc用来反弹shell</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134424.png" alt=""></p>
+<h2 id="四、清理痕迹，撤退"><a href="#四、清理痕迹，撤退" class="headerlink" title="四、清理痕迹，撤退"></a>四、清理痕迹，撤退</h2><p>meterpreter 的 <code>clearv</code> 命令一键清除</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134512.png" alt=""></p>
+<p>或者手动删除 Windows 日志</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200922134600.png" alt=""></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><img src="http://my.lipeilipei.top/images/2020/20200922134626.png" alt=""></p>
+<p>所以赌博这东西碰都不要碰，看都不要看，一点好奇心都不要有，这些骗子割韭菜演都不带演的，就纯割，硬割。</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "某博彩网站渗透实战",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/images/2020/20200922131655.png",
+        "keywords": "渗透",
+        "genre": "安全",
+        "datePublished": "2020-09-24",
+        "dateCreated": "2020-09-24",
+        "dateModified": "2020-10-11",
+        "url": "http://yoursite.com/2020/09/24/某博彩网站渗透实战/",
+        "description": "
+本文原创首发投稿在合天智汇，仅限于技术讨论与分享，严禁用于非法途径。若读者因此作出任何危害网络安全行为后果自负。
+
+前言最近听说用某棋牌产品建的站存在SQL注入，刚好别人发来一个
+
+渗透惯用套路一把梭信息收集 -&gt; 漏洞探测/利用 -&gt; 提权/权限维持 -&gt; 清理痕迹
+一、信息收集
+浏览器访问主页初步发现系统：Windows server中间件 IIS7.5语言：ASPX
+端口",
+        "wordCount": 357
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            msf+python免杀360火绒
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">net user 被杀软拦截绕过方式</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/msf_logo.jpg)" alt="msf+python免杀360火绒" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="title">msf+python免杀360火绒</a></p>
+                            <p class="item-date"><time datetime="2020-09-30T04:00:00.000Z" itemprop="datePublished">2020-09-30</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top//2020img/TIM图片20200705104958.png)" alt="windows主机渗透 - MS08-067" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="title">windows主机渗透 - MS08-067</a></p>
+                            <p class="item-date"><time datetime="2020-07-03T04:00:00.000Z" itemprop="datePublished">2020-07-03</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>

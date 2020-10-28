@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>Web安全 - 文件上传漏洞 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="渗透,安全" />
+    
+    <meta name="description" content="什么是文件上传漏洞由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。 下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。DV">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web安全 - 文件上传漏洞">
+<meta property="og:url" content="http://yoursite.com/2019/12/18/Web%E5%AE%89%E5%85%A8%20-%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="什么是文件上传漏洞由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。 下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。DV">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png">
+<meta property="article:published_time" content="2019-12-18T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-12T10:38:20.611Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="渗透">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-Web安全 - 文件上传漏洞" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Web安全 - 文件上传漏洞
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2019/12/18/Web%E5%AE%89%E5%85%A8%20-%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="article-date">
+       <time datetime="2019-12-18T04:00:00.000Z" itemprop="datePublished">2019-12-18</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2019/12/18/Web%E5%AE%89%E5%85%A8%20-%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="article-date">
+     <time datetime="2020-04-12T10:38:20.611Z" itemprop="dateModified">2020-04-12</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a>, <a class="tag-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <h2 id="什么是文件上传漏洞"><a href="#什么是文件上传漏洞" class="headerlink" title="什么是文件上传漏洞"></a>什么是文件上传漏洞</h2><p>由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。</p>
+<p>下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。<br>DVWA 共有四个等级：</p>
+<ul>
+<li><code>low</code>         (低安全等级)</li>
+<li><code>medium</code>      (中安全等级)</li>
+<li><code>high</code>        (高安全等级)</li>
+<li><code>impossible</code>  (最高等级)</li>
+</ul>
+<p>其中 impossible 等级是最安全的等级，不存在漏洞（我的能力范围内）。</p>
+<h2 id="构造脚本"><a href="#构造脚本" class="headerlink" title="构造脚本"></a>构造脚本</h2><p>在本地创建一个 <code>1.php</code> 文件，内容只有一行，是php一句话木马，也就是简单的webshell。让被攻击的服务器解析此文件，通过 get 方法获取请求参数cmd，并使用 eval 函数来执行。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_GET[<span class="string">"cmd"</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><h5 id="low-等级"><a href="#low-等级" class="headerlink" title="low 等级"></a>low 等级</h5><p>登陆 DVWA 环境，进入文件上传模块并上传创建的 1.php 恶意文件，没有任何阻碍，直接上传成功，并且给出了文件保存的路径。<br><img src="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
+<h5 id="medium-等级"><a href="#medium-等级" class="headerlink" title="medium 等级"></a>medium 等级</h5><p>按照上一步直接上传，发现上传失败，提示只能上传图片格式的文件<br><img src="http://my.lipeilipei.top/002%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
+<p>服务器是校验了我们的文件后缀名吗，将 1.php 的文件名修改成 666.png 图片格式尝试一下<br><img src="http://my.lipeilipei.top/015.png" alt=""><br><img src="http://my.lipeilipei.top/014.png" alt=""></p>
+<p>可以上传成功，但是通过修改后缀的方式，它并不是一个标准的图片或者php文件，有什么办法可以上传php文件但是不被检测到？</p>
+<p>先正常上传一张图片，观察上传文件的 HTTP 请求，可以看到请求参数中的 <code>Content-Type</code> 是 <code>image/jpeg</code>，medium 安全等级检测就是这个字段。<br><img src="http://my.lipeilipei.top/004%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
+<p>这里需要通过抓包修改请求了，以 Charles 为例，开启它的请求拦截功能，配置好浏览器代理，选择 1.php 文件并点击上传，请求被 Charles 拦截，当前请求参数中的 <code>Content-Type</code> 值是 <code>application/octet-stream</code>, 把它修改为 <code>image/jpeg</code> 并将修改后的请求放行。<br><img src="http://my.lipeilipei.top/006%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
+<p>此时前端页面显示上传成功。<br><img src="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
+<p>这里修改的 <code>Content-Type</code> 实际上是遵循了 MIME 标准, jpe、jpg、jpeg等后缀的文件对应的类型都是 <code>image/jpeg</code>，还可以修改成其他的类型，具体的场景具体分析需要选择哪一种</p>
+<blockquote>
+<p>MIME (Multipurpose Internet Mail Extensions) 是描述消息内容类型的因特网标准。<br><br>MIME 消息能包含文本、图像、音频、视频以及其他应用程序专用的数据。</p>
+</blockquote>
+<p>更多请查看 <a href="https://www.w3school.com.cn/media/media_mimeref.asp" target="_blank" rel="noopener"><strong>MIME 参考手册</strong></a>。</p>
+<h5 id="high-等级"><a href="#high-等级" class="headerlink" title="high 等级"></a>high 等级</h5><p>直接使用前两步的方法进行上传，都不能上传成功，在 high 安全等级下，其实还校验了图片的具体内容，也就是我们上传的文件中如果只有恶意代码肯定会被拦截，绕过方式就是制作图片木马。<br>在本地选择一个 1.jpg 图片文件，和前面创建的 1.php 木马文件结合在一起，生成一个新的 2.jpg 文件。<br>打开cmd命令行在当前路径下执行拼接文件的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy 1.jpg&#x2F;b+1.php&#x2F;a 2.jpg</span><br></pre></td></tr></table></figure>
+<p>这个 2.jpg 文件可以正常双击打开，与普通图片看起来没有什么区别，但是用记事本打开这张图片观察最后面就会发现我们的php代码<br><img src="http://my.lipeilipei.top/007%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
+<p>直接上传新建的 2.jpg 文件就可以上传成功了。<br><img src="http://my.lipeilipei.top/008%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h5 id="1-包含-webshell-木马的-php-文件"><a href="#1-包含-webshell-木马的-php-文件" class="headerlink" title="1. 包含 webshell 木马的 php 文件"></a>1. 包含 webshell 木马的 php 文件</h5><p>前面在 low 和 medium 安全等级中都成功上传了 1.php 文件且显示了存储的相对路径，将相对路径填写到当前url的后面并请求，因为它是脚本文件，所以服务器会直接解析，但是发现解析报错了。<br><img src="http://my.lipeilipei.top/009.png" alt=""></p>
+<p>原因是还没有传递参数，恶意木马中使用的是 get 请求，参数是 cmd ，所以这里需要在请求url的后面加上参数，如下面几个例子</p>
+<p>1.查看 phpinfo 信息<br><img src="http://my.lipeilipei.top/011.png" alt=""></p>
+<p>2.查看服务器当前系统用户（通过PHP内置函数执行系统命令）<br><img src="http://my.lipeilipei.top/010.png" alt=""></p>
+<p>3.遍历目录<br><img src="http://my.lipeilipei.top/000%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E8%A1%A5%E5%85%85001.png" alt=""></p>
+<p><strong>注意</strong>：最后面的分号不要忘记，php代码块是以分号结尾。</p>
+<h5 id="2-包含-webshell-木马的图片文件"><a href="#2-包含-webshell-木马的图片文件" class="headerlink" title="2. 包含 webshell 木马的图片文件"></a>2. 包含 webshell 木马的图片文件</h5><p>将上传的带有恶意脚本的图片相对路径直接填写到当前url后面并请求，因为是图片文件，所以服务器会将图片展示出来，而不会解析它里面的恶意代码。<br><img src="http://my.lipeilipei.top/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E017.png" alt=""></p>
+<p>按照前面的方法在URL后面加上参数并请求发现服务器没有把它当成脚本来解析，仍然显示的图片本身。<br>如果被攻击服务器的web服务器是 nginx 的话，nginx有一个解析漏洞，就是只要一个请求最后面的后缀名是脚本格式的时候，他就会把整个程序当作脚本来执行。<br>所以我们构造这样的 url</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.1.150&#x2F;DVWA-master&#x2F;hackable&#x2F;uploads&#x2F;2.jpg&#x2F;2222.php</span><br></pre></td></tr></table></figure>
+<p>前面是图片的地址，后面加上 <code>/xxx.php</code> , xxx 可以随便填写，重要的是要把整个请求最后的后缀名设置成 <code>.php</code>, 然后再加上参数，完整如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.1.150&#x2F;DVWA-master&#x2F;hackable&#x2F;uploads&#x2F;2.jpg&#x2F;2222.php?cmd&#x3D;phpinfo();</span><br></pre></td></tr></table></figure>
+<p>这样再去请求，服务器就会把我们上传的带有一句话木马的 2.jpg 图片当作脚本来执行，返回结果上面部分的乱码是图片信息，把浏览器滚动条往下拉就能看到参数请求的信息。<br><img src="http://my.lipeilipei.top/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E018.png" alt=""></p>
+<h5 id="3-post-webshell"><a href="#3-post-webshell" class="headerlink" title="3. post webshell"></a>3. post webshell</h5><p>如果构造的 webshell 是post请求怎么利用这个漏洞呢</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_POST[<span class="string">"cmd"</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上传文件过程是一样的，只是在利用漏洞的时候需要以post的方式提交请求，这里使用 hackbar 插件方便操作<br><img src="http://my.lipeilipei.top/012.png" alt=""></p>
+<h2 id="“中国菜刀”"><a href="#“中国菜刀”" class="headerlink" title="“中国菜刀”"></a>“中国菜刀”</h2><p>上传了 webshell 后，手动在浏览器获取系统敏感信息、遍历目录结构还是很麻烦，并且有一定的运气成分，例如 web服务器是nginx是猜测的，如果是 apache、IIS 的话就得继续猜解尝试其他找漏洞的方法了，”中国菜刀” 这个软件就可以很方便的解决这个问题，只要知道包含webshell木马文件的路径和请求参数即可，剩下的它会自动处理。</p>
+<p>打开主页面，右键点击添加，填写webshell地址，参数名等信息并保存<br><img src="http://my.lipeilipei.top/%E4%B8%AD%E5%9B%BD%E8%8F%9C%E5%88%802.png" alt=""></p>
+<p>在保存的这条数据右键打开”文件管理”，第一次连接速度比较慢，大概10秒左右，然后就可以看到服务器的目录结构了<br><img src="http://my.lipeilipei.top/%E4%B8%AD%E5%9B%BD%E8%8F%9C%E5%88%804.png" alt=""></p>
+<p>也可以在这条数据上右键打开”虚拟终端”，可以在命令行下操作获取信息<br><img src="http://my.lipeilipei.top/%E4%B8%AD%E5%9B%BD%E8%8F%9C%E5%88%805.png" alt=""></p>
+<h2 id="文件上传漏洞的防御"><a href="#文件上传漏洞的防御" class="headerlink" title="文件上传漏洞的防御"></a>文件上传漏洞的防御</h2><p>知道了文件上传漏洞产生的过程和原因，在配置环境和编写代码的时候就可以从以下方面来避免漏洞的产生。</p>
+<p>1.检查文件扩展名（防止服务器以非图片格式来解析文件）<br>2.检查文件MIME（例如jpe、jpg、jpeg等后缀的文件对应的类型都是 image/jpeg）<br>3.检测文件内容（防止文件中包含webshell）<br>4.将上传的文件重命名（防止攻击者通过文件名猜解webshell路径）<br>5.存储服务器和业务服务器分离<br>6.图片二次渲染（彻底清除上传文件中包含的webshell）<br>7.尽可能避免文件存储的路径被泄露（例如不要在请求响应中包含上传地址）</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "Web安全 - 文件上传漏洞",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png",
+        "keywords": "渗透 安全",
+        "genre": "安全",
+        "datePublished": "2019-12-18",
+        "dateCreated": "2019-12-18",
+        "dateModified": "2020-04-12",
+        "url": "http://yoursite.com/2019/12/18/Web安全 - 文件上传漏洞/",
+        "description": "什么是文件上传漏洞由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。
+下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。DV",
+        "wordCount": 284
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2020/01/11/Web%E5%AE%89%E5%85%A8%20-%20CSRF%EF%BC%88%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            Web安全 - CSRF（跨站请求伪造）
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2019/11/27/kali%20linux%E6%97%A0%E6%B3%95%E8%81%94%E7%BD%91%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">kali linux 无法上网解决办法</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/msf_logo.jpg)" alt="msf+python免杀360火绒" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="title">msf+python免杀360火绒</a></p>
+                            <p class="item-date"><time datetime="2020-09-30T04:00:00.000Z" itemprop="datePublished">2020-09-30</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top//2020img/TIM图片20200705104958.png)" alt="windows主机渗透 - MS08-067" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/07/03/Windows%E4%B8%BB%E6%9C%BA%E6%B8%97%E9%80%8F-MS08-067/" class="title">windows主机渗透 - MS08-067</a></p>
+                            <p class="item-date"><time datetime="2020-07-03T04:00:00.000Z" itemprop="datePublished">2020-07-03</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
