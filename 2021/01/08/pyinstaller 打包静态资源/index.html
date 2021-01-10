@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>pyinstaller 打包静态资源 | Hexo</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="python,pyinstaller" />
+    
+    <meta name="description" content="Pyinstaller 打包图片等静态资源遇到不少坑，在本机运行一般没什么问题，主要是放到其他电脑运行会出现各种问题，经过不断的测试整理出以下方案，很稳定，换目录换电脑都能正常运行。 如下图，loveu.py 是程序的入口文件，程序里面使用相对路径引用了当前文件夹下三个图片  直接使用命令 pyinstaller -F loveu.py 生成的 exe 文件复制到其他目录，或者放到其他电脑上运行就">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pyinstaller 打包静态资源">
+<meta property="og:url" content="http://yoursite.com/2021/01/08/pyinstaller%20%E6%89%93%E5%8C%85%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Pyinstaller 打包图片等静态资源遇到不少坑，在本机运行一般没什么问题，主要是放到其他电脑运行会出现各种问题，经过不断的测试整理出以下方案，很稳定，换目录换电脑都能正常运行。 如下图，loveu.py 是程序的入口文件，程序里面使用相对路径引用了当前文件夹下三个图片  直接使用命令 pyinstaller -F loveu.py 生成的 exe 文件复制到其他目录，或者放到其他电脑上运行就">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://my.lipeilipei.top/images/2020/20210109150756.png">
+<meta property="article:published_time" content="2021-01-08T13:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-10T03:09:49.982Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="pyinstaller">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://my.lipeilipei.top/images/2020/20210109150756.png">
+    
+
+    
+
+    
+        <link rel="icon" href="/css/images/bitbug_favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8229091b2a281af4b398716fce50a2cb";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Web%E5%BC%80%E5%8F%91/">Web开发</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E7%88%AC%E8%99%AB/">爬虫</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-pyinstaller 打包静态资源" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        pyinstaller 打包静态资源
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2021/01/08/pyinstaller%20%E6%89%93%E5%8C%85%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90/" class="article-date">
+       <time datetime="2021-01-08T13:00:00.000Z" itemprop="datePublished">2021-01-08</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2021/01/08/pyinstaller%20%E6%89%93%E5%8C%85%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90/" class="article-date">
+     <time datetime="2021-01-10T03:09:49.982Z" itemprop="dateModified">2021-01-10</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/pyinstaller/" rel="tag">pyinstaller</a>, <a class="tag-link" href="/tags/python/" rel="tag">python</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <p>Pyinstaller 打包图片等静态资源遇到不少坑，在本机运行一般没什么问题，主要是放到其他电脑运行会出现各种问题，经过不断的测试整理出以下方案，很稳定，换目录换电脑都能正常运行。</p>
+<p>如下图，<code>loveu.py</code> 是程序的入口文件，程序里面使用相对路径引用了当前文件夹下三个图片</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20210109143832.png" alt=""></p>
+<p>直接使用命令 <code>pyinstaller -F loveu.py</code> 生成的 exe 文件复制到其他目录，或者放到其他电脑上运行就会提示找不到图片。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h2><h5 id="第一步"><a href="#第一步" class="headerlink" title="第一步"></a>第一步</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyi-makespec -F loveu.py</span><br></pre></td></tr></table></figure>
+<p>使用 <code>pyi-makespec</code> 命令生成 <code>.spec</code> 文件，这个文件是 pyinstaller 打包时都会生成的</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20210109144233.png" alt=""></p>
+<h5 id="第二步"><a href="#第二步" class="headerlink" title="第二步"></a>第二步</h5><p>修改 <code>loveu.spec</code> 文件</p>
+<p>修改之前 <code>datas</code> 列表为空</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20210109144425.png" alt=""></p>
+<p>将三个图片分别添加到列表中，每个元素都是个元组，元组内第一个字符串是图片相对于执行程序的路径，因为这几个图片跟 <code>loveu.py</code> 在同一目录下所以只写文件名就行。第二个字符串是程序运行时查找的相对路径，程序运行时会临时生成一个临时目录，在这个临时目录中寻找图片等静态文件，这里设置为点 <code>.</code>，也就是当前目录寻找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">datas&#x3D;[(&#39;jieguo1.png&#39;,&#39;.&#39;),(&#39;jieguo2.png&#39;,&#39;.&#39;),(&#39;bj2.png&#39;,&#39;.&#39;)],</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：程序中引入图片也要使用相对路径，而不是绝对路径，如下面这种方式</p>
+</blockquote>
+<p><img src="http://my.lipeilipei.top/images/2020/20210109151432.png" alt=""></p>
+<p>修改后</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20210109145509.png" alt=""></p>
+<h5 id="第三步"><a href="#第三步" class="headerlink" title="第三步"></a>第三步</h5><p>打包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F loveu.spec</span><br></pre></td></tr></table></figure>
+
+<p>打包的是上一步设置好的 .spec 文件，而不是最开始的 .py 文件</p>
+<p>exe 单文件生成在 dist 目录下，这是一个 pygame 写的小游戏，可以看到图片都正常加载，复制到其他电脑也能正常运行。</p>
+<p><img src="http://my.lipeilipei.top/images/2020/20210109150756.png" alt=""></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "John Doe"
+        },
+        "headline": "pyinstaller 打包静态资源",
+        "image": "http://yoursite.comhttp://my.lipeilipei.top/images/2020/20210109150756.png",
+        "keywords": "python pyinstaller",
+        "genre": "自动化",
+        "datePublished": "2021-01-08",
+        "dateCreated": "2021-01-08",
+        "dateModified": "2021-01-10",
+        "url": "http://yoursite.com/2021/01/08/pyinstaller 打包静态资源/",
+        "description": "Pyinstaller 打包图片等静态资源遇到不少坑，在本机运行一般没什么问题，主要是放到其他电脑运行会出现各种问题，经过不断的测试整理出以下方案，很稳定，换目录换电脑都能正常运行。
+如下图，loveu.py 是程序的入口文件，程序里面使用相对路径引用了当前文件夹下三个图片
+
+直接使用命令 pyinstaller -F loveu.py 生成的 exe 文件复制到其他目录，或者放到其他电脑上运行就",
+        "wordCount": 81
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/peilipeili" target="_blank" rel="noopener">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2020/12/22/PEI-Bypass%E5%85%8D%E6%9D%80%E5%B9%B3%E5%8F%B0/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">PEI-Bypass 免杀平台</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2021/01/08/pyinstaller%20%E6%89%93%E5%8C%85%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20210109150756.png)" alt="pyinstaller 打包静态资源" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></p>
+                            <p class="item-title"><a href="/2021/01/08/pyinstaller%20%E6%89%93%E5%8C%85%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90/" class="title">pyinstaller 打包静态资源</a></p>
+                            <p class="item-date"><time datetime="2021-01-08T13:00:00.000Z" itemprop="datePublished">2021-01-08</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/12/22/PEI-Bypass%E5%85%8D%E6%9D%80%E5%B9%B3%E5%8F%B0/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201217193534.png)" alt="PEI-Bypass 免杀平台" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/12/22/PEI-Bypass%E5%85%8D%E6%9D%80%E5%B9%B3%E5%8F%B0/" class="title">PEI-Bypass 免杀平台</a></p>
+                            <p class="item-date"><time datetime="2020-12-22T04:00:00.000Z" itemprop="datePublished">2020-12-22</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201215222619.png)" alt="渗透三层网络" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/12/12/%E6%B8%97%E9%80%8F%E4%B8%89%E5%B1%82%E5%86%85%E7%BD%91/" class="title">渗透三层网络</a></p>
+                            <p class="item-date"><time datetime="2020-12-12T04:00:00.000Z" itemprop="datePublished">2020-12-12</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/12/10/%E5%9F%9F%E5%86%85%E5%AF%86%E7%A0%81%E5%87%AD%E8%AF%81%E8%8E%B7%E5%8F%96/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201015202633.png)" alt="域内密码凭证获取" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/12/10/%E5%9F%9F%E5%86%85%E5%AF%86%E7%A0%81%E5%87%AD%E8%AF%81%E8%8E%B7%E5%8F%96/" class="title">域内密码凭证获取</a></p>
+                            <p class="item-date"><time datetime="2020-12-10T04:00:00.000Z" itemprop="datePublished">2020-12-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2020/10/18/%E5%90%8E%E6%B8%97%E9%80%8F%E4%B9%8B%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://my.lipeilipei.top/images/2020/20201210214814.png)" alt="后渗透之横向移动（一）" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></p>
+                            <p class="item-title"><a href="/2020/10/18/%E5%90%8E%E6%B8%97%E9%80%8F%E4%B9%8B%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%EF%BC%88%E4%B8%80%EF%BC%89/" class="title">后渗透之横向移动（一）</a></p>
+                            <p class="item-date"><time datetime="2020-10-18T04:00:00.000Z" itemprop="datePublished">2020-10-18</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2021 John Doe</p>
+                
+                <p>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="https://github.com/ppoffice" target="_blank">PPOffice</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+    </div>
+    
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
